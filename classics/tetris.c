@@ -95,11 +95,11 @@ static void UpdateDrawFrame(void);  // Update and Draw (one frame)
 // Additional module functions
 static bool Createpiece();
 static void GetRandompiece();
-static void ResolveFallingMovement();
+static void ResolveFallingMovement(bool *detection, bool *pieceActive);
 static bool ResolveLateralMovement();
 static bool ResolveTurnMovement();
-static void CheckDetection();
-static void CheckCompletion();
+static void CheckDetection(bool *detection);
+static void CheckCompletion(bool *lineToDelete);
 static void DeleteCompleteLines();
 
 //------------------------------------------------------------------------------------
@@ -592,7 +592,7 @@ static bool ResolveTurnMovement()
     // Input for turning the piece
     if (IsKeyDown(KEY_UP))
     {
-        int aux = 0;
+        GridSquare aux;
         bool checker = false;
 
         // Check all turning possibilities
