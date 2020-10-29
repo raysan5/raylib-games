@@ -246,7 +246,7 @@ void UpdateGameplayScreen(void)
         /*
         if (IsGamepadAvailable(GAMEPAD_PLAYER1))
         {
-            Vector2 movement = { 0.0f };
+            Vector2 movement = { 0 };
             
             movement.x = GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_PS3_AXIS_LEFT_X);
             movement.y = GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_PS3_AXIS_LEFT_Y);
