@@ -4,7 +4,7 @@
 *
 *   Gameplay Screen Functions Definitions (Init, Update, Draw, Unload)
 *
-*   Copyright (c) 2014-2019 Ramon Santamaria (@raysan5)
+*   Copyright (c) 2014-2021 Ramon Santamaria (@raysan5)
 *
 *   This software is provided "as-is", without any express or implied warranty. In no event
 *   will the authors be held liable for any damages arising from the use of this software.
@@ -154,8 +154,8 @@ void InitGameplayScreen(void)
                   (Rectangle){ 0, 0, imWordsBase.width, imWordsBase.height },
                   (Rectangle){ 0, imWordsBase.height*i, imWordsBase.width, imWordsBase.height }, WHITE);
 
-        ImageDrawTextEx(&imWords,(Vector2){ imWordsBase.width/2 - MeasureTextEx(fontMessage, codingWords[i],
-                        fontMessage.baseSize, 0).x/2, imWordsBase.height*i }, fontMessage, codingWords[i],
+        ImageDrawTextEx(&imWords, fontMessage, codingWords[i], (Vector2){ imWordsBase.width/2 - MeasureTextEx(fontMessage, codingWords[i],
+                        fontMessage.baseSize, 0).x/2, imWordsBase.height*i },
                         fontMessage.baseSize, 0, BLACK);
     }
 

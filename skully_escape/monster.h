@@ -51,8 +51,6 @@ typedef struct Monster {
 // Global Variables Definition
 //----------------------------------------------------------------------------------
 
-
-
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions
 #endif

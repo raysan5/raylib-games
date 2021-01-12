@@ -4,7 +4,7 @@
 *
 *   Gameplay Screen Functions Definitions (Init, Update, Draw, Unload)
 *
-*   Copyright (c) 2014 Ramon Santamaria (@raysan5)
+*   Copyright (c) 2014-2021 Ramon Santamaria (@raysan5)
 *
 *   This software is provided "as-is", without any express or implied warranty. In no event
 *   will the authors be held liable for any damages arising from the use of this software.
@@ -154,7 +154,7 @@ void InitGameplayScreen(void)
 
     // Initialize wave and samples data
     Wave wave = LoadWave("resources/audio/wave.ogg");
-    float *waveData = GetWaveData(wave);        // TODO: Be careful with channels!
+    float *waveData = LoadWaveSamples(wave);        // TODO: Be careful with channels!
     
     // We calculate the required parameters to adjust audio time to gameplay time
     // that way samples collected correspond to audio playing
@@ -211,7 +211,7 @@ void InitGameplayScreen(void)
     //fclose(samplesFile);
 
     // We already saved the samples we needed for the game, we can free waveData
-    free(waveData);
+    UnloadWaveSamples(waveData);
     
     // Load and start playing music
     // NOTE: Music is loaded in main code base

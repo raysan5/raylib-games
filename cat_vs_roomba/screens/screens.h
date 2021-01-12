@@ -42,8 +42,8 @@ extern Font font2;
 extern Music music;
 extern Sound fxCoin;
 
-int score;
-int result;             // 0-Loose, 1-Win
+extern int score;
+extern int result;      // 0-Loose, 1-Win
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions

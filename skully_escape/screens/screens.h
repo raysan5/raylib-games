@@ -46,12 +46,12 @@ typedef struct Door {
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
-GameScreen currentScreen;
-Font font;
+extern GameScreen currentScreen;
+extern Font font;
 
-Texture2D doors;
-Sound sndDoor;
-Sound sndScream;
+extern Texture2D doors;
+extern Sound sndDoor;
+extern Sound sndScream;
 
 
 #ifdef __cplusplus

@@ -83,7 +83,7 @@ int main(void)
     background = LoadTexture("resources/background.png");
     
     texNPatch = LoadTexture("resources/npatch.png");
-    npInfo.sourceRec = (Rectangle){ 0, 0, 80, texNPatch.height },
+    npInfo.source = (Rectangle){ 0, 0, 80, texNPatch.height },
     npInfo.left = 24;
     npInfo.top = 24;
     npInfo.right = 24;
@@ -222,7 +222,7 @@ bool GuiButton(Rectangle bounds, const char *text, int forcedState)
         }
     }
             
-    npInfo.sourceRec.x = 80*state;
+    npInfo.source.x = 80*state;
 
     //--------------------------------------------------------------------
 

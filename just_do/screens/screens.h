@@ -34,8 +34,8 @@ typedef enum GameScreen { LOGO, LEVEL00, LEVEL01, LEVEL02, LEVEL03, LEVEL04, LEV
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
-GameScreen currentScreen;
-Sound levelWin;
+extern GameScreen currentScreen;
+extern Sound levelWin;
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions

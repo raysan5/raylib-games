@@ -57,28 +57,28 @@ typedef struct Mission {
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
-GameScreen currentScreen;
+extern GameScreen currentScreen;
 
-Music music;
-Sound fxButton;
+extern Music music;
+extern Sound fxButton;
 
 //Mission *missions;
 
 // UI BUTTON
-Rectangle recButton;
-float fadeButton;
-Color colorButton;
-Texture2D texButton;
-Vector2 textPositionButton;
-int fontSizeButton;
-Color textColorButton;
+extern Rectangle recButton;
+extern float fadeButton;
+extern Color colorButton;
+extern Texture2D texButton;
+extern Vector2 textPositionButton;
+extern int fontSizeButton;
+extern Color textColorButton;
 
-int currentMission;
-int totalMissions;
+extern int currentMission;
+extern int totalMissions;
 
-Font fontMission;
+extern Font fontMission;
 
-Word messageWords[MAX_MISSION_WORDS];
+extern Word messageWords[MAX_MISSION_WORDS];
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions

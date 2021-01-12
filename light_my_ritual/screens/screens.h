@@ -34,11 +34,11 @@ typedef enum GameScreen { LOGO_RL = 0, TITLE, GAMEPLAY } GameScreen;
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
-GameScreen currentScreen;
-Font font;
+extern GameScreen currentScreen;
+extern Font font;
 
-Color *lightsMap;
-int lightsMapWidth, lightsMapHeight;
+extern Color *lightsMap;
+extern int lightsMapWidth, lightsMapHeight;
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions

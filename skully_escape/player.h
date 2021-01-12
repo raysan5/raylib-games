@@ -25,7 +25,7 @@ typedef struct Player {
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
-Player player;
+extern Player player;
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions
