@@ -465,11 +465,11 @@ void DrawEndingScreen(void)
     DrawTexturePro(atlas01, ending_button_trophy, (Rectangle){GetScreenWidth()*0.871, GetScreenHeight()*0.513, ending_button_trophy.width, ending_button_trophy.height}, (Vector2){ 0, 0}, 0, buttonTrophyColor);
     DrawTexturePro(atlas01, ending_button_share, (Rectangle){GetScreenWidth()*0.871, GetScreenHeight()*0.719, ending_button_share.width, ending_button_share.height}, (Vector2){ 0, 0}, 0, buttonShareColor);
     
-    DrawTextEx(font, FormatText("%03i", seasonsCounter), (Vector2){ GetScreenWidth()*0.73f, GetScreenHeight()*0.14f }, font.baseSize, 1, WHITE);
-    DrawTextEx(font, FormatText("%03i", currentLeavesEnding), (Vector2){ GetScreenWidth()*0.73f, GetScreenHeight()*0.29f }, font.baseSize, 1, WHITE);
-    DrawTextEx(font, FormatText("%04i", currentScore), (Vector2){ GetScreenWidth()*0.715f, GetScreenHeight()*0.426f }, font.baseSize, 1, WHITE);
+    DrawTextEx(font, TextFormat("%03i", seasonsCounter), (Vector2){ GetScreenWidth()*0.73f, GetScreenHeight()*0.14f }, font.baseSize, 1, WHITE);
+    DrawTextEx(font, TextFormat("%03i", currentLeavesEnding), (Vector2){ GetScreenWidth()*0.73f, GetScreenHeight()*0.29f }, font.baseSize, 1, WHITE);
+    DrawTextEx(font, TextFormat("%04i", currentScore), (Vector2){ GetScreenWidth()*0.715f, GetScreenHeight()*0.426f }, font.baseSize, 1, WHITE);
     
-    DrawTextEx(font, FormatText("%s %i - %s %i", initMonthText, initYears, finalMonthText, finalYears), (Vector2){ GetScreenWidth()*0.1f, GetScreenHeight()*0.7f }, font.baseSize/2.0f, 1, WHITE);
+    DrawTextEx(font, TextFormat("%s %i - %s %i", initMonthText, initYears, finalMonthText, finalYears), (Vector2){ GetScreenWidth()*0.1f, GetScreenHeight()*0.7f }, font.baseSize/2.0f, 1, WHITE);
     
     for (int i = 0; i < MAX_KILLS; i++)
     {
@@ -488,14 +488,14 @@ void DrawEndingScreen(void)
     }
     
 /*
-    DrawText(FormatText("KOALA IS DEAD :("), GetScreenWidth()/2 -  MeasureText("YOU'RE DEAD   ", 60)/2, GetScreenHeight()/3, 60, RED);
-    DrawText(FormatText("Score: %02i - HiScore: %02i", score, hiscore),GetScreenWidth()/2 -  MeasureText("Score: 00 - HiScore: 00", 60)/2, GetScreenHeight()/3 +100, 60, RED);
-    DrawText(FormatText("You lived: %02i years", years),GetScreenWidth()/2 -  MeasureText("You lived: 00", 60)/2 + 60, GetScreenHeight()/3 +200, 30, RED);
-    DrawText(FormatText("%02s killed you", killer),GetScreenWidth()/2 -  MeasureText("killer killed you", 60)/2 + 90, GetScreenHeight()/3 +270, 30, RED);
+    DrawText(TextFormat("KOALA IS DEAD :("), GetScreenWidth()/2 -  MeasureText("YOU'RE DEAD   ", 60)/2, GetScreenHeight()/3, 60, RED);
+    DrawText(TextFormat("Score: %02i - HiScore: %02i", score, hiscore),GetScreenWidth()/2 -  MeasureText("Score: 00 - HiScore: 00", 60)/2, GetScreenHeight()/3 +100, 60, RED);
+    DrawText(TextFormat("You lived: %02i years", years),GetScreenWidth()/2 -  MeasureText("You lived: 00", 60)/2 + 60, GetScreenHeight()/3 +200, 30, RED);
+    DrawText(TextFormat("%02s killed you", killer),GetScreenWidth()/2 -  MeasureText("killer killed you", 60)/2 + 90, GetScreenHeight()/3 +270, 30, RED);
     //DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.5));
 */
     
-    //DrawTextEx(font, FormatText("%02s", killer), (Vector2){ GetScreenWidth()*0.08, GetScreenHeight()*0.78 }, font.baseSize/2, 1, WHITE);
+    //DrawTextEx(font, TextFormat("%02s", killer), (Vector2){ GetScreenWidth()*0.08, GetScreenHeight()*0.78 }, font.baseSize/2, 1, WHITE);
     if (killer == 0) DrawTextEx(font, textFire01, (Vector2){ GetScreenWidth()*0.13f, GetScreenHeight()*0.78f }, font.baseSize/2.0f, 1, WHITE);
     else if (killer == 2) DrawTextEx(font, textDingo01, (Vector2){ GetScreenWidth()*0.13f, GetScreenHeight()*0.78f }, font.baseSize/2.0f, 1, WHITE);
     else if (killer == 1) 

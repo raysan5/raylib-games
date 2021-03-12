@@ -620,7 +620,7 @@ static void UpdateDrawFrame(void)
                 DrawTextEx(font, "STAMINA:", (Vector2){ 10, screenHeight - 16 }, font.baseSize, 1, GB_GREEN03);
                 DrawRectangleLines(70, screenHeight - 16, 100, 13, GB_GREEN03);
                 DrawRectangle(70 + 2, screenHeight - 16 + 2, (int)staminaLevel - 4, 13 - 4, GB_GREEN02);
-                DrawTextEx(font, FormatText("TIME: %i:%02is", timeLevelSeconds/60, timeLevelSeconds%60), (Vector2){ 240, screenHeight - 16 }, font.baseSize, 1, GB_GREEN03);
+                DrawTextEx(font, TextFormat("TIME: %i:%02is", timeLevelSeconds/60, timeLevelSeconds%60), (Vector2){ 240, screenHeight - 16 }, font.baseSize, 1, GB_GREEN03);
                 
                 if (showMinimapDebug)
                 {

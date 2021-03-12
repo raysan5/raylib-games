@@ -78,7 +78,7 @@ void DrawEndingScreen(void)
     else if (result == 1) DrawTextEx(font, "YOU WIN!!!", (Vector2){ 380, 200 }, font.baseSize*2, 2, WHITE);
     
     // Draw score
-    DrawTextEx(font, FormatText("FINAL SCORE: %i", score), (Vector2){ 400, 360 }, font2.baseSize, 2, WHITE);
+    DrawTextEx(font, TextFormat("FINAL SCORE: %i", score), (Vector2){ 400, 360 }, font2.baseSize, 2, WHITE);
     
     if ((framesCounter/30)%2) DrawTextEx(font2, "PRESS ENTER to TITLE", (Vector2){ 340, 550 }, font2.baseSize, 2, WHITE);
 }

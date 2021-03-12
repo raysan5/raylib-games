@@ -116,7 +116,7 @@ void DrawLevel03Screen(void)
     {
         DrawRectangleBordersRec((Rectangle){0, 0, GetScreenWidth(), GetScreenHeight()}, 0, 0, 60, Fade(LIGHTGRAY, 0.6f));
         DrawText("LEVEL 03", GetScreenWidth()/2 - MeasureText("LEVEL 03", 30)/2, 20, 30, GRAY);
-        DrawText(FormatText("DONE! (Seconds: %03i)", levelTimeSec), GetScreenWidth()/2 - MeasureText("DONE! (Seconds: 000)", 30)/2, GetScreenHeight() - 40, 30, GRAY);
+        DrawText(TextFormat("DONE! (Seconds: %03i)", levelTimeSec), GetScreenWidth()/2 - MeasureText("DONE! (Seconds: 000)", 30)/2, GetScreenHeight() - 40, 30, GRAY);
     }
     else DrawText("LEVEL 03", GetScreenWidth()/2 - MeasureText("LEVEL 03", 30)/2, 20, 30, LIGHTGRAY);
 }

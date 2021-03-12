@@ -418,8 +418,8 @@ int main()
                     DrawRectangle(20, 20, foodBar, 40, ORANGE);
                     DrawRectangleLines(20, 20, 400, 40, BLACK);
                     
-                    DrawTextEx(font, FormatText("SCORE: %04i", score), (Vector2){ screenWidth - 300, 20 }, font.baseSize, -2, ORANGE);
-                    DrawTextEx(font, FormatText("DISTANCE: %04i", (int)distance), (Vector2){ 550, 20 }, font.baseSize, -2, ORANGE);
+                    DrawTextEx(font, TextFormat("SCORE: %04i", score), (Vector2){ screenWidth - 300, 20 }, font.baseSize, -2, ORANGE);
+                    DrawTextEx(font, TextFormat("DISTANCE: %04i", (int)distance), (Vector2){ 550, 20 }, font.baseSize, -2, ORANGE);
                     
                     if (gameraMode)
                     {
@@ -435,10 +435,10 @@ int main()
                 
                     DrawTextEx(font, "GAME OVER", (Vector2){ 300, 160 }, font.baseSize*3, -2, MAROON);
                     
-                    DrawTextEx(font, FormatText("SCORE: %04i", score), (Vector2){ 680, 350 }, font.baseSize, -2, GOLD);
-                    DrawTextEx(font, FormatText("DISTANCE: %04i", (int)distance), (Vector2){ 290, 350 }, font.baseSize, -2, GOLD);
-                    DrawTextEx(font, FormatText("HISCORE: %04i", hiscore), (Vector2){ 665, 400 }, font.baseSize, -2, ORANGE);
-                    DrawTextEx(font, FormatText("HIDISTANCE: %04i", (int)hidistance), (Vector2){ 270, 400 }, font.baseSize, -2, ORANGE);
+                    DrawTextEx(font, TextFormat("SCORE: %04i", score), (Vector2){ 680, 350 }, font.baseSize, -2, GOLD);
+                    DrawTextEx(font, TextFormat("DISTANCE: %04i", (int)distance), (Vector2){ 290, 350 }, font.baseSize, -2, GOLD);
+                    DrawTextEx(font, TextFormat("HISCORE: %04i", hiscore), (Vector2){ 665, 400 }, font.baseSize, -2, ORANGE);
+                    DrawTextEx(font, TextFormat("HIDISTANCE: %04i", (int)hidistance), (Vector2){ 270, 400 }, font.baseSize, -2, ORANGE);
                     
                     // Draw blinking text
                     if ((framesCounter/30) % 2) DrawTextEx(font, "PRESS ENTER to REPLAY", (Vector2){ screenWidth/2 - 250, 520 }, font.baseSize, -2, LIGHTGRAY);

@@ -613,7 +613,7 @@ void DrawGameplayScreen(void)
             }
             
             for (int i = 0; i < MAX_LIGHTS_III; i++) if (lightsIII[i].active) DrawTexture(lightGlow, lightsIII[i].position.x - lightGlow.width/2, lightsIII[i].position.y - lightGlow.height/2, Fade(WHITE, 0.3f));
-            for (int i = 0; i < MAX_LIGHTS_III; i++) DrawText(FormatText("%02i", lightsIII[i].requiredEnergy), lightsIII[i].position.x - 10, lightsIII[i].position.y + 14, 20, lightsIII[i].active ? GRAY : YELLOW);
+            for (int i = 0; i < MAX_LIGHTS_III; i++) DrawText(TextFormat("%02i", lightsIII[i].requiredEnergy), lightsIII[i].position.x - 10, lightsIII[i].position.y + 14, 20, lightsIII[i].active ? GRAY : YELLOW);
         }
         case LEVEL_II:
         {
@@ -625,7 +625,7 @@ void DrawGameplayScreen(void)
             }
             
             for (int i = 0; i < MAX_LIGHTS_II; i++) if (lightsII[i].active) DrawTexture(lightGlow, lightsII[i].position.x - lightGlow.width/2, lightsII[i].position.y - lightGlow.height/2, Fade(WHITE, 0.3f));
-            for (int i = 0; i < MAX_LIGHTS_II; i++) DrawText(FormatText("%02i", lightsII[i].requiredEnergy), lightsII[i].position.x - 10, lightsII[i].position.y + 14, 20, lightsII[i].active ? GRAY : YELLOW);
+            for (int i = 0; i < MAX_LIGHTS_II; i++) DrawText(TextFormat("%02i", lightsII[i].requiredEnergy), lightsII[i].position.x - 10, lightsII[i].position.y + 14, 20, lightsII[i].active ? GRAY : YELLOW);
         }
         case LEVEL_I:
         {
@@ -637,7 +637,7 @@ void DrawGameplayScreen(void)
             }
             
             for (int i = 0; i < MAX_LIGHTS_I; i++) if (lightsI[i].active) DrawTexture(lightGlow, lightsI[i].position.x - lightGlow.width/2, lightsI[i].position.y - lightGlow.height/2, Fade(WHITE, 0.3f));
-            for (int i = 0; i < MAX_LIGHTS_I; i++) DrawText(FormatText("%02i", lightsI[i].requiredEnergy), lightsI[i].position.x - 10, lightsI[i].position.y + 14, 20, lightsI[i].active ? GRAY : YELLOW);
+            for (int i = 0; i < MAX_LIGHTS_I; i++) DrawText(TextFormat("%02i", lightsI[i].requiredEnergy), lightsI[i].position.x - 10, lightsI[i].position.y + 14, 20, lightsI[i].active ? GRAY : YELLOW);
         }
         default: break;
     }
@@ -663,13 +663,13 @@ void DrawGameplayScreen(void)
         }
         
         // Draw time left for ritual
-        DrawTextEx(font, FormatText("%02.2f", (99.0f - ritualTime)), (Vector2){ 560, 20 }, font.baseSize, 0, WHITE);
+        DrawTextEx(font, TextFormat("%02.2f", (99.0f - ritualTime)), (Vector2){ 560, 20 }, font.baseSize, 0, WHITE);
         
         // Draw light energy bar
         DrawRectangle(20, 30, 400, 20, GRAY);
         DrawRectangle(20, 30, (400*player.lightEnergy)/MAX_PLAYER_ENERGY, 20, GOLD);
         DrawRectangleLines(20, 30, 400, 20, LIGHTGRAY);
-        DrawText(FormatText("%03.0f", player.lightEnergy), 430, 30, 20, WHITE);
+        DrawText(TextFormat("%03.0f", player.lightEnergy), 430, 30, 20, WHITE);
         
         // Draw level lighted bar (for completion)
         DrawRectangle(GetScreenWidth() - 40, 30, 20, 660, GRAY);
@@ -688,7 +688,7 @@ void DrawGameplayScreen(void)
         
         // Wait some time before jumping to ending: raylib
         DrawTexture(texRitual, GetScreenWidth()/2 - texRitual.width/2, 100, WHITE);
-        DrawTextEx(font, FormatText("BEST LIGHTING TIME: %02.2f", ritualTime), (Vector2){ 320, 340 }, 50, 0, WHITE);
+        DrawTextEx(font, TextFormat("BEST LIGHTING TIME: %02.2f", ritualTime), (Vector2){ 320, 340 }, 50, 0, WHITE);
         DrawTextEx(font, "PRESS ENTER to START the RITUAL", (Vector2){ 160, 480 }, 60, 0, WHITE);
         
         if (IsKeyPressed(KEY_ENTER)) startRitual = true;
@@ -699,7 +699,7 @@ void DrawGameplayScreen(void)
         DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.4f));
         
         DrawTexture(texTimeOver, GetScreenWidth()/2 - texTimeOver.width/2, 140, WHITE);
-        DrawTextEx(font, FormatText("NEXT STARS ALIGNMENT IN %i YEARS", nextStarsAlignment), (Vector2){ 200, 360 }, 50, 0, WHITE);
+        DrawTextEx(font, TextFormat("NEXT STARS ALIGNMENT IN %i YEARS", nextStarsAlignment), (Vector2){ 200, 360 }, 50, 0, WHITE);
         DrawTextEx(font, "PRESS ENTER to GO HOME...", (Vector2){ 260, 480 }, 60, 0, WHITE);
         
         if (IsKeyPressed(KEY_ENTER)) finishScreen = 2;

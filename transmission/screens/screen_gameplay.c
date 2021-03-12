@@ -375,7 +375,7 @@ void DrawGameplayScreen(void)
         Rectangle recLines = messageWords[i].rec;
         DrawRectangleLines(recLines.x, recLines.y, recLines.width, recLines.height, Fade(RED, 0.35f));
         if (messageWords[i].hover) DrawRectangleRec(messageWords[i].rec, Fade(RED, 0.30f));
-        DrawText(FormatText("%i", messageWords[i].id), i*25, 0, 30, RED);
+        DrawText(TextFormat("%i", messageWords[i].id), i*25, 0, 30, RED);
     }
     for (int i = 0; i < MAX_CODING_WORDS; i++)
     {

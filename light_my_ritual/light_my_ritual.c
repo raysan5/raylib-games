@@ -62,7 +62,7 @@ int main(void)
 
     Image image = LoadImage("resources/lights_map.png");  // Load image in CPU memory (RAM)
     
-    lightsMap = GetImageData(image);            // Get image pixels data as an array of Color
+    lightsMap = LoadImageColors(image);         // Get image pixels data as an array of Color
     lightsMapWidth = image.width;
     lightsMapHeight = image.height;
     
@@ -111,7 +111,7 @@ int main(void)
     
     UnloadMusicStream(music);
     
-    free(lightsMap);
+    UnloadImageColors(lightsMap);
     
     CloseAudioDevice();
     

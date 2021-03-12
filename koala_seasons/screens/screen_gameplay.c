@@ -473,7 +473,7 @@ void UpdateGameplayScreen(void)
         if (numberAlpha <= 0) numberAlpha = 1;
         if (numberScale <= 0) numberScale = 2.5f;
 
-        textSize = MeasureTextEx(font, FormatText("%01i", startNum), font.baseSize*numberScale, 2);
+        textSize = MeasureTextEx(font, TextFormat("%01i", startNum), font.baseSize*numberScale, 2);
     }
 
     if (playerActive) finishScreen = 0;
@@ -2896,20 +2896,20 @@ void DrawGameplayScreen(void)
     {
         if (popupScore[i].active)
         {
-            DrawTextEx(font, FormatText("%i", popupScore[i].score), popupScore[i].position, font.baseSize/4*popupScore[i].scale, -5, Fade((Color){255, 73, 73, 255}, popupScore[i].alpha));
+            DrawTextEx(font, TextFormat("%i", popupScore[i].score), popupScore[i].position, font.baseSize/4*popupScore[i].scale, -5, Fade((Color){255, 73, 73, 255}, popupScore[i].alpha));
         }
     }
     
-    if (popupBee.active) DrawTextEx(font, FormatText("%i", popupBee.score), popupBee.position, font.baseSize/4*popupBee.scale, -5, Fade((Color){255, 73, 73, 255}, popupBee.alpha));
-    if (popupEagle.active) DrawTextEx(font, FormatText("%i", popupEagle.score), popupEagle.position, font.baseSize/4*popupEagle.scale, -5, Fade((Color){255, 73, 73, 255}, popupEagle.alpha));
+    if (popupBee.active) DrawTextEx(font, TextFormat("%i", popupBee.score), popupBee.position, font.baseSize/4*popupBee.scale, -5, Fade((Color){255, 73, 73, 255}, popupBee.alpha));
+    if (popupEagle.active) DrawTextEx(font, TextFormat("%i", popupEagle.score), popupEagle.position, font.baseSize/4*popupEagle.scale, -5, Fade((Color){255, 73, 73, 255}, popupEagle.alpha));
 
     for (int i = 0; i < MAX_LEAVES; i++)
     {
-        if (popupLeaves[i].active) DrawTextEx(font, FormatText("+ %i", popupLeaves[i].score), popupLeaves[i].position, font.baseSize/4*popupLeaves[i].scale, -5, Fade((Color){139, 179, 0, 255}, popupLeaves[i].alpha));
+        if (popupLeaves[i].active) DrawTextEx(font, TextFormat("+ %i", popupLeaves[i].score), popupLeaves[i].position, font.baseSize/4*popupLeaves[i].scale, -5, Fade((Color){139, 179, 0, 255}, popupLeaves[i].alpha));
     }
     
 
-    DrawTextEx(font, FormatText("%03i", currentLeaves), (Vector2){ 47, 50 }, font.baseSize, -8, counterColor);
+    DrawTextEx(font, TextFormat("%03i", currentLeaves), (Vector2){ 47, 50 }, font.baseSize, -8, counterColor);
 
     if (transforming) DrawTextEx(font, textFinalForm, (Vector2){ GetScreenWidth()/2 - MeasureText(textFinalForm, 40)/2, GetScreenHeight()/4}, font.baseSize, -5, (Color){246, 133, 133, 255});
     
@@ -2986,9 +2986,9 @@ void DrawGameplayScreen(void)
         default: break;
     }
     
-    DrawText(FormatText("Score: %02i", score), 140, GetScreenHeight() - 20, 20, RED);
-    DrawText(FormatText("HighScore: %02i", hiscore), 600, GetScreenHeight() - 20, 20, RED);
-    DrawText(FormatText("SeasonChange: %03i", seasonTimer), 300, GetScreenHeight() - 20, 20, RED);
+    DrawText(TextFormat("Score: %02i", score), 140, GetScreenHeight() - 20, 20, RED);
+    DrawText(TextFormat("HighScore: %02i", hiscore), 600, GetScreenHeight() - 20, 20, RED);
+    DrawText(TextFormat("SeasonChange: %03i", seasonTimer), 300, GetScreenHeight() - 20, 20, RED);
 #endif
 }
 

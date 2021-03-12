@@ -564,16 +564,16 @@ void DrawGameplayScreen(void)
     
     // Draw UI
     DrawTextEx(font2, "SCORE:", (Vector2){ 80, 10 }, font2.baseSize, 2, WHITE);
-    DrawTextEx(font, FormatText("%i", score), (Vector2){ 260, 10 }, font.baseSize, 2, WHITE);
+    DrawTextEx(font, TextFormat("%i", score), (Vector2){ 260, 10 }, font.baseSize, 2, WHITE);
     DrawTextEx(font2, "CLEAN:", (Vector2){ 500, 10 }, font2.baseSize, 2, WHITE);
-    DrawTextEx(font, FormatText("%.2f%%", GetTileCleanPercent()), (Vector2){ 690, 10 }, font.baseSize, 2, WHITE);
+    DrawTextEx(font, TextFormat("%.2f%%", GetTileCleanPercent()), (Vector2){ 690, 10 }, font.baseSize, 2, WHITE);
     DrawTextEx(font2, "TIME:", (Vector2){ 950, 10 }, font2.baseSize, 2, WHITE);
-    DrawTextEx(font, FormatText("%i:%02is", timeLevelSeconds/60, timeLevelSeconds%60), (Vector2){ 1100, 10 }, font.baseSize, 2, WHITE);
+    DrawTextEx(font, TextFormat("%i:%02is", timeLevelSeconds/60, timeLevelSeconds%60), (Vector2){ 1100, 10 }, font.baseSize, 2, WHITE);
     
     // Debug information
-    //DrawText(FormatText("CatTilePos: [ %i, %i ]", catTilePosX, catTilePosY), roomOffset.x, 690, 20, RAYWHITE);
-    //DrawText(FormatText("MousePos: [ %i, %i ]", mouseTileX, mouseTileY), 400, 690, 20, RED);
-    //DrawText(FormatText("RoombaPos: [ %i, %i ]", roombaTilePosX, roombaTilePosY), 600, 690, 20, GREEN);
+    //DrawText(TextFormat("CatTilePos: [ %i, %i ]", catTilePosX, catTilePosY), roomOffset.x, 690, 20, RAYWHITE);
+    //DrawText(TextFormat("MousePos: [ %i, %i ]", mouseTileX, mouseTileY), 400, 690, 20, RED);
+    //DrawText(TextFormat("RoombaPos: [ %i, %i ]", roombaTilePosX, roombaTilePosY), 600, 690, 20, GREEN);
     
     if ((mouseTileY >= 0) && (mouseTileY < MAX_TILES_Y) && (mouseTileX >= 0) && (mouseTileX < MAX_TILES_X))
     {
@@ -584,7 +584,7 @@ void DrawGameplayScreen(void)
     // Draw enabled popups!
     for (int i = 0; i < MAX_SCORE_POPUPS; i++)
     {
-        if (popup[i].enabled) DrawText(FormatText("+%i", popup[i].value), popup[i].position.x, popup[i].position.y, 20, Fade(RED, popup[i].alpha)); 
+        if (popup[i].enabled) DrawText(TextFormat("+%i", popup[i].value), popup[i].position.x, popup[i].position.y, 20, Fade(RED, popup[i].alpha)); 
     }
     
     // Show objective

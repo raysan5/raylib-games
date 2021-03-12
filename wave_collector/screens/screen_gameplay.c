@@ -393,12 +393,12 @@ void DrawGameplayScreen(void)
     if (pause) DrawTextEx(font, "WAVE PAUSED", (Vector2){ 235, 400 }, font.baseSize*2, 0, WHITE);
 
     // Draw number of samples
-    //DrawText(FormatText("%05i", collectedSamples), 900, 200, 40, GRAY);
-    //DrawText(FormatText("%05i", totalSamples), 900, 250, 40, GRAY);
-    DrawTextEx(font, FormatText("%05i / %05i", collectedSamples, totalSamples), (Vector2){810, 170}, font.baseSize, -2, SKYBLUE);
+    //DrawText(TextFormat("%05i", collectedSamples), 900, 200, 40, GRAY);
+    //DrawText(TextFormat("%05i", totalSamples), 900, 250, 40, GRAY);
+    DrawTextEx(font, TextFormat("%05i / %05i", collectedSamples, totalSamples), (Vector2){810, 170}, font.baseSize, -2, SKYBLUE);
     
     // Draw combo
-    DrawTextEx(font, FormatText("Combo: %02i [max: %02i]", combo, maxCombo), (Vector2){200, 170}, font.baseSize/2, -2, SKYBLUE);
+    DrawTextEx(font, TextFormat("Combo: %02i [max: %02i]", combo, maxCombo), (Vector2){200, 170}, font.baseSize/2, -2, SKYBLUE);
 
     // Draw synchonicity level
     DrawRectangle(99, 622, 395, 32, Fade(RAYWHITE, 0.8f));
@@ -410,15 +410,15 @@ void DrawGameplayScreen(void)
     
     DrawRectangleLines(99, 622, 395, 32, MAROON);
 
-    if (synchro == 1.0f) DrawTextEx(font, FormatText("%02i%%", (int)(synchro*100)), (Vector2){99 + 390, 600}, font.baseSize, -2, GREEN);
-    else DrawTextEx(font, FormatText("%02i%%", (int)(synchro*100)), (Vector2){99 + 390, 600}, font.baseSize, -2, SKYBLUE);
+    if (synchro == 1.0f) DrawTextEx(font, TextFormat("%02i%%", (int)(synchro*100)), (Vector2){99 + 390, 600}, font.baseSize, -2, GREEN);
+    else DrawTextEx(font, TextFormat("%02i%%", (int)(synchro*100)), (Vector2){99 + 390, 600}, font.baseSize, -2, SKYBLUE);
     
     // Draw time warp coool-down bar
     DrawRectangle(754, 622, 395, 32, Fade(RAYWHITE, 0.8f));
     DrawRectangle(754, 622, warpCounter, 32, Fade(SKYBLUE, 0.8f));
     DrawRectangleLines(754, 622, 395, 32, DARKGRAY);
-    //DrawText(FormatText("%02i%%", (int)(synchro*100)), 754 + 410, 628, 20, DARKGRAY);
-    DrawTextEx(font, FormatText("%02i%%", (int)((float)warpCounter/395.0f*100.0f)), (Vector2){754 + 390, 600}, font.baseSize, -2, SKYBLUE);
+    //DrawText(TextFormat("%02i%%", (int)(synchro*100)), 754 + 410, 628, 20, DARKGRAY);
+    DrawTextEx(font, TextFormat("%02i%%", (int)((float)warpCounter/395.0f*100.0f)), (Vector2){754 + 390, 600}, font.baseSize, -2, SKYBLUE);
     
     // Draw wave
     if (waveTarget.texture.id <= 0)     // Render target could not be loaded (OpenGL 1.1)
