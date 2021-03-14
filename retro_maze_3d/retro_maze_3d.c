@@ -204,7 +204,7 @@ int main()
     Mesh mesh = GenMeshCubicmap(imMap, (Vector3){ 1.0f, 1.0f, 1.0f });
     model = LoadModelFromMesh(mesh);                    // Load generated mesh into a model
     texMapAtlas = LoadTexture("resources/cubicmap_atlas.png");      // Load map texture
-    model.materials[0].maps[MAP_DIFFUSE].texture = texMapAtlas;     // Set map diffuse texture  
+    model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texMapAtlas;     // Set map diffuse texture  
     mapPixels = LoadImageColors(imMap); // Get map image data to be used for collision detection
 
     // Convert image to custom GB colors for minimap usage
