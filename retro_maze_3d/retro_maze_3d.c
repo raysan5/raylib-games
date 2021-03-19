@@ -598,7 +598,7 @@ static void UpdateDrawFrame(void)
                 DrawTexture(texTitleLogo, 320 - texTitleLogo.width + 5, 240 - texTitleLogo.height + 3, WHITE);
                 
                 /*
-                if (IsGamepadAvailable(GAMEPAD_PLAYER1))
+                if (IsGamepadAvailable(0))
                 {
                     if (GetGamepadButtonPressed() != -1) DrawText(TextFormat("DETECTED BUTTON: %i", GetGamepadButtonPressed()), 10, screenHeight - 25, 20, RED);
                     else DrawText("DETECTED BUTTON: NONE", 10, screenHeight - 25, 20, GRAY);

@@ -312,9 +312,9 @@ void UpdateGameplayScreen(void)
         if (IsKeyPressed(KEY_S)) enemiesStopped = !enemiesStopped;
         
         /*
-        if (IsGamepadAvailable(GAMEPAD_PLAYER1))
+        if (IsGamepadAvailable(0))
         {
-            Vector2 movement = GetGamepadMovement(GAMEPAD_PLAYER1);
+            Vector2 movement = GetGamepadMovement(0);
             
             player.position.x += movement.x*GAMEPAD_SENSITIVITY;
             player.position.y += movement.y*GAMEPAD_SENSITIVITY;

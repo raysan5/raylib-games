@@ -244,12 +244,12 @@ void UpdateGameplayScreen(void)
 
         // Player movement logic (gamepad)
         /*
-        if (IsGamepadAvailable(GAMEPAD_PLAYER1))
+        if (IsGamepadAvailable(0))
         {
             Vector2 movement = { 0 };
             
-            movement.x = GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_PS3_AXIS_LEFT_X);
-            movement.y = GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_PS3_AXIS_LEFT_Y);
+            movement.x = GetGamepadAxisMovement(0, GAMEPAD_PS3_AXIS_LEFT_X);
+            movement.y = GetGamepadAxisMovement(0, GAMEPAD_PS3_AXIS_LEFT_Y);
             
             player.position.x += movement.x*0.1f;   // Scale gamepad movement value
             player.position.y += movement.y*0.1f;   // Scale gamepad movement value
