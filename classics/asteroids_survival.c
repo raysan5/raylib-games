@@ -141,7 +141,7 @@ void InitGame(void)
     {
         posx = GetRandomValue(0, screenWidth);
 
-        while(!correctRange)
+        while (!correctRange)
         {
             if (posx > screenWidth/2 - 150 && posx < screenWidth/2 + 150) posx = GetRandomValue(0, screenWidth);
             else correctRange = true;
@@ -151,7 +151,7 @@ void InitGame(void)
 
         posy = GetRandomValue(0, screenHeight);
 
-        while(!correctRange)
+        while (!correctRange)
         {
             if (posy > screenHeight/2 - 150 && posy < screenHeight/2 + 150)  posy = GetRandomValue(0, screenHeight);
             else correctRange = true;
@@ -161,7 +161,7 @@ void InitGame(void)
         velx = GetRandomValue(-METEORS_SPEED, METEORS_SPEED);
         vely = GetRandomValue(-METEORS_SPEED, METEORS_SPEED);
 
-        while(!correctRange)
+        while (!correctRange)
         {
             if (velx == 0 && vely == 0)
             {
@@ -181,7 +181,7 @@ void InitGame(void)
     {
         posx = GetRandomValue(0, screenWidth);
 
-        while(!correctRange)
+        while (!correctRange)
         {
             if (posx > screenWidth/2 - 150 && posx < screenWidth/2 + 150) posx = GetRandomValue(0, screenWidth);
             else correctRange = true;
@@ -191,7 +191,7 @@ void InitGame(void)
 
         posy = GetRandomValue(0, screenHeight);
 
-        while(!correctRange)
+        while (!correctRange)
         {
             if (posy > screenHeight/2 - 150 && posy < screenHeight/2 + 150)  posy = GetRandomValue(0, screenHeight);
             else correctRange = true;
@@ -201,7 +201,7 @@ void InitGame(void)
         velx = GetRandomValue(-METEORS_SPEED, METEORS_SPEED);
         vely = GetRandomValue(-METEORS_SPEED, METEORS_SPEED);
 
-        while(!correctRange)
+        while (!correctRange)
         {
             if (velx == 0 && vely == 0)
             {

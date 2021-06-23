@@ -126,7 +126,7 @@ void UpdateTitleScreen(void)
         }
     }
 
-    if(IsButtonPressed())
+    if (IsButtonPressed())
     {
         MissionScreen();
     }    

@@ -221,7 +221,7 @@ void GameUpdate(void){
     CoinUpdate();
     
     // If all coins are collected
-    if(win){
+    if (win){
         if (IsKeyPressed(KEY_ENTER)){
             GameInit();
         }
@@ -243,7 +243,7 @@ void GameDraw(void){
         EndMode2D();
         DrawText(TextFormat("SCORE: %i", score), GetScreenWidth()/2 - MeasureText(TextFormat("SCORE: %i", score), 40)/2, GetScreenHeight()/5 - 50, 40, BLACK);
 
-        if(win){
+        if (win){
             DrawText("PRESS [ENTER] TO PLAY AGAIN", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] TO PLAY AGAIN", 20)/2, GetScreenHeight()/2 - 50, 20, GRAY);
         }
     EndDrawing();
@@ -385,15 +385,15 @@ void PlayerUpdate(void){
 
 // Reset coin visibility
 void CoinInit(void){
-    for(int i=0; i<coinCount; i++){
+    for (int i=0; i<coinCount; i++){
         coins[i].visible = true;
     }
 }
 
 // Draw each coin
 void CoinDraw(void){
-    for(int i=0; i<coinCount; i++){
-        if(coins[i].visible){
+    for (int i=0; i<coinCount; i++){
+        if (coins[i].visible){
             DrawRectangle((int)coins[i].position.x, (int)coins[i].position.y, 4.0, 4.0, GOLD);
         }
     }
@@ -402,10 +402,10 @@ void CoinDraw(void){
 // Collision check each coin
 void CoinUpdate(void){
     Rectangle playerRect = (Rectangle){player.position.x - player.width*0.5, player.position.y-player.height +1, player.width, player.height};
-    for(int i=0; i<coinCount; i++){
-        if(coins[i].visible){
+    for (int i=0; i<coinCount; i++){
+        if (coins[i].visible){
             Rectangle coinRect = (Rectangle){coins[i].position.x, coins[i].position.y, 4.0, 4.0};
-            if(CheckCollisionRecs(playerRect, coinRect)){
+            if (CheckCollisionRecs(playerRect, coinRect)){
                 coins[i].visible = false;
                 score += 1;
             }
@@ -639,10 +639,10 @@ void CollisionVerticalBlocks(Entity* instance) {
 
 // Return sign of the floal as int (-1, 0, 1)
 int ttc_sign(float x){
-    if(x < 0){
+    if (x < 0){
         return -1;
     }
-    else if(x < 0.0001){
+    else if (x < 0.0001){
         return 0;
     }
     else{
@@ -651,7 +651,7 @@ int ttc_sign(float x){
 }
 // Return absolute value of float
 float ttc_abs(float x){
-    if(x < 0.0) x *= -1.0;
+    if (x < 0.0) x *= -1.0;
     return x;
 }
 // clamp value between min and max

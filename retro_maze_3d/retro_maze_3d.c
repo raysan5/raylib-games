@@ -676,11 +676,9 @@ static void UpdateDrawFrame(void)
             } break;
             default: break;
         }
-        
     EndTextureMode();
 
     BeginDrawing();
-    
         ClearBackground(GB_GREEN01);
         
         // Draw render texture to screen
@@ -693,7 +691,6 @@ static void UpdateDrawFrame(void)
             EndScissorMode();
         }
         else DrawTextureRec(screenTarget.texture, (Rectangle){ 0, 0, screenTarget.texture.width, -screenTarget.texture.height }, (Vector2){ 0, 0 }, WHITE);
-
     EndDrawing();
     
     previousGamepadAxisValue[6] = currentGamepadAxisValue[6];

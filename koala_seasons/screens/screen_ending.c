@@ -203,7 +203,7 @@ void UpdateEndingScreen(void)
     {
         case DELAY:
         {
-            if(framesCounter >= 10)
+            if (framesCounter >= 10)
             {
                 endingCounter = SEASONS;
                 framesCounter = 0;

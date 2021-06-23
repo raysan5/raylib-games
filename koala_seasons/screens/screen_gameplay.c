@@ -2057,7 +2057,7 @@ void UpdateGameplayScreen(void)
 
                     if (((IsGestureDetected(GESTURE_TAP) || (GetGestureDetected() == GESTURE_DOUBLETAP)) && CheckCollisionPointRec(GetTouchPosition(0), leftButton)))
                     {
-                        if(!onIce)gravity = KICKSPEED;
+                        if (!onIce)gravity = KICKSPEED;
                         else gravity = ICEGRAVITY;
                         PlaySound(fxDash);
 
@@ -2070,7 +2070,7 @@ void UpdateGameplayScreen(void)
                     }
                     else
                     {
-                        if(!onIce)gravity = GRAVITY;
+                        if (!onIce)gravity = GRAVITY;
                         else gravity = ICEGRAVITY;
                         //thisFrameKoala = 0;
                     }
@@ -2092,7 +2092,7 @@ void UpdateGameplayScreen(void)
 
                     if (IsKeyPressed(KEY_DOWN) || (CheckCollisionPointRec(GetMousePosition(), leftButton) && IsMouseButtonPressed(0)))
                     {
-                        if(!onIce)gravity = KICKSPEED;
+                        if (!onIce)gravity = KICKSPEED;
                         else gravity = ICEGRAVITY;
                         PlaySound(fxDash);
 
@@ -2105,7 +2105,7 @@ void UpdateGameplayScreen(void)
                     }
                     else
                     {
-                        if(!onIce)gravity = GRAVITY;
+                        if (!onIce)gravity = GRAVITY;
                         else gravity = ICEGRAVITY;
                         //thisFrameKoala = 0;
                     }
@@ -2622,7 +2622,7 @@ void DrawGameplayScreen(void)
                     (Rectangle){fire[i].x + 5, fire[i].y + gameplay_props_burnttree.height/14, gameplay_props_burnttree.width, gameplay_props_burnttree.height}, (Vector2){0, 0}, 0, WHITE);
         DrawTextureRec(atlas01, fireAnimation, (Vector2){fire[i].x, GetScreenHeight() - gameplay_props_burnttree.height/7}, WHITE);
 
-        for(int j = MAX_FIRE_FLAMES; j > -2; j--)
+        for (int j = MAX_FIRE_FLAMES; j > -2; j--)
         {
             if ((fire[i].y - 25 <= (j*43)) && fireActive[i])
             {
@@ -3059,7 +3059,7 @@ static void DingoSpawn(int chance)
 
     if (GetRandomValue(0, 100) <= chance)
     {
-        for(int k = 0; k < MAX_ENEMIES; k++)
+        for (int k = 0; k < MAX_ENEMIES; k++)
         {
             if ((!dingoActive[k]) && (counter < 1))
             {
@@ -3131,12 +3131,12 @@ static void LeafSpawn(void)
             }
             else if (counter == 1)
             {
-                while(leafPosition == posArrayLeaf[counter - 1] || CheckArrayValue(posArray, 2, leafPosition)) leafPosition = GetRandomValue(0, 4);
+                while (leafPosition == posArrayLeaf[counter - 1] || CheckArrayValue(posArray, 2, leafPosition)) leafPosition = GetRandomValue(0, 4);
                 posArrayLeaf[counter] =  leafPosition;
             }
             else if (counter == 2)
             {
-                while((leafPosition == posArrayLeaf[counter - 1] || (leafPosition == posArrayLeaf[counter - 2])) || CheckArrayValue(posArray, 2, leafPosition)) leafPosition = GetRandomValue(0, 4);
+                while ((leafPosition == posArrayLeaf[counter - 1] || (leafPosition == posArrayLeaf[counter - 2])) || CheckArrayValue(posArray, 2, leafPosition)) leafPosition = GetRandomValue(0, 4);
                 posArrayLeaf[counter] =  leafPosition;
             }
 

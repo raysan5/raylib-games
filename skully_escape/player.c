@@ -273,7 +273,7 @@ static void DrawLifes(void)
     {
         Vector2 position = { 20, GetScreenHeight() - texLife.height - 20 };
         
-        for(int i = 0; i < player.numLifes; i++)
+        for (int i = 0; i < player.numLifes; i++)
         {
             DrawTexture(texLife, position.x + i*texLife.width, position.y, Fade(RAYWHITE, 0.7f));
         }

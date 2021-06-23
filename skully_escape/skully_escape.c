@@ -315,8 +315,8 @@ void UpdateDrawFrame(void)
                 UpdateAisle01Screen();
                 
                 if (FinishAisle01Screen() == 1) TransitionToScreen(BATHROOM);
-                else if(FinishAisle01Screen() == 2) TransitionToScreen(KITCHEN);
-                else if(FinishAisle01Screen() == 3) TransitionToScreen(LIVINGROOM);
+                else if (FinishAisle01Screen() == 2) TransitionToScreen(KITCHEN);
+                else if (FinishAisle01Screen() == 3) TransitionToScreen(LIVINGROOM);
 
             } break;
             case BATHROOM:
@@ -331,7 +331,7 @@ void UpdateDrawFrame(void)
                 UpdateLivingroomScreen();
                 
                 if (FinishLivingroomScreen() == 1) TransitionToScreen(AISLE01);
-                else if(FinishLivingroomScreen() == 2)TransitionToScreen(AISLE02);
+                else if (FinishLivingroomScreen() == 2)TransitionToScreen(AISLE02);
 
             } break;
             case AISLE02:
@@ -346,15 +346,15 @@ void UpdateDrawFrame(void)
                 UpdateKitchenScreen();
                 
                 if (FinishKitchenScreen() == 1) TransitionToScreen(ARMORY);
-                else if(FinishKitchenScreen() == 2)TransitionToScreen(AISLE02);
+                else if (FinishKitchenScreen() == 2)TransitionToScreen(AISLE02);
 
             } break;
             case ARMORY:
             { 
                 UpdateArmoryScreen();
                 
-                if(FinishArmoryScreen() == 1) TransitionToScreen(ENDING);
-                else if(FinishArmoryScreen() == 2) TransitionToScreen(KITCHEN);
+                if (FinishArmoryScreen() == 1) TransitionToScreen(ENDING);
+                else if (FinishArmoryScreen() == 2) TransitionToScreen(KITCHEN);
 
             } break;
             case ENDING: 
