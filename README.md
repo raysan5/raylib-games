@@ -2,6 +2,8 @@
 
 This is my collection of games made with raylib. Most of the games in this repo have been done Global Game Jam since 2015.
 
+![game name](screenshots/screenshot000.png "Game Name")
+
 Games included:
 
  - Dr Turtle and Mr Gamera (CEV 2014)
@@ -31,3 +33,10 @@ Classics directory includes some classic games:
  - Tetris
 
 All games are usually updated to latest version of raylib. Feel free to send a PR if some games requires an update!
+
+license
+-------
+
+All games sources are licensed under an unmodified zlib/libpng license, which is an OSI-certified, BSD-like license that allows static linking with closed source software. Check [LICENSE](LICENSE) for further details.
+
+*Copyright (c) 2014-2021 Ramon Santamaria ([@raysan5](https://twitter.com/raysan5))*
