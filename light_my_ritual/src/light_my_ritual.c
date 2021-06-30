@@ -287,8 +287,6 @@ static void UpdateDrawFrame(void)
 
         if (onTransition) DrawTransition();
 
-        //DrawFPS(10, 10);
-
     EndDrawing();
     //----------------------------------------------------------------------------------
 }
