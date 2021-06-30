@@ -128,9 +128,9 @@ static Texture2D circleIon = { 0 };
 static Texture2D circleIIon = { 0 };
 static Texture2D circleIIIon = { 0 };
 static Rectangle lightOff = { 0 };
-static Texture2D lightOn = { 0 };
+static Rectangle lightOn = { 0 };
 static Sound fxLightOn = { 0 };
-static Texture2D fxLightOff = { 0 };
+static Sound fxLightOff = { 0 };
 static Music music = { 0 };
 
 static bool enemiesStopped = false;

@@ -29,6 +29,7 @@
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int framesCounter = 0;
 static int finishScreen = 0;
 static int state = 0;
 

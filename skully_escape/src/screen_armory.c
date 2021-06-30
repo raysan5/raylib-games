@@ -25,29 +25,23 @@
 
 #include "raylib.h"
 #include "screens.h"
-#include "../player.h"
-#include "../monster.h"
+#include "player.h"
+#include "monster.h"
 
 #include <string.h>
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int framesCounter = 0;
+static int finishScreen = 0;
 
-// Gameplay screen global variables
-static int framesCounter;
-static int finishScreen;
-
-static Texture2D background;
-
-// Declare doors
-static Door doorLeft;
-static Door doorRight;
-
-// Decalre monsters
-static Monster blazon01;
-static Monster blazon02;
-static Monster blazon03;
+static Texture2D background = { 0 };
+static Door doorLeft = { 0 };
+static Door doorRight = { 0 };
+static Monster blazon01 = { 0 };
+static Monster blazon02 = { 0 };
+static Monster blazon03 = { 0 };
 
 static bool monsterHover = false;
 static int monsterCheck = -1;      // Identify checking monster
@@ -334,7 +328,8 @@ void DrawArmoryScreen(void)
 {
     DrawTexture(background, 0, 0, WHITE);
 
-    // Draw monsters    DrawMonster(blazon01, 0);
+    // Draw monsters
+    DrawMonster(blazon01, 0);
     DrawMonster(blazon02, 0);
     DrawMonster(blazon03, 0);
 
@@ -349,7 +344,7 @@ void DrawArmoryScreen(void)
     if (msgState < 2) DrawRectangle(0, 40, GetScreenWidth(), 200, Fade(LIGHTGRAY, 0.5f));
     else if (msgState == 2) DrawRectangle(0, 80, GetScreenWidth(), 100, Fade(LIGHTGRAY, 0.5f));
 
-    if (msgState == 0)
+    if (msgState == 0) 
     {
         DrawTextEx(font, msgBuffer, (Vector2){ msgPosX, 80 }, font.baseSize, 2, WHITE);
     }
@@ -385,8 +380,8 @@ void DrawArmoryScreen(void)
 // Gameplay Screen Unload logic
 void UnloadArmoryScreen(void)
 {
-    // TODO: Unload GAMEPLAY screen variables here!
-    UnloadTexture(background);    
+    UnloadTexture(background);
+
     UnloadMonster(blazon01);
     UnloadMonster(blazon02);
     UnloadMonster(blazon03);

@@ -165,7 +165,7 @@ static void ChangeToScreen(int screen)
 {
     switch (currentScreen)
     {
-        case LOGO: rlUnloadLogoScreen(); break;
+        case LOGO: UnloadLogoScreen(); break;
         case TITLE: UnloadTitleScreen(); break;
         case GAMEPLAY: UnloadGameplayScreen(); break;
         default: break;
@@ -173,7 +173,7 @@ static void ChangeToScreen(int screen)
 
     switch (screen)
     {
-        case LOGO: rlInitLogoScreen(); break;
+        case LOGO: InitLogoScreen(); break;
         case TITLE: InitTitleScreen(); break;
         case GAMEPLAY: InitGameplayScreen(); break;
         default: break;

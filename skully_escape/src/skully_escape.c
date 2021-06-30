@@ -28,6 +28,7 @@ Font font = { 0 };
 Texture2D doors = { 0 };
 Sound sndDoor = { 0 };
 Sound sndScream = { 0 };
+Player player = { 0 };
 
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)

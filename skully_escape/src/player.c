@@ -19,29 +19,26 @@
 #define PLAYER_ANIM_SEQ        6
 
 //----------------------------------------------------------------------------------
-// Module Variables Definition
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-
-// Player mouse moving variables
-static bool movingAnim;
-static int moveDirection;
-static int nextMovePoint;
+static bool movingAnim = false;
+static int moveDirection = 0;
+static int nextMovePoint = 0;
 
 // Mouse pointer variables
-static Vector2 pointerPosition;
-static bool pointerAnim;
-static float pointerAlpha;
+static Vector2 pointerPosition = { 0 };
+static bool pointerAnim = false;
+static float pointerAlpha = 0.0f;
 
-static int framesCounter;
+static int framesCounter = 0;
 static bool outControl = false;
 
 static int animTimer = 0;
 
-static Texture2D texLife;
+static Texture2D texLife = { 0 };
 
 static void DrawLifes(void);
 
-// player initialitaction definition
 void InitPlayer(void)
 {
     // NOTE: Some player variables are only initialized once
@@ -56,7 +53,6 @@ void InitPlayer(void)
     texLife = LoadTexture("resources/textures/skully_icon.png");
 }
 
-// player update definition
 void UpdatePlayer(void)
 {
     if (!outControl)

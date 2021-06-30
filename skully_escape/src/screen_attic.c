@@ -25,35 +25,29 @@
 
 #include "raylib.h"
 #include "screens.h"
-#include "../player.h"
-#include "../monster.h"
+#include "player.h"
+#include "monster.h"
 
 #include <string.h>
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int framesCounter = 0;
+static int finishScreen = 0;
 
-// Gameplay screen global variables
-static int framesCounter;
-static int finishScreen;
+static Texture2D background = { 0 };
+static Door doorRight = { 0 };
+static Monster lamp = { 0 };
+static Monster arc = { 0 };
 
-static Texture2D background;
-
-// Declare doors
-static Door doorRight;
-
-// Decalre monsters
-static Monster lamp;
-static Monster arc;
-
-static bool monsterHover;
-static int monsterCheck;      // Identify checking monster
+static bool monsterHover = false;
+static int monsterCheck = 0;      // Identify checking monster
 
 static const char message[256] = "YOUR PARENTS ARE GONE! TIME TO ESCAPE!\nTHE DOOR IS LOCKED... TURN ON THE LIGHTS! ;)";
 static int msgPosX = 100;
 
-static int msgState = 0;   // 0-writting, 1-wait, 2-choose
+static int msgState = 0;        // 0-writting, 1-wait, 2-choose
 static int lettersCounter = 0;
 static char msgBuffer[256] = { '\0' };
 static int msgCounter = 0;

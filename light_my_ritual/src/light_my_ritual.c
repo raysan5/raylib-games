@@ -88,9 +88,7 @@ int main(void)
 
     // Setup and Init first screen
     currentScreen = LOGO;
-    //InitTitleScreen();
-    //InitGameplayScreen();
-    rlInitLogoScreen();
+    InitLogoScreen();
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
@@ -109,7 +107,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     switch (currentScreen)
     {
-        case LOGO_RL: UnloadLogoScreen(); break;
+        case LOGO: UnloadLogoScreen(); break;
         case TITLE: UnloadTitleScreen(); break;
         case GAMEPLAY: UnloadGameplayScreen(); break;
         default: break;
@@ -144,7 +142,7 @@ static void ChangeToScreen(int screen)
 
     switch (screen)
     {
-        case LOGO_RL: InitLogoScreen(); break;
+        case LOGO: InitLogoScreen(); break;
         case TITLE: InitTitleScreen(); break;
         case GAMEPLAY: InitGameplayScreen(); break;
         default: break;
@@ -185,7 +183,7 @@ static void UpdateTransition(void)
                 case LOGO:
                 {
                     InitLogoScreen();
-                    currentScreen = LOGO_RL;
+                    currentScreen = LOGO;
                 } break;
                 case TITLE:
                 {
