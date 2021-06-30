@@ -45,7 +45,7 @@ void InitLogoScreen(void)
 {
     // Initialize LOGO screen variables here!
     finishScreen = 0;
-    
+
     logo = LoadTexture("resources/textures/skully_logo.png");
 }
 
@@ -56,20 +56,20 @@ void UpdateLogoScreen(void)
     if (state == 0)
     {
         logoAlpha += 0.04f;
-        
+
         if (logoAlpha >= 1.0f) state = 1;
     }
     else if (state == 1)
     {
         framesCounter++;
-        
+
         if (framesCounter > 180) state = 2;
     }
     else if (state == 2)
     {
         logoAlpha -= 0.04f;
-        
-        if (logoAlpha <= 0.0f) 
+
+        if (logoAlpha <= 0.0f)
         {
             framesCounter = 0;
             state = 3;
@@ -87,7 +87,7 @@ void DrawLogoScreen(void)
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), RAYWHITE);
 
     DrawTexture(logo, GetScreenWidth()/2 - logo.width/2, 130, Fade(WHITE, logoAlpha));
-    
+
     DrawText("GRAY TEAM", 340, 450, 100, Fade(DARKGRAY, logoAlpha));
 }
 

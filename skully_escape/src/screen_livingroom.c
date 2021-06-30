@@ -70,7 +70,7 @@ static bool searching = false;
 void InitLivingroomScreen(void)
 {
     ResetPlayer();
-    
+
     // Reset Screen variables
     monsterHover = false;
     monsterCheck = -1;
@@ -78,12 +78,12 @@ void InitLivingroomScreen(void)
     msgCounter = 0;
     lettersCounter = 0;
     for (int i = 0; i < 256; i++) msgBuffer[i] = '\0';
-    
+
     framesCounter = 0;
     finishScreen = 0;
-    
+
     background = LoadTexture("resources/textures/background_livingroom.png");
-    
+
     // Initialize doors
     doorLeft.position = (Vector2) { -45, 140};
     doorLeft.facing = 0;
@@ -91,7 +91,7 @@ void InitLivingroomScreen(void)
     doorLeft.frameRec =(Rectangle) {((doors.width/3)*doorLeft.facing), doors.height/2, doors.width/3, doors.height/2};
     doorLeft.bound = (Rectangle) { doorLeft.position.x, doorLeft.position.y, doors.width/3, doors.height/2};
     doorLeft.selected = false;
-    
+
     doorCenter.position = (Vector2) { 830, 108 };
     doorCenter.facing = 1;
     doorCenter.locked = true;
@@ -110,7 +110,7 @@ void InitLivingroomScreen(void)
     candle.selected = false;
     candle.active = false;
     candle.spooky = false;
-    
+
     // Monster init: arc
     picture.position = (Vector2){ 504, 164 };
     picture.texture = LoadTexture("resources/textures/monster_picture.png");
@@ -122,7 +122,7 @@ void InitLivingroomScreen(void)
     picture.selected = false;
     picture.active = false;
     picture.spooky = true;
-    
+
     // Monster init: phone
     phone.position = (Vector2){ 1054, 404 };
     phone.texture = LoadTexture("resources/textures/monster_phone.png");
@@ -140,12 +140,12 @@ void InitLivingroomScreen(void)
 void UpdateLivingroomScreen(void)
 {
     if (player.key)
-    {       
+    {
         // Door: left
-        if ((CheckCollisionPointRec(GetMousePosition(), doorLeft.bound)) || 
-            (CheckCollisionRecs(player.bounds, doorLeft.bound))) doorLeft.selected = true; 
+        if ((CheckCollisionPointRec(GetMousePosition(), doorLeft.bound)) ||
+            (CheckCollisionRecs(player.bounds, doorLeft.bound))) doorLeft.selected = true;
         else doorLeft.selected = false;
-        
+
         if ((doorLeft.selected) && (CheckCollisionRecs(player.bounds, doorLeft.bound)))
         {
             if (((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && CheckCollisionPointRec(GetMousePosition(), doorLeft.bound)) || (IsKeyPressed(KEY_SPACE)))
@@ -159,12 +159,12 @@ void UpdateLivingroomScreen(void)
                 else finishScreen = 1;
             }
         }
-        
+
         // Door: center
-        if ((CheckCollisionPointRec(GetMousePosition(), doorCenter.bound)) || 
-            (CheckCollisionRecs(player.bounds, doorCenter.bound))) doorCenter.selected = true; 
+        if ((CheckCollisionPointRec(GetMousePosition(), doorCenter.bound)) ||
+            (CheckCollisionRecs(player.bounds, doorCenter.bound))) doorCenter.selected = true;
         else doorCenter.selected = false;
-        
+
         if ((doorCenter.selected) && (CheckCollisionRecs(player.bounds, doorCenter.bound)))
         {
             if (((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && CheckCollisionPointRec(GetMousePosition(), doorCenter.bound)) || (IsKeyPressed(KEY_SPACE)))
@@ -179,78 +179,75 @@ void UpdateLivingroomScreen(void)
             }
         }
     }
-        
+
     if (msgState > 2)
     {
-        UpdatePlayer();
-	
-		// Monsters logic
+        UpdatePlayer();        	// Monsters logic
         UpdateMonster(&candle);
         UpdateMonster(&picture);
         UpdateMonster(&phone);
-    }
-	
+    }    
     // Check player hover monsters to interact
     if (((CheckCollisionRecs(player.bounds, candle.bounds)) && !candle.active) ||
         ((CheckCollisionRecs(player.bounds, picture.bounds)) && !picture.active) ||
         ((CheckCollisionRecs(player.bounds, phone.bounds)) && !phone.active)) monsterHover = true;
     else monsterHover = false;
-    
+
     // Monters logic: candle
     if ((CheckCollisionRecs(player.bounds, candle.bounds)) && !candle.active)
     {
         candle.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), candle.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 1;
         }
     }
     else candle.selected = false;
-    
+
     // Monters logic: picture
     if ((CheckCollisionRecs(player.bounds, picture.bounds)) && !picture.active)
     {
         picture.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), picture.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 2;
         }
     }
     else picture.selected = false;
-    
+
     // Monters logic: phone
     if ((CheckCollisionRecs(player.bounds, phone.bounds)) && !phone.active)
     {
         phone.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), phone.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 3;
         }
     }
     else phone.selected = false;
-    
+
     if (searching)
     {
         framesCounter++;
-        
+
         if (framesCounter > 180)
         {
             if (monsterCheck == 1)
@@ -261,7 +258,7 @@ void UpdateLivingroomScreen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 candle.active = true;
                 candle.selected = false;
             }
@@ -273,7 +270,7 @@ void UpdateLivingroomScreen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 picture.active = true;
                 picture.selected = false;
             }
@@ -285,19 +282,19 @@ void UpdateLivingroomScreen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 phone.active = true;
                 phone.selected = false;
             }
-  
+
             searching = false;
             framesCounter = 0;
         }
     }
-    
+
     // Text animation
     framesCounter++;
-    
+
     if ((framesCounter%2) == 0) lettersCounter++;
 
     if (msgState == 0)
@@ -310,13 +307,13 @@ void UpdateLivingroomScreen(void)
             lettersCounter = 0;
             msgState = 1;
         }
-        
+
         if (IsKeyPressed(KEY_ENTER)) msgState = 1;
     }
     else if (msgState == 1)
     {
         msgCounter++;
-        
+
         if ((IsKeyPressed(KEY_ENTER)) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)))
         {
             msgState = 2;
@@ -326,7 +323,7 @@ void UpdateLivingroomScreen(void)
     else if (msgState == 2)
     {
         msgCounter++;
-        
+
         if (msgCounter > 180) msgState = 3;
     }
     else msgCounter++;
@@ -336,30 +333,29 @@ void UpdateLivingroomScreen(void)
 void DrawLivingroomScreen(void)
 {
     DrawTexture(background, 0, 0, WHITE);
-    
-    // Draw monsters
-	DrawMonster(picture, 0);
+
+    // Draw monsters    DrawMonster(picture, 0);
     DrawMonster(candle, 0);
     DrawMonster(phone, 0);
-    
+
     // Draw door
     if (doorCenter.selected) DrawTextureRec(doors, doorCenter.frameRec, doorCenter.position, GREEN);
     else DrawTextureRec(doors, doorCenter.frameRec, doorCenter.position, WHITE);
     if (doorLeft.selected) DrawTextureRec(doors, doorLeft.frameRec, doorLeft.position, GREEN);
     else DrawTextureRec(doors, doorLeft.frameRec, doorLeft.position, WHITE);
-    
+
     // Draw messsages
     if (msgState < 2) DrawRectangle(0, 40, GetScreenWidth(), 200, Fade(LIGHTGRAY, 0.5f));
     else if (msgState == 2) DrawRectangle(0, 80, GetScreenWidth(), 100, Fade(LIGHTGRAY, 0.5f));
 
-    if (msgState == 0) 
+    if (msgState == 0)
     {
         DrawTextEx(font, msgBuffer, (Vector2){ msgPosX, 80 }, font.baseSize, 2, WHITE);
     }
     else if (msgState == 1)
     {
         DrawTextEx(font, message, (Vector2){ msgPosX, 80 }, font.baseSize, 2, WHITE);
-        
+
         if ((msgCounter/30)%2) DrawText("PRESS ENTER or CLICK", GetScreenWidth() - 280, 200, 20, BLACK);
     }
     else if (msgState == 2)
@@ -367,7 +363,7 @@ void DrawLivingroomScreen(void)
         if ((msgCounter/30)%2)
         {
             DrawTextEx(font, "CHOOSE WISELY!", (Vector2){ 300, 95 }, font.baseSize*2, 2, WHITE);
-            
+
             DrawRectangleRec(candle.bounds, Fade(RED, 0.6f));
             DrawRectangleRec(phone.bounds, Fade(RED, 0.6f));
             DrawRectangleRec(picture.bounds, Fade(RED, 0.6f));
@@ -389,8 +385,7 @@ void DrawLivingroomScreen(void)
 void UnloadLivingroomScreen(void)
 {
     // TODO: Unload GAMEPLAY screen variables here!
-    UnloadTexture(background);
-	
+    UnloadTexture(background);    
     UnloadMonster(candle);
     UnloadMonster(picture);
     UnloadMonster(phone);

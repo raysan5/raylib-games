@@ -47,12 +47,12 @@ void InitTitleScreen(void)
 {
     framesCounter = 0;
     finishScreen = 0;
-    
+
     texTitle = LoadTexture("resources/title.png");
     texLogo = LoadTexture("resources/raylib_logo.png");
-    
+
     player = GenerateCharacter();
-    
+
     titlePositionY = -200;
 }
 
@@ -64,7 +64,7 @@ void UpdateTitleScreen(void)
     if (framesCounter > 5)
     {
         int partToChange = GetRandomValue(0, 4);
-        
+
         if (partToChange == 0)
         {
             player.head = GetRandomValue(0, texHead.width/BASE_HEAD_WIDTH - 1);
@@ -81,12 +81,12 @@ void UpdateTitleScreen(void)
 
         framesCounter = 0;
     }
-    
+
     titlePositionY += 3;
     if (titlePositionY > 40) titlePositionY = 40;
-    
+
     titleCounter++;
-    
+
     if (IsKeyPressed(KEY_ENTER)) finishScreen = 1;
 }
 
@@ -94,22 +94,22 @@ void UpdateTitleScreen(void)
 void DrawTitleScreen(void)
 {
     DrawTexture(background, 0, 0, GetColor(0xf6aa60ff));
-    
+
     // Draw face, parts keep changing ranomly
     DrawCharacter(player, (Vector2){ GetScreenWidth()/2 - 125, 80 });
-    
+
     // Draw face rectangles
     //DrawRectangleRec((Rectangle){ GetScreenWidth()/2 - BASE_EYES_WIDTH/2, 270, BASE_EYES_WIDTH, texEyes.height }, Fade(GREEN, 0.3f));
     //DrawRectangleRec((Rectangle){ GetScreenWidth()/2 - BASE_NOSE_WIDTH/2, 355, BASE_NOSE_WIDTH, texNose.height }, Fade(SKYBLUE, 0.3f));
     //DrawRectangleRec((Rectangle){ GetScreenWidth()/2 - BASE_MOUTH_WIDTH/2, 450, BASE_MOUTH_WIDTH, texMouth.height }, Fade(RED, 0.3f));
-    
+
     DrawTexture(texTitle, GetScreenWidth()/2 - texTitle.width/2, titlePositionY, WHITE);
 
     if (titleCounter > 180)
     {
         if (GuiButton((Rectangle){ GetScreenWidth()/2 - 440/2, 580, 440, 80 }, "START DATE!", -1)) finishScreen = 1;   // GAMEPLAY
     }
-    
+
     DrawText("powered by", 20, GetScreenHeight() - texLogo.height - 35, 10, BLACK);
     DrawTexture(texLogo, 20, GetScreenHeight() - texLogo.height - 20, WHITE);
 }

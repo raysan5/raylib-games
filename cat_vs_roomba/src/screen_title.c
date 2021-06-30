@@ -54,19 +54,19 @@ void InitTitleScreen(void)
     // TODO: Initialize TITLE screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     cat = LoadTexture("resources/title_cat.png");
     vs = LoadTexture("resources/title_vs.png");
     roomba = LoadTexture("resources/title_roomba.png");
-    
+
     state = 0;
     catPosX = 1760;
     roombaPosX = -700;
     scrollPositionX = 0;
-    
+
     vsAlpha = 0.0f;
     vsScale = 10.0f;
-    
+
     PlayMusicStream(music);
 }
 
@@ -80,11 +80,11 @@ void UpdateTitleScreen(void)
     {
         catPosX -= 4;
         roombaPosX += 3;
-        
+
         if (catPosX < (GetScreenWidth()/2 - cat.width/2)) catPosX = (GetScreenWidth()/2 - cat.width/2);
         if (roombaPosX > (GetScreenWidth()/2 - roomba.width/2)) roombaPosX = (GetScreenWidth()/2 - roomba.width/2);
-        
-        if ((catPosX == (GetScreenWidth()/2 - cat.width/2)) && (roombaPosX == (GetScreenWidth()/2 - roomba.width/2))) 
+
+        if ((catPosX == (GetScreenWidth()/2 - cat.width/2)) && (roombaPosX == (GetScreenWidth()/2 - roomba.width/2)))
         {
             state = 1;
             framesCounter = 0;
@@ -93,13 +93,13 @@ void UpdateTitleScreen(void)
     else if (state == 1)
     {
         framesCounter++;
-        
+
         vsScale -= 0.1f;
         vsAlpha += 0.01f;
-        
+
         if (vsScale < 1.0f) vsScale = 1.0f;
         if (vsAlpha > 1.0f) vsAlpha = 1.0f;
-        
+
         if (framesCounter > 160)
         {
             state = 2;
@@ -124,10 +124,10 @@ void DrawTitleScreen(void)
     {
         DrawRectangle(64*i + scrollPositionX, 0, 64, GetScreenHeight(), (i%2 == 0)? GetColor(0xf3726dff) : GetColor(0xffcf6bff));
     }
-    
+
     DrawTexture(cat, catPosX, 80, WHITE);
     DrawTexture(roomba, roombaPosX, 320, WHITE);
-    
+
     if (state > 0)
     {
         DrawTexturePro(vs, (Rectangle){ 0, 0, vs.width, vs.height }, (Rectangle){ GetScreenWidth()/2, 300, vs.width*vsScale, vs.height*vsScale }, (Vector2){ vs.width/2*vsScale, vs.height/2*vsScale }, 0.0f, Fade(WHITE, vsAlpha));

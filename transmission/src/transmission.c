@@ -2,8 +2,8 @@
 *
 *   TRANSMISSION MISSION [GLOBAL GAME JAM 2018]
 *
-*   Code the different filtration messages to be send to newspaper 
-*   to avoid being understood in case of interception. 
+*   Code the different filtration messages to be send to newspaper
+*   to avoid being understood in case of interception.
 *
 *   This game has been created using raylib 1.8 (www.raylib.com)
 *   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
@@ -52,16 +52,16 @@ static bool onTransition = false;
 static bool transFadeOut = false;
 static int transFromScreen = -1;
 static int transToScreen = -1;
-    
+
 //----------------------------------------------------------------------------------
 // Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
 static void ChangeToScreen(int screen);     // Change to screen, no transition effect
-                                            
+
 static void TransitionToScreen(int screen); // Request transition to next screen
 static void UpdateTransition(void);         // Update transition effect
 static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
-                                            
+
 static void UpdateDrawFrame(void);          // Update and draw one frame
 
 //----------------------------------------------------------------------------------
@@ -78,13 +78,13 @@ int main(void)
 
     music = LoadMusicStream("resources/audio/music_title.ogg");
     fxButton = LoadSound("resources/audio/fx_newspaper.ogg");
-    
+
     SetMusicVolume(music, 1.0f);
     PlayMusicStream(music);
-    
+
     fontMission = LoadFontEx("resources/fonts/traveling_typewriter.ttf", 64, 0, 250);
     texButton = LoadTexture("resources/textures/title_ribbon.png");
-    
+
     // UI BUTTON
     recButton.width = texButton.width;
     recButton.height = texButton.height;
@@ -98,7 +98,7 @@ int main(void)
 
     currentMission = 0;
     totalMissions = 4;
-    
+
     // Setup and Init first screen
     currentScreen = LOGO;
     InitLogoScreen();
@@ -118,7 +118,7 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    
+
     // Unload current screen data before closing
     switch (currentScreen)
     {
@@ -129,16 +129,16 @@ int main(void)
         case ENDING: UnloadEndingScreen(); break;
         default: break;
     }
-    
+
     // Unload all global loaded data (i.e. fonts) here!
     UnloadMusicStream(music);
     UnloadSound(fxButton);
-    
+
     UnloadFont(fontMission);
     UnloadTexture(texButton);
-    
+
     CloseAudioDevice();     // Close audio context
-    
+
     CloseWindow();          // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -161,7 +161,7 @@ static void ChangeToScreen(int screen)
         case ENDING: UnloadEndingScreen(); break;
         default: break;
     }
-    
+
     // Init next screen
     switch (screen)
     {
@@ -172,7 +172,7 @@ static void ChangeToScreen(int screen)
         case ENDING: InitEndingScreen(); break;
         default: break;
     }
-    
+
     currentScreen = screen;
 }
 
@@ -192,13 +192,13 @@ static void UpdateTransition(void)
     if (!transFadeOut)
     {
         transAlpha += 0.02f;
-        
+
         // NOTE: Due to float internal representation, condition jumps on 1.0f instead of 1.05f
         // For that reason we compare against 1.01f, to avoid last frame loading stop
         if (transAlpha > 1.01f)
         {
             transAlpha = 1.0f;
-        
+
             // Unload current screen
             switch (transFromScreen)
             {
@@ -209,7 +209,7 @@ static void UpdateTransition(void)
                 case ENDING: UnloadEndingScreen(); break;
                 default: break;
             }
-            
+
             // Load next screen
             switch (transToScreen)
             {
@@ -220,9 +220,9 @@ static void UpdateTransition(void)
                 case ENDING: InitEndingScreen(); break;
                 default: break;
             }
-            
+
             currentScreen = transToScreen;
-            
+
             // Activate fade out effect to next loaded screen
             transFadeOut = true;
         }
@@ -230,7 +230,7 @@ static void UpdateTransition(void)
     else  // Transition fade out logic
     {
         transAlpha -= 0.02f;
-        
+
         if (transAlpha < -0.01f)
         {
             transAlpha = 0.0f;
@@ -254,23 +254,23 @@ static void UpdateDrawFrame(void)
     // Update
     //----------------------------------------------------------------------------------
     UpdateMusicStream(music);       // NOTE: Music keeps playing between screens
-    
+
     if (!onTransition)
     {
-        switch(currentScreen) 
+        switch(currentScreen)
         {
-            case LOGO: 
+            case LOGO:
             {
                 UpdateLogoScreen();
-                
+
                 if (FinishLogoScreen()) TransitionToScreen(TITLE);
 
             } break;
-            case TITLE: 
+            case TITLE:
             {
                 UpdateTitleScreen();
 
-                if (FinishTitleScreen()) 
+                if (FinishTitleScreen())
                 {
                     StopMusicStream(music);
                     TransitionToScreen(MISSION);
@@ -280,7 +280,7 @@ static void UpdateDrawFrame(void)
             case MISSION:
             {
                 UpdateMissionScreen();
-                    
+
                 if (FinishMissionScreen())
                 {
                     StopMusicStream(music);
@@ -291,15 +291,15 @@ static void UpdateDrawFrame(void)
             case GAMEPLAY:
             {
                 UpdateGameplayScreen();
-                
+
                 if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
                 //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
             } break;
             case ENDING:
-            { 
+            {
                 UpdateEndingScreen();
-                
+
                 if (FinishEndingScreen() == 1)          // Continue to next mission
                 {
                     TransitionToScreen(MISSION);
@@ -316,14 +316,14 @@ static void UpdateDrawFrame(void)
     }
     else UpdateTransition();    // Update transition (fade-in, fade-out)
     //----------------------------------------------------------------------------------
-    
+
     // Draw
     //----------------------------------------------------------------------------------
     BeginDrawing();
-        
+
         ClearBackground(RAYWHITE);
-            
-        switch(currentScreen) 
+
+        switch(currentScreen)
         {
             case LOGO: DrawLogoScreen(); break;
             case TITLE: DrawTitleScreen(); break;
@@ -332,12 +332,12 @@ static void UpdateDrawFrame(void)
             case ENDING: DrawEndingScreen(); break;
             default: break;
         }
-         
+
         // Draw full screen rectangle in front of everything
         if (onTransition) DrawTransition();
-        
+
         //DrawFPS(10, 10);
-        
+
     EndDrawing();
     //----------------------------------------------------------------------------------
 }
@@ -350,11 +350,11 @@ Mission *LoadMissions(const char *fileName)
 {
     Mission *missions = NULL;
     char buffer[512];
-    
+
     int missionsCount = 0;
-    
+
     FILE *misFile = fopen(fileName, "rt");
-    
+
     if (misFile == NULL) printf("[%s] Missions file could not be opened\n", fileName);
     else
     {
@@ -362,21 +362,21 @@ Mission *LoadMissions(const char *fileName)
         while (!feof(misFile))
         {
             fgets(buffer, 512, misFile);
-            
+
             switch (buffer[0])
             {
                 case 't': sscanf(buffer, "t %i", &missionsCount); break;
                 default: break;
             }
         }
-        
+
         if (missionsCount > 0) missions = (Mission *)malloc(missionsCount*sizeof(Mission));
         else return NULL;
-        
+
         rewind(misFile);    // Return to the beginning of the file, to read again
-        
+
         int missionNum = 0;
-        
+
         while (!feof(misFile))
         {
             fgets(buffer, 512, misFile);
@@ -385,11 +385,11 @@ Mission *LoadMissions(const char *fileName)
             {
                 switch (buffer[0])
                 {
-                    case 'b': 
+                    case 'b':
                     {
                         // New mission brief starts!
                         missions[missionNum].id = missionNum;
-                        sscanf(buffer, "b %[^\n]s", missions[missionNum].brief); 
+                        sscanf(buffer, "b %[^\n]s", missions[missionNum].brief);
                     } break;
                     case 'k': sscanf(buffer, "k %[^\n]s", missions[missionNum].key); break;
                     case 'm':
@@ -397,10 +397,10 @@ Mission *LoadMissions(const char *fileName)
                         // NOTE: Message is loaded as is, needs to be processed!
                         sscanf(buffer, "m %[^\n]s", missions[missionNum].msg);
                     } break;
-                    case 's': 
+                    case 's':
                     {
-                        sscanf(buffer, "s %i %i %i %i %i %i %i %i", 
-                               &missions[missionNum].sols[0], 
+                        sscanf(buffer, "s %i %i %i %i %i %i %i %i",
+                               &missions[missionNum].sols[0],
                                &missions[missionNum].sols[1],
                                &missions[missionNum].sols[2],
                                &missions[missionNum].sols[3],
@@ -408,37 +408,37 @@ Mission *LoadMissions(const char *fileName)
                                &missions[missionNum].sols[5],
                                &missions[missionNum].sols[6],
                                &missions[missionNum].sols[7]);
-                               
+
                         missions[missionNum].wordsCount = 0;
-                        
-                        for (int i = 0; i < 8; i++) 
+
+                        for (int i = 0; i < 8; i++)
                         {
                             if (missions[missionNum].sols[i] > -1)
                             {
                                 missions[missionNum].wordsCount++;
                             }
                         }
-                        
+
                         TraceLog(LOG_WARNING, "Mission %i - Words count %i", missionNum, missions[missionNum].wordsCount);
-                        
+
                         missionNum++;
                     } break;
                     default: break;
                 }
             }
         }
-        
+
         if (missionsCount != missionNum) TraceLog(LOG_WARNING, "Missions count and loaded missions don't match!");
     }
 
     fclose(misFile);
-    
-    if (missions != NULL) 
+
+    if (missions != NULL)
     {
         TraceLog(LOG_INFO, "Missions loaded: %i", missionsCount);
         TraceLog(LOG_INFO, "Missions loaded successfully!");
     }
-    
+
     return missions;
 }
 
@@ -448,7 +448,7 @@ bool IsButtonPressed(void)
     if (CheckCollisionPointRec(GetMousePosition(), recButton))
     {
         fadeButton = 1.0f;
-        
+
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsGestureDetected(GESTURE_TAP))
         {
             PlaySound(fxButton);
@@ -456,7 +456,7 @@ bool IsButtonPressed(void)
         }
     }
     else fadeButton = 0.80f;
-    
+
     return false;
 }
 

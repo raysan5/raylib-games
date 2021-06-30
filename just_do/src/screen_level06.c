@@ -55,9 +55,9 @@ void InitLevel06Screen(void)
     // Initialize Level06 screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     centerRec = (Rectangle){ GetScreenWidth()/2 - 100, 0, 200, GetScreenHeight() };
-    
+
     for (int i = 0; i < 4; i++)
     {
         movingRecs[i] = (Rectangle){ GetRandomValue(0, 5)*150, (i*150) + 90, 100, 100 };
@@ -77,13 +77,13 @@ void UpdateLevel06Screen(void)
         for (int i = 0; i < 4; i++)
         {
             if (!stoppedRec[i]) movingRecs[i].x += speedRecs[i];
-            
+
             if (movingRecs[i].x >= GetScreenWidth()) movingRecs[i].x = -movingRecs[i].width;
-            
+
             if (CheckCollisionPointRec(GetMousePosition(), movingRecs[i]))
             {
                 mouseOverNum = i;
-                
+
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
                     if (i == 0) stoppedRec[3] = !stoppedRec[3];
@@ -105,18 +105,18 @@ void UpdateLevel06Screen(void)
         }
     }
 
-    
+
     if (done && !levelFinished)
     {
         levelTimeSec = framesCounter/60;
         levelFinished = true;
         framesCounter = 0;
     }
-    
+
     if (levelFinished)
     {
         framesCounter++;
-        
+
         if ((framesCounter > 90) && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) finishScreen = true;
     }
 }
@@ -126,14 +126,14 @@ void DrawLevel06Screen(void)
 {
     // Draw Level06 screen
     DrawRectangleRec(centerRec, LIGHTGRAY);
-    
+
     for (int i = 0; i < 4; i++)
     {
         DrawRectangleRec(movingRecs[i], GRAY);
     }
-    
+
     if (!done && (mouseOverNum >= 0)) DrawRectangleLines(movingRecs[mouseOverNum].x - 5, movingRecs[mouseOverNum].y - 5, movingRecs[mouseOverNum].width + 10, movingRecs[mouseOverNum].height + 10, Fade(LIGHTGRAY, 0.8f));
-        
+
     if (levelFinished)
     {
         DrawRectangleBordersRec((Rectangle){0, 0, GetScreenWidth(), GetScreenHeight()}, 0, 0, 60, Fade(LIGHTGRAY, 0.6f));

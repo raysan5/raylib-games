@@ -58,10 +58,10 @@ static const int screenHeight = 240;
 // Game general variables
 static int currentScreen = LOGO;
 static int elementPositionY = -128;
-static int framesCounter = 0; 
-static int scrollingY = 0;    
-static int score = 0;         
-static int hiscore = 0;       
+static int framesCounter = 0;
+static int scrollingY = 0;
+static int score = 0;
+static int hiscore = 0;
 static int titleState = 0;
 static int optionSelect = 0;       // Main menu option selection
 
@@ -150,7 +150,7 @@ int main()
     //--------------------------------------------------------------------------------------
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_TRANSPARENT);
     InitWindow(screenWidth, screenHeight, "RETRO MAZE 3D [GGJ 2021]");
-    
+
     // Textures loading
     texLogo = LoadTexture("resources/logo.png");
     texTitle = LoadTexture("resources/title.png");
@@ -158,14 +158,14 @@ int main()
     texTitle3d = LoadTexture("resources/title_3d.png");
     texTitle3dShadow = LoadTexture("resources/title_3d_shadow.png");
     texTitleLogo = LoadTexture("resources/title_raylib_logo.png");
-    
+
     texGpiCase = LoadTexture("resources/gpi_case_front.png");
 
     // Text Font loading
     font = LoadFont("resources/alpha_beta.png");
-    
+
     InitAudioDevice();
-    
+
     // Audio loading
     fxLogo = LoadSound("resources/audio/logo.wav");
     fxMenuMove = LoadSound("resources/audio/menu_move.wav");
@@ -179,12 +179,12 @@ int main()
     musicGameplay = LoadMusicStream("resources/audio/music_gameplay.mp3");
     musicCredits = LoadMusicStream("resources/audio/music_credits.mp3");
     musicCredits.looping = false;
-    
+
     fxVoice[0] = LoadSound("resources/audio/voice_hello.wav");
     fxVoice[1] = LoadSound("resources/audio/voice_im_lost.wav");
     fxVoice[2] = LoadSound("resources/audio/voice_anyone_there.wav");
     fxVoice[3] = LoadSound("resources/audio/voice_can_you_hear_me.wav");
-    
+
     // Define the camera to look into our 3d world
     // WARNING: Camera target is actually controlled by cameraAngle, so initial value is ignored...
     camera.position = (Vector3){ 2.5f, 0.3f, 23.5f };   // Camera position
@@ -192,18 +192,18 @@ int main()
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
     camera.fovy = 45.0f;                                // Camera field-of-view Y
     camera.projection = CAMERA_PERSPECTIVE;                   // Camera mode type
-    
+
     cameraAngle.x = 0.0f;               // Camera rotation angle in Y axis
     cameraAngle.y = -8.0f*DEG2RAD;      // Camera rotation angle in plane XY
     playerPosition = camera.position;   // Initial player position
-    
+
     // Load map data (model anf texture)
     // NOTE: By default each cube is mapped to one part of texture atlas
     Image imMap = LoadImage("resources/game_map.png");  // Load texMap image (RAM)
     Mesh mesh = GenMeshCubicmap(imMap, (Vector3){ 1.0f, 1.0f, 1.0f });
     model = LoadModelFromMesh(mesh);                    // Load generated mesh into a model
     texMapAtlas = LoadTexture("resources/cubicmap_atlas.png");      // Load map texture
-    model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texMapAtlas;     // Set map diffuse texture  
+    model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texMapAtlas;     // Set map diffuse texture
     mapPixels = LoadImageColors(imMap); // Get map image data to be used for collision detection
 
     // Convert image to custom GB colors for minimap usage
@@ -217,7 +217,7 @@ int main()
     // NOTE: If screen is scaled, mouse input should be scaled proportionally
     screenTarget = LoadRenderTexture(640, 480);
     SetTextureFilter(screenTarget.texture, FILTER_BILINEAR);
-    
+
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
 #else
@@ -232,11 +232,11 @@ int main()
 #endif
 
     // De-Initialization
-    //--------------------------------------------------------------------------------------  
+    //--------------------------------------------------------------------------------------
     UnloadImageColors(mapPixels);   // Unload color array
-    
+
     UnloadRenderTexture(screenTarget);
-    
+
     // Unload textures
     UnloadTexture(texLogo);
     UnloadTexture(texTitle);
@@ -249,9 +249,9 @@ int main()
     UnloadTexture(texGpiCase);
 
     UnloadFont(font);               // Unload fonts
-    
+
     UnloadModel(model);             // Unload map model
-    
+
     // Unload sounds
     UnloadSound(fxLogo);
     UnloadSound(fxMenuMove);
@@ -260,15 +260,15 @@ int main()
     UnloadSound(fxPause);
     UnloadSound(fxStep);
     UnloadSound(fxEnding);
-    
+
     UnloadMusicStream(musicTitle);
     UnloadMusicStream(musicGameplay);
     UnloadMusicStream(musicCredits);
-    
+
     for (int i = 0; i < 4; i++) UnloadSound(fxVoice[i]);
-    
+
     CloseAudioDevice();
-    
+
     CloseWindow();                  // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -282,17 +282,17 @@ int main()
 static void UpdateDrawFrame(void)
 {
     // Update
-    //----------------------------------------------------------------------------------   
+    //----------------------------------------------------------------------------------
     currentGamepadAxisValue[6] = GetGamepadAxisMovement(0, 6);
     currentGamepadAxisValue[7] = GetGamepadAxisMovement(0, 7);
-    
+
     switch (currentScreen)
     {
         case LOGO:
         {
             // Update LOGO screen
             framesCounter++;
-            
+
             // Logo moving down logic (animation and sound playing)
             elementPositionY++;
             if (elementPositionY == (screenHeight/2 - 64 - 1)) PlaySound(fxLogo);
@@ -302,10 +302,10 @@ static void UpdateDrawFrame(void)
             {
                 framesCounter = 0;
                 currentScreen = TITLE;
-                
+
                 // NOTE: elementPositionY is reused for title animation
                 elementPositionY = -texTitle.width;
-                
+
                 // Play game music
                 PlayMusicStream(musicTitle);
             }
@@ -316,7 +316,7 @@ static void UpdateDrawFrame(void)
             UpdateMusicStream(musicTitle);
 
             framesCounter++;
-            
+
             if (titleState == 0)        // Title animation (moving down)
             {
                 elementPositionY += 2;
@@ -326,14 +326,14 @@ static void UpdateDrawFrame(void)
             }
             else if (titleState == 1)   // Title 3D showing up
             {
-                if (framesCounter > 140) 
+                if (framesCounter > 140)
                 {
                     titleState = 2;
                     PlaySound(fxTitleRocks);
                 }
             }
-            
-            if (IsKeyPressed(KEY_DOWN) || IsGamepadAxisAsButtonPressed(0, 7, true)) 
+
+            if (IsKeyPressed(KEY_DOWN) || IsGamepadAxisAsButtonPressed(0, 7, true))
             {
                 optionSelect++;
                 PlaySound(fxMenuMove);
@@ -343,51 +343,51 @@ static void UpdateDrawFrame(void)
                 optionSelect--;
                 PlaySound(fxMenuMove);
             }
-            
+
             if (optionSelect < 0) optionSelect = 0;
             else if (optionSelect > 2) optionSelect = 2;
-            
+
             if (IsKeyPressed(KEY_ENTER) || IsGamepadButtonPressed(0, GPICASE_BUTTON_A))
             {
-                if (optionSelect == 0) 
+                if (optionSelect == 0)
                 {
                     currentScreen = GAMEPLAY;        // Gameplay screen
-                    
+
                     camera.position = (Vector3){ 2.5f, 0.3f, 23.5f };
                     playerPosition = camera.position;
-                    
+
                     StopMusicStream(musicTitle);
                     PlayMusicStream(musicGameplay);
                 }
-                else if (optionSelect == 1) 
+                else if (optionSelect == 1)
                 {
                     currentScreen = CREDITS;    // Credits screen
                     creditsScrollingPosY = (float)screenHeight + 20.0f;
-                    
+
                     StopMusicStream(musicTitle);
                     PlayMusicStream(musicCredits);
                 }
                 else if (optionSelect == 2) exitGame = true;            // Exit game
-                
-                framesCounter = 0;    
+
+                framesCounter = 0;
                 PlaySound(fxMenuSelect);
             }
-            
+
         } break;
         case GAMEPLAY:
         {
             UpdateMusicStream(musicGameplay);
-            
+
             // In-game menu logic
-            if (IsKeyPressed(KEY_SPACE) || IsGamepadButtonPressed(0, GPICASE_BUTTON_START)) 
+            if (IsKeyPressed(KEY_SPACE) || IsGamepadButtonPressed(0, GPICASE_BUTTON_START))
             {
                 showInGameMenu = !showInGameMenu;
                 PlaySound(fxPause);
             }
-            
+
             // In-game minimap
             if (IsKeyPressed(KEY_M) || IsGamepadButtonPressed(0, GPICASE_BUTTON_SELECT)) showMinimapDebug = !showMinimapDebug;
-            
+
             if (!showInGameMenu)    // Pause menu
             {
                 // In game voices playing logic
@@ -426,17 +426,17 @@ static void UpdateDrawFrame(void)
                         }
                     }
                 }
-                
+
                 // Check ending condition: reach destination
                 if ((playerCellX == exitCellX) && (playerCellY == exitCellY))
                 {
                     currentScreen = ENDING;
                     PlaySound(fxEnding);
                     endingResult = 1;           // Player wins
-                    
+
                     StopMusicStream(musicGameplay);
                 }
-                
+
                 // Check ending condition: time limit
                 framesCounter++;
                 if (framesCounter == 60)
@@ -447,11 +447,11 @@ static void UpdateDrawFrame(void)
                     {
                         currentScreen = ENDING;
                         PlaySound(fxEnding);
-                        
+
                         StopMusicStream(musicGameplay);
                     }
                 }
-                
+
                 // Check ending condition: stamina level
                 if (staminaLevel < 0.0f)
                 {
@@ -462,7 +462,7 @@ static void UpdateDrawFrame(void)
             }
             else
             {
-                if (IsKeyPressed(KEY_DOWN) || IsGamepadAxisAsButtonPressed(0, 7, true)) 
+                if (IsKeyPressed(KEY_DOWN) || IsGamepadAxisAsButtonPressed(0, 7, true))
                 {
                     optionSelect++;
                     PlaySound(fxMenuMove);
@@ -472,35 +472,35 @@ static void UpdateDrawFrame(void)
                     optionSelect--;
                     PlaySound(fxMenuMove);
                 }
-                
+
                 if (optionSelect < 0) optionSelect = 0;
                 else if (optionSelect > 2) optionSelect = 2;
-                
+
                 if (IsKeyPressed(KEY_ENTER) || IsGamepadButtonPressed(0, GPICASE_BUTTON_A))
                 {
                     if (optionSelect == 0) showInGameMenu = false;      // Resume game
-                    else if (optionSelect == 1) 
+                    else if (optionSelect == 1)
                     {
                         showInGameMenu = false;
                         currentScreen = TITLE;      // Title screen
-                        
+
                         StopMusicStream(musicGameplay);
                         PlayMusicStream(musicTitle);
                     }
                     else if (optionSelect == 2) exitGame = true;        // Exit game
-                    
-                    framesCounter = 0;    
+
+                    framesCounter = 0;
                     PlaySound(fxMenuSelect);
                 }
             }
-            
+
             // Steps sounds
             if (playerMoving)
             {
                 staminaLevel -= 0.01f;
                 stepFrameCount++;
-                
-                if (stepFrameCount%20 == 0) 
+
+                if (stepFrameCount%20 == 0)
                 {
                     SetSoundPitch(fxStep, (float)GetRandomValue(80, 120)/100.0f);
                     PlaySound(fxStep);
@@ -511,10 +511,10 @@ static void UpdateDrawFrame(void)
         case CREDITS:
         {
             UpdateMusicStream(musicCredits);
-            
+
             creditsScrollingPosY -= 0.6f;
             if (creditsScrollingPosY < (-screenHeight + 36)) creditsScrollingPosY = -screenHeight + 36;
-            
+
             if (IsKeyPressed(KEY_ENTER) || IsGamepadButtonPressed(0, GPICASE_BUTTON_A))
             {
                 currentScreen = TITLE;
@@ -522,7 +522,7 @@ static void UpdateDrawFrame(void)
                 framesCounter = 0;
                 elementPositionY = -texTitle.height;
                 PlaySound(fxMenuSelect);
-                
+
                 StopMusicStream(musicCredits);
                 PlayMusicStream(musicTitle);
             }
@@ -536,20 +536,20 @@ static void UpdateDrawFrame(void)
                 framesCounter = 0;
                 endingResult = 0;
                 PlaySound(fxMenuSelect);
-                
+
                 creditsScrollingPosY = (float)screenHeight + 20.0f;
                 PlayMusicStream(musicCredits);
             }
-            
+
         } break;
         default: break;
     }
-    
-    if (IsKeyPressed(KEY_G)) 
+
+    if (IsKeyPressed(KEY_G))
     {
         gpiCaseMode = !gpiCaseMode;
         Vector2 currentWindowPos = GetWindowPosition();
-        
+
         if (gpiCaseMode)
         {
             SetWindowState(FLAG_WINDOW_UNDECORATED);
@@ -567,18 +567,18 @@ static void UpdateDrawFrame(void)
 
     // Draw
     //----------------------------------------------------------------------------------
- 
+
     // Render all screen to a texture
     BeginTextureMode(screenTarget);
         ClearBackground(GB_GREEN01);
-        
+
         switch (currentScreen)
         {
             case LOGO:
             {
                 // Draw LOGO screen
                 DrawTexture(texLogo, screenWidth/2 - 64, elementPositionY, WHITE);
-                
+
             } break;
             case TITLE:
             {
@@ -590,15 +590,15 @@ static void UpdateDrawFrame(void)
                 }
                 DrawTexture(texTitle, 32, elementPositionY, WHITE);
                 if (titleState >= 1) DrawTexture(texTitle3d, 32, 90, WHITE);
-                
+
                 DrawRectangle(95, 165 + optionSelect*16, 130, 16, GB_GREEN02);
                 DrawTextEx(font, "START GAME", (Vector2){ 120, 167 }, font.baseSize, 2, (optionSelect == 0)? GB_GREEN03 : GB_GREEN02);
                 DrawTextEx(font, "CREDITS", (Vector2){ 132, 167 + 16 }, font.baseSize, 2, (optionSelect == 1)? GB_GREEN03 : GB_GREEN02);
                 DrawTextEx(font, "EXIT GAME", (Vector2){ 124, 167 + 32 }, font.baseSize, 2, (optionSelect == 2)? GB_GREEN03 : GB_GREEN02);
-                
+
                 DrawTextEx(font, "GGJ 2021", (Vector2){ 10, 240 - 18 }, font.baseSize, 1, GB_GREEN02);
                 DrawTexture(texTitleLogo, 320 - texTitleLogo.width + 5, 240 - texTitleLogo.height + 3, WHITE);
-                
+
                 /*
                 if (IsGamepadAvailable(0))
                 {
@@ -612,18 +612,18 @@ static void UpdateDrawFrame(void)
             {
                 BeginMode3D(camera);
                     DrawModel(model, mapPosition, 1.0f, WHITE);     // Draw maze map
-                    
+
                     // Draw ending cube for reference
                     DrawCube((Vector3){ mapPosition.x + (float)exitCellX, 0.5f, mapPosition.z + (float)exitCellY }, 1.0f, 1.0f, 1.0f, ColorAlpha(GREEN, 0.5f));
 
                 EndMode3D();
-                
+
                 DrawRectangle(0, screenHeight - 20, screenWidth, 20, GB_GREEN01);
                 DrawTextEx(font, "STAMINA:", (Vector2){ 10, screenHeight - 16 }, font.baseSize, 1, GB_GREEN03);
                 DrawRectangleLines(70, screenHeight - 16, 100, 13, GB_GREEN03);
                 DrawRectangle(70 + 2, screenHeight - 16 + 2, (int)staminaLevel - 4, 13 - 4, GB_GREEN02);
                 DrawTextEx(font, TextFormat("TIME: %i:%02is", timeLevelSeconds/60, timeLevelSeconds%60), (Vector2){ 240, screenHeight - 16 }, font.baseSize, 1, GB_GREEN03);
-                
+
                 if (showMinimapDebug)
                 {
                     // Draw minimap
@@ -648,33 +648,33 @@ static void UpdateDrawFrame(void)
                 // Draw scrolling credits
                 DrawTextEx(font, "GAME DESIGN", (Vector2){ screenWidth/2 - MeasureTextEx(font, "GAME DESIGN", font.baseSize, 2).x/2, creditsScrollingPosY }, font.baseSize, 2, GB_GREEN02);
                 DrawTextEx(font, "Ramon Santamaria (Ray)", (Vector2){ screenWidth/2 - MeasureTextEx(font, "Ramon Santamaria (Ray)", font.baseSize, 2).x/2, creditsScrollingPosY + 16 }, font.baseSize, 2, GB_GREEN03);
-                
+
                 DrawTextEx(font, "GAME PROGRAMMING", (Vector2){ screenWidth/2 - MeasureTextEx(font, "GAME PROGRAMMING", font.baseSize, 2).x/2, creditsScrollingPosY + 50 }, font.baseSize, 2, GB_GREEN02);
                 DrawTextEx(font, "Ramon Santamaria (Ray)", (Vector2){ screenWidth/2 - MeasureTextEx(font, "Ramon Santamaria (Ray)", font.baseSize, 2).x/2, creditsScrollingPosY + 66 }, font.baseSize, 2, GB_GREEN03);
-                
+
                 DrawTextEx(font, "GAME ART", (Vector2){ screenWidth/2 - MeasureTextEx(font, "GAME ART", font.baseSize, 2).x/2, creditsScrollingPosY + 100 }, font.baseSize, 2, GB_GREEN02);
                 DrawTextEx(font, "Ramon Santamaria (Ray)", (Vector2){ screenWidth/2 - MeasureTextEx(font, "Ramon Santamaria (Ray)", font.baseSize, 2).x/2, creditsScrollingPosY + 116 }, font.baseSize, 2, GB_GREEN03);
-                
+
                 DrawTextEx(font, "GAME AUDIO", (Vector2){ screenWidth/2 - MeasureTextEx(font, "GAME AUDIO", font.baseSize, 2).x/2, creditsScrollingPosY + 150 }, font.baseSize, 2, GB_GREEN02);
                 DrawTextEx(font, "German Sartori", (Vector2){ screenWidth/2 - MeasureTextEx(font, "Germán Sartori", font.baseSize, 2).x/2, creditsScrollingPosY + 166 }, font.baseSize, 2, GB_GREEN03);
-                
+
                 DrawTextEx(font, "powered by", (Vector2){ screenWidth/2 - MeasureTextEx(font, "powered by", font.baseSize, 2).x/2, creditsScrollingPosY + 240 }, font.baseSize, 2, GB_GREEN02);
                 DrawTexture(texLogo, screenWidth/2 - 64, creditsScrollingPosY + 256, WHITE);
-                
+
                 DrawRectangle(screenWidth - 60, screenHeight - 24, 50, 16, GB_GREEN02);
                 DrawTextEx(font, "BACK", (Vector2){ screenWidth - 50, screenHeight - 22 }, font.baseSize, 2, GB_GREEN03);
             } break;
             case ENDING:
             {
-                if (endingResult == 1) 
+                if (endingResult == 1)
                 {
                     DrawTextEx(font, "YOU ARE FOUND!", (Vector2){ screenWidth/2 - MeasureTextEx(font, "YOU ARE FOUND!", font.baseSize*2, 2).x/2, 100 }, font.baseSize*2, 2, GB_GREEN03);
                 }
                 else DrawTextEx(font, "YOU ARE LOST...", (Vector2){ screenWidth/2 - MeasureTextEx(font, "YOU ARE LOST...", font.baseSize*2, 2).x/2, 100 }, font.baseSize*2, 2, GB_GREEN03);
-                
+
                 DrawRectangle(screenWidth/2 - 65, 170, 130, 16, GB_GREEN02);
                 DrawTextEx(font, "CONTINUE", (Vector2){ screenWidth/2 - MeasureTextEx(font, "CONTINUE", font.baseSize, 2).x/2, 172 }, font.baseSize, 2, GB_GREEN03);
-                
+
             } break;
             default: break;
         }
@@ -682,7 +682,7 @@ static void UpdateDrawFrame(void)
 
     BeginDrawing();
         ClearBackground(GB_GREEN01);
-        
+
         // Draw render texture to screen
         if (gpiCaseMode)
         {
@@ -694,7 +694,7 @@ static void UpdateDrawFrame(void)
         }
         else DrawTextureRec(screenTarget.texture, (Rectangle){ 0, 0, screenTarget.texture.width, -screenTarget.texture.height }, (Vector2){ 0, 0 }, WHITE);
     EndDrawing();
-    
+
     previousGamepadAxisValue[6] = currentGamepadAxisValue[6];
     previousGamepadAxisValue[7] = currentGamepadAxisValue[7];
     //----------------------------------------------------------------------------------
@@ -708,7 +708,7 @@ void UpdateCameraCustom(Camera *camera)
                           (IsKeyDown(KEY_S) || (GetGamepadAxisMovement(0, 7) > 0)),
                           (IsKeyDown(KEY_D) || (GetGamepadAxisMovement(0, 6) > 0)),
                           (IsKeyDown(KEY_A) || (GetGamepadAxisMovement(0, 6) < 0)) };
-                          
+
     if (direction[0] || direction[1] || direction[2] || direction[3]) playerMoving = true;
     else playerMoving = false;
 
@@ -724,11 +724,11 @@ void UpdateCameraCustom(Camera *camera)
                            cosf(cameraAngle.x)*direction[0] +
                            sinf(cameraAngle.x)*direction[3] -
                            sinf(cameraAngle.x)*direction[2])/PLAYER_MOVEMENT_SENSITIVITY;
-                           
+
     // Camera rotation over its own Y axis
     if (IsKeyDown(KEY_LEFT) || IsGamepadButtonDown(0, GPICASE_TRIGGER_LEFT)) cameraAngle.x += (1.0f*DEG2RAD);      // GAMEPAD_BUTTON_LEFT_TRIGGER_1    // GAMEPAD_BUTTON_LEFT_FACE_LEFT    // DPAD LEFT
     if (IsKeyDown(KEY_RIGHT) || IsGamepadButtonDown(0, GPICASE_TRIGGER_RIGHT)) cameraAngle.x -= (1.0f*DEG2RAD);     // GAMEPAD_BUTTON_RIGHT_TRIGGER_1   // GAMEPAD_BUTTON_LEFT_FACE_RIGHT   // DPAD RIGHT
-    
+
     // Camera angle clamp to limits
     if (cameraAngle.y > CAMERA_FIRST_PERSON_MIN_CLAMP*DEG2RAD) cameraAngle.y = CAMERA_FIRST_PERSON_MIN_CLAMP*DEG2RAD;
     else if (cameraAngle.y < CAMERA_FIRST_PERSON_MAX_CLAMP*DEG2RAD) cameraAngle.y = CAMERA_FIRST_PERSON_MAX_CLAMP*DEG2RAD;
@@ -750,12 +750,12 @@ void UpdateCameraCustom(Camera *camera)
 static bool IsGamepadAxisAsButtonPressed(int gamepad, int axis, bool positiveAxis)
 {
     bool pressed = false;
-    
+
     if ((int)roundf(previousGamepadAxisValue[axis]) == 0)
     {
         if (positiveAxis && (currentGamepadAxisValue[axis] > 0.2f)) pressed = true; // Positive axis pressed
         if (!positiveAxis && (currentGamepadAxisValue[axis] < -0.2f)) pressed = true;            // Negative axis pressed
     }
-    
+
     return pressed;
 }

@@ -128,7 +128,7 @@ int main(void)
 #else
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -141,7 +141,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadGame();         // Unload loaded data (textures, sounds, models...)
-    
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -164,7 +164,7 @@ void InitGame(void)
 
         missile[i].active = false;
     }
-    
+
     // Initialize interceptors
     for (int i = 0; i < MAX_INTERCEPTORS; i++)
     {
@@ -174,7 +174,7 @@ void InitGame(void)
 
         interceptor[i].active = false;
     }
-    
+
     // Initialize explosions
     for (int i = 0; i < MAX_EXPLOSIONS; i++)
     {
@@ -182,7 +182,7 @@ void InitGame(void)
         explosion[i].frame = 0;
         explosion[i].active = false;
     }
-    
+
     // Initialize buildings and launchers
     int sparcing = screenWidth/(LAUNCHERS_AMOUNT + BUILDINGS_AMOUNT + 1);
 
@@ -216,7 +216,7 @@ void UpdateGame(void)
         {
             framesCounter++;
 
-            static 
+            static
             float distance;
 
             // Interceptors update
@@ -404,7 +404,7 @@ void DrawGame(void)
                     if (framesCounter % 16 < 8) DrawCircle(missile[i].position.x, missile[i].position.y, 3, YELLOW);
                 }
             }
-            
+
             // Draw interceptors
             for (int i = 0; i < MAX_INTERCEPTORS; i++)
             {
@@ -415,7 +415,7 @@ void DrawGame(void)
                     if (framesCounter % 16 < 8) DrawCircle(interceptor[i].position.x, interceptor[i].position.y, 3, BLUE);
                 }
             }
-            
+
             // Draw explosions
             for (int i = 0; i < MAX_EXPLOSIONS; i++)
             {
@@ -435,7 +435,7 @@ void DrawGame(void)
 
             // Draw score
             DrawText(TextFormat("SCORE %4i", score), 20, 20, 40, LIGHTGRAY);
-            
+
             if (pause) DrawText("GAME PAUSED", screenWidth/2 - MeasureText("GAME PAUSED", 40)/2, screenHeight/2 - 40, 40, GRAY);
         }
         else DrawText("PRESS [ENTER] TO PLAY AGAIN", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] TO PLAY AGAIN", 20)/2, GetScreenHeight()/2 - 50, 20, GRAY);

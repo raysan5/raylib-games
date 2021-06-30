@@ -57,7 +57,7 @@ void InitLevel07Screen(void)
     // Initialize Level07 screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     leftCirclePos = (Vector2){ GetScreenWidth()/2 - 340, GetScreenHeight()/2 - 100 };
     middleCirclePos = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 - 100 };
     rightCirclePos = (Vector2){ GetScreenWidth()/2 + 340, GetScreenHeight()/2 - 100 };
@@ -65,11 +65,11 @@ void InitLevel07Screen(void)
     leftBtnPos = (Vector2){ GetScreenWidth()/2 - 340, GetScreenHeight()/2 + 120 };
     middleBtnPos = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 + 120 };
     rightBtnPos = (Vector2){ GetScreenWidth()/2 + 340, GetScreenHeight()/2 + 120 };
-    
+
     leftCircleActive = false;
     middleCircleActive = true;
     rightCircleActive = false;
-    
+
     leftCircleColor = GRAY;
     middleCircleColor = GRAY;
     rightCircleColor = GRAY;
@@ -80,7 +80,7 @@ void UpdateLevel07Screen(void)
 {
     // Update Level07 screen variables here!
     framesCounter++;
-    
+
     if (!done)
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -88,26 +88,26 @@ void UpdateLevel07Screen(void)
             if (CheckCollisionPointCircle(GetMousePosition(), leftBtnPos, btnRadius)) leftCircleActive = !leftCircleActive;
             else if (CheckCollisionPointCircle(GetMousePosition(), middleBtnPos, btnRadius)) middleCircleActive = !middleCircleActive;
             else if (CheckCollisionPointCircle(GetMousePosition(), rightBtnPos, btnRadius)) rightCircleActive = !rightCircleActive;
-            
+
             if (rightCircleActive && CheckCollisionPointCircle(GetMousePosition(), leftCirclePos, circleRadius))
             {
                 if (CheckColor(leftCircleColor, GRAY)) leftCircleColor = LIGHTGRAY;
                 else leftCircleColor = GRAY;
             }
-            
+
             if (middleCircleActive && CheckCollisionPointCircle(GetMousePosition(), middleCirclePos, circleRadius))
             {
                 if (CheckColor(middleCircleColor, GRAY)) middleCircleColor = LIGHTGRAY;
                 else middleCircleColor = GRAY;
             }
-            
+
             if (rightCircleActive && leftCircleActive && CheckCollisionPointCircle(GetMousePosition(), rightCirclePos, circleRadius))
             {
                 if (CheckColor(rightCircleColor, GRAY)) rightCircleColor = LIGHTGRAY;
                 else rightCircleColor = GRAY;
             }
         }
-    
+
         // Check all cicles done
         if (CheckColor(leftCircleColor, LIGHTGRAY) && CheckColor(middleCircleColor, LIGHTGRAY) && CheckColor(rightCircleColor, LIGHTGRAY) &&
             !leftCircleActive && !middleCircleActive && !rightCircleActive)
@@ -116,18 +116,18 @@ void UpdateLevel07Screen(void)
             PlaySound(levelWin);
         }
     }
-    
+
     if (done && !levelFinished)
     {
         levelTimeSec = framesCounter/60;
         levelFinished = true;
         framesCounter = 0;
     }
-    
+
     if (levelFinished)
     {
         framesCounter++;
-        
+
         if ((framesCounter > 90) && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) finishScreen = true;
     }
 }
@@ -139,18 +139,18 @@ void DrawLevel07Screen(void)
     DrawCircleV(leftCirclePos, circleRadius, leftCircleColor);
     DrawCircleV(middleCirclePos, circleRadius, middleCircleColor);
     DrawCircleV(rightCirclePos, circleRadius, rightCircleColor);
-    
+
     if (leftCircleActive) DrawCircleV(leftBtnPos, btnRadius, GRAY);
     else DrawCircleV(leftBtnPos, btnRadius, LIGHTGRAY);
-    
+
     if (middleCircleActive) DrawCircleV(middleBtnPos, btnRadius, GRAY);
     else DrawCircleV(middleBtnPos, btnRadius, LIGHTGRAY);
-    
+
     if (rightCircleActive) DrawCircleV(rightBtnPos, btnRadius, GRAY);
     else DrawCircleV(rightBtnPos, btnRadius, LIGHTGRAY);
-    
-    
-    
+
+
+
     if (levelFinished)
     {
         DrawRectangleBordersRec((Rectangle){0, 0, GetScreenWidth(), GetScreenHeight()}, 0, 0, 60, Fade(LIGHTGRAY, 0.6f));

@@ -56,15 +56,15 @@ void InitLevel05Screen(void)
     // Initialize Level05 screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     circleCenter = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 };
-    
+
     for (int i = 0; i < NUM_CIRCLES; i++)
     {
         circleRadius[i] = 760/NUM_CIRCLES*(NUM_CIRCLES - i);
         circleLocked[i] = false;
     }
-    
+
     // That's a dirty hack to give sonme coherence to this puzzle...
     circleColor[9] = GRAY;
     circleColor[8] = RAYWHITE;
@@ -116,18 +116,18 @@ void UpdateLevel05Screen(void)
                 }
             }
         }
-    
+
         // Check all cicles done
         for (int i = 0; i < NUM_CIRCLES; i++)
         {
             done = true;
-            
+
             if (CheckColor(circleColor[i], RAYWHITE))
             {
                 done = false;
                 return;
             }
-            
+
             //if (done) PlaySound(levelWin);
         }
     }
@@ -138,11 +138,11 @@ void UpdateLevel05Screen(void)
         levelFinished = true;
         framesCounter = 0;
     }
-    
+
     if (levelFinished)
     {
         framesCounter++;
-        
+
         if ((framesCounter > 90) && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) finishScreen = true;
     }
 }
@@ -155,9 +155,9 @@ void DrawLevel05Screen(void)
     {
         DrawPoly(circleCenter, 64, circleRadius[i], 0.0f, circleColor[i]);
     }
-    
-    
-    
+
+
+
     if (levelFinished)
     {
         DrawRectangleBordersRec((Rectangle){0, 0, GetScreenWidth(), GetScreenHeight()}, 0, 0, 60, Fade(LIGHTGRAY, 0.6f));

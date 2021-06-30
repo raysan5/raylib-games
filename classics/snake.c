@@ -95,7 +95,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadGame();         // Unload loaded data (textures, sounds, models...)
-    
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ void InitGame(void)
     framesCounter = 0;
     gameOver = false;
     pause = false;
-    
+
     counterTail = 1;
     allowMove = false;
 
@@ -145,7 +145,7 @@ void UpdateGame(void)
     if (!gameOver)
     {
         if (IsKeyPressed('P')) pause = !pause;
-        
+
         if (!pause)
         {
             // Player control
@@ -188,7 +188,7 @@ void UpdateGame(void)
             }
 
             // Wall behaviour
-            if (((snake[0].position.x) > (screenWidth - offset.x)) || 
+            if (((snake[0].position.x) > (screenWidth - offset.x)) ||
                 ((snake[0].position.y) > (screenHeight - offset.y)) ||
                 (snake[0].position.x < 0) || (snake[0].position.y < 0))
             {
@@ -245,7 +245,7 @@ void DrawGame(void)
     BeginDrawing();
 
         ClearBackground(RAYWHITE);
-        
+
         if (!gameOver)
         {
             // Draw grid lines

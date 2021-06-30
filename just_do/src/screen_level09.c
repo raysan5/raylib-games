@@ -57,20 +57,20 @@ void InitLevel09Screen(void)
     // Initialize Level09 screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     for (int i = 0; i < NUM_BOXES; i++)
     {
         bwRecs[i].x = GetScreenWidth()/7*(i%7);
         bwRecs[i].y = GetScreenHeight()/3*(i/7);
         bwRecs[i].width = GetScreenWidth()/7;
         bwRecs[i].height = GetScreenHeight()/3;
-        
+
         activated[i] = false;
-        
+
         if (i%2 == 0) bwColors[i] = LIGHTGRAY;
         else bwColors[i] = GRAY;
     }
-    
+
     bwColors[10] = RAYWHITE;
 }
 
@@ -80,7 +80,7 @@ void UpdateLevel09Screen(void)
     // Update Level09 screen variables here!
     framesCounter++;
     if (enableCounter) resetCounter++;
-    
+
     if (!done)
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -88,7 +88,7 @@ void UpdateLevel09Screen(void)
             for (int i = 0; i < NUM_BOXES; i++)
             {
                 if (CheckCollisionPointRec(GetMousePosition(), bwRecs[i]))
-                {               
+                {
                     if (i == 10)
                     {
                         if (CheckColor(bwColors[i], RAYWHITE))
@@ -103,7 +103,7 @@ void UpdateLevel09Screen(void)
                             bwColors[i] = RAYWHITE;
                             enableCounter = false;
                             resetCounter = 5*60;
-                            
+
                             for (int i = 0; i < NUM_BOXES; i++) activated[i] = false;
                         }
                     }
@@ -118,32 +118,32 @@ void UpdateLevel09Screen(void)
                 }
             }
         }
-        
+
         if (resetCounter > (4*60 + 10))
         {
             for (int i = 0; i < NUM_BOXES; i++)
             {
                 if (i%2 == 0) bwColors[i] = LIGHTGRAY;
                 else bwColors[i] = GRAY;
-                
+
                 activated[i] = false;
             }
-        
+
             bwColors[10] = RAYWHITE;
             enableCounter = false;
             resetCounter = 0;
         }
-    
+
         for (int i = 0; i < NUM_BOXES; i++)
         {
             done = true;
-            
+
             if (!CheckColor(bwColors[i], LIGHTGRAY))
             {
                 done = false;
                 return;
             }
-            
+
             //if (done) PlaySound(levelWin);
         }
     }
@@ -154,11 +154,11 @@ void UpdateLevel09Screen(void)
         levelFinished = true;
         framesCounter = 0;
     }
-    
+
     if (levelFinished)
     {
         framesCounter++;
-        
+
         if ((framesCounter > 90) && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) finishScreen = true;
     }
 }
@@ -167,11 +167,11 @@ void UpdateLevel09Screen(void)
 void DrawLevel09Screen(void)
 {
     // Draw Level09 screen
-    for (int i = 0; i < NUM_BOXES; i++) 
+    for (int i = 0; i < NUM_BOXES; i++)
     {
         DrawRectangleRec(bwRecs[i], bwColors[i]);
     }
-    
+
     if (levelFinished)
     {
         DrawRectangleBordersRec((Rectangle){0, 0, GetScreenWidth(), GetScreenHeight()}, 0, 0, 60, Fade(RAYWHITE, 0.6f));

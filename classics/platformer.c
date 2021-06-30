@@ -62,7 +62,7 @@ typedef struct {
     bool hitOnFloor;
     bool hitOnCeiling;
     bool hitOnWall;
-    
+
     Input *control;
 } Entity;
 
@@ -164,7 +164,7 @@ int main(void){
     screenScale = 2.0;
     screenWidth = TILE_SIZE * TILE_MAP_WIDTH * (int)screenScale;
     screenHeight = TILE_SIZE * TILE_MAP_HEIGHT * (int)screenScale;
-    
+
     SetConfigFlags(FLAG_VSYNC_HINT);    //movement jitters without it
     InitWindow(screenWidth, screenHeight, "sample game: platformer");
     GameInit();
@@ -216,10 +216,10 @@ void GameInit(void){
 void GameUpdate(void){
     // get time since last frame
     delta = GetFrameTime();
-    
+
     PlayerUpdate();
     CoinUpdate();
-    
+
     // If all coins are collected
     if (win){
         if (IsKeyPressed(KEY_ENTER)){
@@ -238,8 +238,8 @@ void GameDraw(void){
         MapDraw();
         CoinDraw();
         PlayerDraw();
-        
-        
+
+
         EndMode2D();
         DrawText(TextFormat("SCORE: %i", score), GetScreenWidth()/2 - MeasureText(TextFormat("SCORE: %i", score), 40)/2, GetScreenHeight()/5 - 50, 40, BLACK);
 
@@ -251,7 +251,7 @@ void GameDraw(void){
 
 // Unload game variables
 void GameUnload(void){
-    
+
 }
 
 void MapInit(void){
@@ -268,20 +268,20 @@ void MapInit(void){
             }
         }
     }
-    
+
     //manual cell population for platforms
     tiles[3+8 * TILE_MAP_WIDTH] = BLOCK;
     tiles[4+8 * TILE_MAP_WIDTH] = BLOCK;
     tiles[5+8 * TILE_MAP_WIDTH] = BLOCK;
-    
+
     tiles[8+6 * TILE_MAP_WIDTH] = BLOCK;
     tiles[9+6 * TILE_MAP_WIDTH] = BLOCK;
     tiles[10+6 * TILE_MAP_WIDTH] = BLOCK;
-    
+
     tiles[13+7 * TILE_MAP_WIDTH] = BLOCK;
     tiles[14+7 * TILE_MAP_WIDTH] = BLOCK;
     tiles[15+7 * TILE_MAP_WIDTH] = BLOCK;
-    
+
     tiles[1+10 * TILE_MAP_WIDTH] = BLOCK;
 }
 
@@ -351,7 +351,7 @@ void PlayerInit(void){
     player.position.x = (float)(TILE_SIZE * TILE_MAP_WIDTH) * 0.5;
     player.position.y = TILE_MAP_HEIGHT*TILE_SIZE - 16.0 -1;
     player.direction = 1.0;
-    
+
     player.maxSpd = 1.5625f *60;
     player.acc = 0.118164 *60 *60;
     player.dcc =  0.113281 *60 *60;
@@ -367,7 +367,7 @@ void PlayerInit(void){
 
     player.isGrounded   = false;
     player.isJumping    = false;
-    
+
     // Assign Input instance used by player
     player.control = &input;
 }
@@ -377,7 +377,7 @@ void PlayerDraw(void){
     DrawRectangle(player.position.x - player.width*0.5, player.position.y-player.height +1, player.width, player.height, RED);
 }
 
-// Player's instance update 
+// Player's instance update
 void PlayerUpdate(void){
     InputUpdate();
     EntityMoveUpdate(&player);
@@ -425,7 +425,7 @@ void EntityMoveUpdate(Entity* instance) {
     MoveCalc(instance);
     GravityCalc(instance);
     CollisionCheck(instance);
-    
+
     // Horizontal velocity together including last frame sub-pixel value
     float xVel = instance->velocity.x * delta + instance->hsp;
     // Horizontal velocity in pixel values
@@ -459,7 +459,7 @@ void GroundCheck(Entity* instance) {
     int x = (int)instance->position.x;
     int y = (int)instance->position.y + 1;
     instance->isGrounded = false;
-    
+
     // Center point check
     int c = MapGetTile(x >> TILE_SHIFT, y >> TILE_SHIFT);
     if (c != EMPTY) {
@@ -556,9 +556,9 @@ void CollisionHorizontalBlocks(Entity* instance) {
     // Get horizontal speed in pixels
     float xVel = instance->velocity.x * delta + instance->hsp;
     int xsp = (int)ttc_abs(xVel) * ttc_sign(xVel);
-    
+
     instance->hitOnWall = false;
-    
+
     // Get bounding box side offset
     int side;
     if (xsp > 0) {
@@ -590,7 +590,7 @@ void CollisionHorizontalBlocks(Entity* instance) {
         instance->position.x = (float)x;
         instance->velocity.x = 0.0;
         instance->hsp = 0.0;
-        
+
         instance->hitOnWall = true;
     }
 }
@@ -602,7 +602,7 @@ void CollisionVerticalBlocks(Entity* instance) {
     int ysp = (int)ttc_abs(yVel) * ttc_sign(yVel);
     instance->hitOnCeiling = false;
     instance->hitOnFloor = false;
-    
+
     //get bounding box side offset
     int side;
     if (ysp > 0) {

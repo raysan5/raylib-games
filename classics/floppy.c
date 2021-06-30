@@ -81,7 +81,7 @@ int main(void)
 #else
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -94,7 +94,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadGame();         // Unload loaded data (textures, sounds, models...)
-    
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -196,7 +196,7 @@ void DrawGame(void)
 
         ClearBackground(RAYWHITE);
 
-        if (!gameOver) 
+        if (!gameOver)
         {
             DrawCircle(floppy.position.x, floppy.position.y, floppy.radius, DARKGRAY);
 
@@ -206,7 +206,7 @@ void DrawGame(void)
                 DrawRectangle(tubes[i*2].rec.x, tubes[i*2].rec.y, tubes[i*2].rec.width, tubes[i*2].rec.height, GRAY);
                 DrawRectangle(tubes[i*2 + 1].rec.x, tubes[i*2 + 1].rec.y, tubes[i*2 + 1].rec.width, tubes[i*2 + 1].rec.height, GRAY);
             }
-            
+
             // Draw flashing fx (one frame only)
             if (superfx)
             {

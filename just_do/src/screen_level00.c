@@ -55,7 +55,7 @@ void InitLevel00Screen(void)
     // Initialize Level00 screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     boundsU = (Rectangle){GetScreenWidth()/2 - 265, -200, MeasureText("U", 160) + 40, 160 };
     boundsO = (Rectangle){GetScreenWidth() - 370, -30, MeasureText("O", 160) + 40, 160 };
 }
@@ -65,19 +65,19 @@ void UpdateLevel00Screen(void)
 {
     // Update Level00 screen variables here!
     if (!done) framesCounter++;
-    
+
     if (!done)
     {
         if (!placedU) boundsU.y += 2;
-        
+
         if (boundsU.y >= GetScreenHeight()) boundsU.y = -boundsU.height;
-        
+
         Vector2 mousePos = GetMousePosition();
 
         if (CheckCollisionPointRec(mousePos, boundsU))
         {
             mouseOverU = true;
-            
+
             if (!placedU && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
                 if ((boundsU.y > GetScreenHeight()/2 - 110) && ((boundsU.y + boundsU.height) < (GetScreenHeight()/2 + 100)))
@@ -87,35 +87,35 @@ void UpdateLevel00Screen(void)
             }
         }
         else mouseOverU = false;
-        
+
         if (CheckCollisionPointRec(mousePos, boundsO))
         {
             mouseOverO = true;
-            
+
             if (!placedO && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) boundsO.y += 100;
-            
+
             if (boundsO.y >= (GetScreenHeight()/2 - 130)) placedO = true;
         }
         else mouseOverO = false;
-        
+
         if (placedO && placedU)
         {
             done = true;
             PlaySound(levelWin);
         }
     }
-    
+
     if (done && !levelFinished)
     {
         levelTimeSec = framesCounter/60;
         levelFinished = true;
         framesCounter = 0;
     }
-    
+
     if (levelFinished)
     {
         framesCounter++;
-        
+
         if ((framesCounter > 30) && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) finishScreen = true;
     }
 }
@@ -128,15 +128,15 @@ void DrawLevel00Screen(void)
     DrawText("J", GetScreenWidth()/2 - MeasureText("JUST DO", 160)/2, GetScreenHeight()/2 - 80, 160, GRAY);
     DrawText("ST D", GetScreenWidth()/2 - MeasureText("JUST DO", 160)/2 + 210, GetScreenHeight()/2 - 80, 160, GRAY);
     DrawText("O", boundsO.x, boundsO.y + 10, 160, GRAY);
-    
+
     DrawText("by RAMON SANTAMARIA (@raysan5)", 370, GetScreenHeight()/2 + 100, 30, Fade(LIGHTGRAY, 0.4f));
-    
+
     if (mouseOverU && !placedU) DrawRectangleLines(boundsU.x - 20, boundsU.y, boundsU.width, boundsU.height, Fade(LIGHTGRAY, 0.8f));
     //DrawRectangleBordersRec(boundsU, -20, 0, 20, Fade(RED, 0.3f));
-    
+
     if (mouseOverO && !placedO) DrawRectangleLines(boundsO.x - 20, boundsO.y, boundsO.width, boundsO.height, Fade(LIGHTGRAY, 0.8f));
     //DrawRectangleBordersRec(boundsO, -20, 0, 20, Fade(RED, 0.3f));
-        
+
     if (levelFinished)
     {
         DrawRectangleBordersRec((Rectangle){0, 0, GetScreenWidth(), GetScreenHeight()}, 0, 0, 60, Fade(LIGHTGRAY, 0.6f));

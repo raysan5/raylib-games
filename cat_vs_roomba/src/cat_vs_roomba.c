@@ -2,7 +2,7 @@
 *
 *   CAT VS ROOMBA [GLOBAL GAME JAM 2019]
 *
-*   Ah! Home, sweet home! Time for some automatic cleaning... 
+*   Ah! Home, sweet home! Time for some automatic cleaning...
 *   if the worst enemy of Roomba allows it... be careful with Cat!
 *
 *   This game has been created using raylib 2.0 (www.raylib.com)
@@ -46,16 +46,16 @@ static bool onTransition = false;
 static bool transFadeOut = false;
 static int transFromScreen = -1;
 static int transToScreen = -1;
-    
+
 //----------------------------------------------------------------------------------
 // Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
 static void ChangeToScreen(int screen);     // Change to screen, no transition effect
-                                            
+
 static void TransitionToScreen(int screen); // Request transition to next screen
 static void UpdateTransition(void);         // Update transition effect
 static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
-                                            
+
 static void UpdateDrawFrame(void);          // Update and draw one frame
 
 //----------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ int main(void)
     font2 = LoadFont("resources/star2.fnt");
     music = LoadMusicStream("resources/cat_mouse.mod");
     fxCoin = LoadSound("resources/coin.wav");
-    
+
     SetMusicVolume(music, 1.0f);
     PlayMusicStream(music);
 
@@ -97,7 +97,7 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    
+
     // Unload current screen data before closing
     switch (currentScreen)
     {
@@ -107,7 +107,7 @@ int main(void)
         case ENDING: UnloadEndingScreen(); break;
         default: break;
     }
-    
+
     // Unload all global loaded data (i.e. fonts) here!
     UnloadFont(font);
     UnloadFont(font2);
@@ -115,7 +115,7 @@ int main(void)
     UnloadSound(fxCoin);
 
     CloseAudioDevice();     // Close audio context
-    
+
     CloseWindow();          // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -137,7 +137,7 @@ static void ChangeToScreen(int screen)
         case ENDING: UnloadEndingScreen(); break;
         default: break;
     }
-    
+
     // Init next screen
     switch (screen)
     {
@@ -147,7 +147,7 @@ static void ChangeToScreen(int screen)
         case ENDING: InitEndingScreen(); break;
         default: break;
     }
-    
+
     currentScreen = screen;
 }
 
@@ -167,13 +167,13 @@ static void UpdateTransition(void)
     if (!transFadeOut)
     {
         transAlpha += 0.02f;
-        
+
         // NOTE: Due to float internal representation, condition jumps on 1.0f instead of 1.05f
         // For that reason we compare against 1.01f, to avoid last frame loading stop
         if (transAlpha > 1.01f)
         {
             transAlpha = 1.0f;
-        
+
             // Unload current screen
             switch (transFromScreen)
             {
@@ -183,7 +183,7 @@ static void UpdateTransition(void)
                 case ENDING: UnloadEndingScreen(); break;
                 default: break;
             }
-            
+
             // Load next screen
             switch (transToScreen)
             {
@@ -193,9 +193,9 @@ static void UpdateTransition(void)
                 case ENDING: InitEndingScreen(); break;
                 default: break;
             }
-            
+
             currentScreen = transToScreen;
-            
+
             // Activate fade out effect to next loaded screen
             transFadeOut = true;
         }
@@ -203,7 +203,7 @@ static void UpdateTransition(void)
     else  // Transition fade out logic
     {
         transAlpha -= 0.02f;
-        
+
         if (transAlpha < -0.01f)
         {
             transAlpha = 0.0f;
@@ -227,22 +227,22 @@ static void UpdateDrawFrame(void)
     // Update
     //----------------------------------------------------------------------------------
     UpdateMusicStream(music);       // NOTE: Music keeps playing between screens
-    
+
     if (!onTransition)
     {
-        switch(currentScreen) 
+        switch(currentScreen)
         {
-            case LOGO: 
+            case LOGO:
             {
                 UpdateLogoScreen();
-                
+
                 if (FinishLogoScreen()) TransitionToScreen(TITLE);
 
             } break;
-            case TITLE: 
+            case TITLE:
             {
                 UpdateTitleScreen();
-                    
+
                 if (FinishTitleScreen() == 1) TransitionToScreen(OPTIONS);
                 else if (FinishTitleScreen() == 2) TransitionToScreen(GAMEPLAY);
 
@@ -250,15 +250,15 @@ static void UpdateDrawFrame(void)
             case GAMEPLAY:
             {
                 UpdateGameplayScreen();
-                
+
                 if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
                 //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
             } break;
             case ENDING:
-            { 
+            {
                 UpdateEndingScreen();
-                
+
                 if (FinishEndingScreen() == 1) TransitionToScreen(TITLE);
 
             } break;
@@ -267,14 +267,14 @@ static void UpdateDrawFrame(void)
     }
     else UpdateTransition();    // Update transition (fade-in, fade-out)
     //----------------------------------------------------------------------------------
-    
+
     // Draw
     //----------------------------------------------------------------------------------
     BeginDrawing();
-        
+
         ClearBackground(RAYWHITE);
-            
-        switch(currentScreen) 
+
+        switch(currentScreen)
         {
             case LOGO: DrawLogoScreen(); break;
             case TITLE: DrawTitleScreen(); break;
@@ -282,12 +282,12 @@ static void UpdateDrawFrame(void)
             case ENDING: DrawEndingScreen(); break;
             default: break;
         }
-         
+
         // Draw full screen rectangle in front of everything
         if (onTransition) DrawTransition();
-        
+
         //DrawFPS(10, 10);
-        
+
     EndDrawing();
     //----------------------------------------------------------------------------------
 }

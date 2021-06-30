@@ -50,11 +50,11 @@ void InitTitleScreen(void)
     // Initialize TITLE screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     texBackground = LoadTexture("resources/textures/background_title.png");
     texTitle = LoadTexture("resources/textures/title.png");
     texLogo = LoadTexture("resources/textures/logo_raylib.png");
-    
+
     fxStart = LoadSound("resources/audio/start.wav");
 }
 
@@ -63,9 +63,9 @@ void UpdateTitleScreen(void)
 {
     // Update TITLE screen variables here!
     framesCounter++;
-    
+
     titleAlpha += 0.005f;
-    
+
     if (titleAlpha >= 1.0f) titleAlpha = 1.0f;
 
     // Press enter to change to ATTIC screen
@@ -82,13 +82,13 @@ void DrawTitleScreen(void)
 {
     DrawTexture(texBackground, 0, 0, WHITE);
     DrawTexture(texTitle, GetScreenWidth()/2 - texTitle.width/2, -25, Fade(WHITE, titleAlpha));
-    
+
     DrawRectangle(0, GetScreenHeight() - 70, 560, 40, Fade(RAYWHITE, 0.8f));
-    DrawText("(c) Developed by Ramon Santamaria (@raysan5)", 36, GetScreenHeight() - 60, 20, DARKBLUE); 
-    
+    DrawText("(c) Developed by Ramon Santamaria (@raysan5)", 36, GetScreenHeight() - 60, 20, DARKBLUE);
+
     DrawText("powered by", GetScreenWidth() - 162, GetScreenHeight() - 190, 20, DARKGRAY);
     DrawTexture(texLogo, GetScreenWidth() - 128 - 34, GetScreenHeight() - 128 - 36, WHITE);
-    
+
     if ((framesCounter > 160) && ((framesCounter/40)%2)) DrawTextEx(font, "mouse click to start", (Vector2){ 325, 500 }, font.baseSize, 0, SKYBLUE);
 }
 
@@ -99,7 +99,7 @@ void UnloadTitleScreen(void)
     UnloadTexture(texBackground);
     UnloadTexture(texTitle);
     UnloadTexture(texLogo);
-    
+
     UnloadSound(fxStart);
 }
 

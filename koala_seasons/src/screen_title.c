@@ -158,7 +158,7 @@ void InitTitleScreen(void)
     initSeason = GetRandomValue(0, 3);
     soundActive = true;
     musicActive = true;
-    
+
     parallaxBackOffset = GetRandomValue(10, 100);
     parallaxFrontOffset = GetRandomValue(100, 200);
 
@@ -186,7 +186,7 @@ void InitTitleScreen(void)
     rainStormParticle.active = false;
     snowStormParticle.position = (Vector2){ 0, 0 };
     snowStormParticle.active = false;
-    
+
     soundButton = (Rectangle){ GetScreenWidth()*0.85, GetScreenHeight()*0.7, title_music_on.width, title_music_on.height };
     speakerButton = (Rectangle){ GetScreenWidth()*0.85, GetScreenHeight()*0.85, title_speaker_on.width, title_speaker_on.height };
 
@@ -324,12 +324,12 @@ void InitTitleScreen(void)
     player.y = 100;
     player.width = 35;
     player.height = 60;
-    
+
     koalaMenu.x = gameplay_koala_menu.x;
     koalaMenu.y = gameplay_koala_menu.y;
     koalaMenu.width = gameplay_koala_menu.width/2;
     koalaMenu.height = gameplay_koala_menu.height;
-    
+
     fontSize = MeasureTextEx(font, "PRESS TO PLAY", font.baseSize, 2);
 }
 
@@ -344,7 +344,7 @@ void UpdateTitleScreen(void)
         currentValue1 = BounceEaseOut((float)framesCounter, initValue1, (finishValue1 - initValue1), duration);
         currentValue2 = BounceEaseOut((float)framesCounter, initValue2, (finishValue2 - initValue2), duration);
     }
-    
+
     thisFrame += 1*TIME_FACTOR;
 
     if (thisFrame >= 40)
@@ -363,7 +363,7 @@ void UpdateTitleScreen(void)
         dandelionBackParticle.active = true;
         rayparticle.active = true;
         backRayparticle.active = true;
-        
+
         rainParticle.active = false;
         rainStormParticle.active = false;
         backRainParticle.active = false;
@@ -412,7 +412,7 @@ void UpdateTitleScreen(void)
             snowStormParticle.active = true;
             backSnowParticle.active = true;
         }
-        
+
         rainParticle.active = false;
         rainStormParticle.active = false;
         backRainParticle.active = false;
@@ -426,7 +426,7 @@ void UpdateTitleScreen(void)
     {
         flowerParticle.active = true;
         backFlowerParticle.active = true;
-        
+
         rainParticle.active = false;
         rainStormParticle.active = false;
         backRainParticle.active = false;
@@ -564,7 +564,7 @@ void UpdateTitleScreen(void)
                     rainStormParticle.particle[i+j].active = true;
                     rainStormParticle.particle[i+j].position = (Vector2){GetRandomValue(100, GetScreenWidth() + 1000), GetRandomValue(-10,-20)};
                 }
-                
+
                 rainStormParticle.spawnTime = 0;
                 rainStormParticle.maxTime = 4;
             }
@@ -858,7 +858,7 @@ void UpdateTitleScreen(void)
 void DrawTitleScreen(void)
 {
     BeginShaderMode(colorBlend);
-    
+
     DrawTexturePro(atlas02, gameplay_background, (Rectangle){0, 0, gameplay_background.width*2, gameplay_background.height*2}, (Vector2){0, 0}, 0, color02);
 
     // Draw parallax
@@ -892,7 +892,7 @@ void DrawTitleScreen(void)
                                                (Vector2){ particle_waterdrop_bw.width*backRainParticle.particle[i].size/2, particle_waterdrop_bw.height*backRainParticle.particle[i].size/2 }, backRainParticle.particle[i].rotation,
                                                Fade((Color){144, 183, 187, 255}, backRainParticle.particle[i].alpha));
     }
-    
+
     for (int i = 0; i < 20; i++)
     {
        if (backRayparticle.particle[i].active) DrawTexturePro(atlas02, gameplay_back_fx_lightraymid,
@@ -902,7 +902,7 @@ void DrawTitleScreen(void)
     }
 
     DrawParallaxFront();
-    
+
     for (int i = 0; i < 5; i++)
     {
         DrawTexturePro(atlas02, gameplay_props_tree, (Rectangle){bamboo[i].x, bamboo[i].y, 43, 720}, (Vector2){0, 0}, 0, color03);
@@ -910,7 +910,7 @@ void DrawTitleScreen(void)
     }
 
     EndShaderMode();
-    
+
     DrawTextureRec(atlas01, koalaMenu, (Vector2){player.x - player.width, player.y - 40}, WHITE);
 
     BeginShaderMode(colorBlend);
@@ -918,7 +918,7 @@ void DrawTitleScreen(void)
     DrawTexturePro(atlas02, gameplay_back_ground00, (Rectangle){0, 637, gameplay_back_ground00.width*2, gameplay_back_ground00.height*2}, (Vector2){0,0}, 0, color00);
 
     EndShaderMode();
-    
+
     DrawTexturePro(atlas01, (Rectangle){title_titletext.x, title_titletext.y, title_titletext.width, 230},  (Rectangle){GetScreenWidth()*0.49F - title_titletext.width/2, currentValue1, title_titletext.width, 235}, (Vector2){0, 0}, 0, WHITE);
     DrawTexturePro(atlas01, (Rectangle){title_titletext.x, title_titletext.y + 232, title_titletext.width, 116}, (Rectangle){GetScreenWidth()*0.49F - title_titletext.width/2, currentValue2, title_titletext.width, 116}, (Vector2){0, 0}, 0, WHITE);
 
@@ -976,15 +976,15 @@ void DrawTitleScreen(void)
                                                (Vector2){ gameplay_fx_lightraymid.width*rayparticle.particle[i].size/2, gameplay_fx_lightraymid.height*rayparticle.particle[i].size/2 }, rayparticle.particle[i].rotation,
                                                Fade(rayparticle.particle[i].color, rayparticle.particle[i].alpha));
     }
-    
+
     /*
     DrawTexturePro(atlas01, title_twitter, (Rectangle){ GetScreenWidth()*0.85, GetScreenHeight()*0.1, title_twitter.width, title_twitter.height}, (Vector2){0,0}, 0, WHITE);
     DrawTexturePro(atlas01, title_facebook, (Rectangle){ GetScreenWidth()*0.85, GetScreenHeight()*0.3, title_facebook.width, title_facebook.height}, (Vector2){0,0}, 0, WHITE);
     DrawTexturePro(atlas01, title_googleplay, (Rectangle){ GetScreenWidth()*0.85, GetScreenHeight()*0.5, title_googleplay.width, title_googleplay.height}, (Vector2){0,0}, 0, WHITE);
-    
+
     if (soundActive)DrawTexturePro(atlas01, title_music_on, (Rectangle){soundButton.x, soundButton.y, title_music_on.width, title_music_on.height}, (Vector2){0,0}, 0, WHITE);
     else DrawTexturePro(atlas01, title_music_off, (Rectangle){soundButton.x, soundButton.y, title_music_off.width, title_music_off.height}, (Vector2){0,0}, 0, WHITE);
-    
+
     if (musicActive)DrawTexturePro(atlas01, title_speaker_on, (Rectangle){speakerButton.x, speakerButton.y, title_speaker_on.width, title_speaker_on.height}, (Vector2){0,0}, 0, WHITE);
     else DrawTexturePro(atlas01, title_speaker_off, (Rectangle){speakerButton.x, speakerButton.y, title_speaker_off.width, title_speaker_off.height}, (Vector2){0,0}, 0, WHITE);
     */
@@ -1035,7 +1035,7 @@ static void DrawParallaxMiddle(void)
     DrawTexturePro(atlas02, gameplay_back_tree06_layer02, (Rectangle){(int)140*5, 67, gameplay_back_tree06_layer02.width*2, gameplay_back_tree06_layer02.height*2}, (Vector2){0,0}, 0, color02);
     DrawTexturePro(atlas02, gameplay_back_tree07_layer02, (Rectangle){(int)140*6, 67, gameplay_back_tree07_layer02.width*2, gameplay_back_tree07_layer02.height*2}, (Vector2){0,0}, 0, color02);
     DrawTexturePro(atlas02, gameplay_back_tree08_layer02, (Rectangle){(int)140*7, 67, gameplay_back_tree08_layer02.width*2, gameplay_back_tree08_layer02.height*2}, (Vector2){0,0}, 0, color02);
-    DrawTexturePro(atlas02, gameplay_back_ground02, (Rectangle){0, 509, ground02.width*2, ground02.height*2}, (Vector2){0,0}, 0, color01);  
+    DrawTexturePro(atlas02, gameplay_back_ground02, (Rectangle){0, 509, ground02.width*2, ground02.height*2}, (Vector2){0,0}, 0, color01);
     DrawTexturePro(atlas02, (Rectangle){ground02.x, ground02.y + ground02.height, ground02.width, -ground02.height}, (Rectangle){0, 19, ground02.width*2, ground02.height*2}, (Vector2){0,0}, 0, color01);
 }
 
@@ -1068,7 +1068,7 @@ static float BounceEaseOut(float t,float b , float c, float d)
     {
         float postFix = t-=(2.25f/2.75f);
         return c*(7.5625f*(postFix)*t + 0.9375f) + b;
-    } 
+    }
     else
     {
         float postFix = t-=(2.625f/2.75f);

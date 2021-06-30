@@ -2,9 +2,9 @@
 *
 *   LIGHT MY RITUAL [GLOBAL GAME JAM 2016]
 *
-*   Preparing a ritual session is not that easy. 
-*   You must light all the candles before the astral alignment finishes... 
-*   but dark creatures move in the shadows to put out all your lights! 
+*   Preparing a ritual session is not that easy.
+*   You must light all the candles before the astral alignment finishes...
+*   but dark creatures move in the shadows to put out all your lights!
 *   Be fast! Be smart! Light my ritual!
 *
 *   This game has been created using raylib 1.6 (www.raylib.com)
@@ -46,16 +46,16 @@ static int transFromScreen = -1;
 static int transToScreen = -1;
 
 static Music music;
-    
+
 //----------------------------------------------------------------------------------
 // Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
 static void ChangeToScreen(int screen);     // Change to screen, no transition effect
-                                            
+
 static void TransitionToScreen(int screen); // Request transition to next screen
 static void UpdateTransition(void);         // Update transition effect
 static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
-                                            
+
 static void UpdateDrawFrame(void);          // Update and draw one frame
 
 //----------------------------------------------------------------------------------
@@ -71,17 +71,17 @@ int main(void)
     InitAudioDevice();
 
     Image image = LoadImage("resources/lights_map.png");  // Load image in CPU memory (RAM)
-    
+
     lightsMap = LoadImageColors(image);         // Get image pixels data as an array of Color
     lightsMapWidth = image.width;
     lightsMapHeight = image.height;
-    
+
     UnloadImage(image);                         // Unload image from CPU memory (RAM)
-    
+
     font = LoadFont("resources/font_arcadian.png");
     //doors = LoadTexture("resources/textures/doors.png");
     //sndDoor = LoadSound("resources/audio/door.ogg");
-    
+
     music = LoadMusicStream("resources/audio/ambient.ogg");
     PlayMusicStream(music);
     SetMusicVolume(music, 1.0f);
@@ -114,17 +114,17 @@ int main(void)
         case GAMEPLAY: UnloadGameplayScreen(); break;
         default: break;
     }
-    
+
     // Unload all global loaded data (i.e. fonts) here!
     UnloadFont(font);
     //UnloadSound(sndDoor);
-    
+
     UnloadMusicStream(music);
-    
+
     UnloadImageColors(lightsMap);
-    
+
     CloseAudioDevice();
-    
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -144,7 +144,7 @@ static void ChangeToScreen(int screen)
         case GAMEPLAY: UnloadGameplayScreen(); break;
         default: break;
     }
-    
+
     switch (screen)
     {
         case LOGO_RL: rlInitLogoScreen(); break;
@@ -152,7 +152,7 @@ static void ChangeToScreen(int screen)
         case GAMEPLAY: InitGameplayScreen(); break;
         default: break;
     }
-    
+
     currentScreen = screen;
 }
 
@@ -174,7 +174,7 @@ static void UpdateTransition(void)
         if (transAlpha >= 1.0)
         {
             transAlpha = 1.0;
-        
+
             switch (transFromScreen)
             {
                 case LOGO_RL: rlUnloadLogoScreen(); break;
@@ -182,7 +182,7 @@ static void UpdateTransition(void)
                 case GAMEPLAY: UnloadGameplayScreen(); break;
                 default: break;
             }
-            
+
             switch (transToScreen)
             {
                 case LOGO_RL:
@@ -190,26 +190,26 @@ static void UpdateTransition(void)
                     rlInitLogoScreen();
                     currentScreen = LOGO_RL;
                 } break;
-                case TITLE: 
+                case TITLE:
                 {
                     InitTitleScreen();
-                    currentScreen = TITLE;                  
+                    currentScreen = TITLE;
                 } break;
                 case GAMEPLAY:
                 {
-                    InitGameplayScreen(); 
+                    InitGameplayScreen();
                     currentScreen = GAMEPLAY;
                 } break;
                 default: break;
             }
-            
+
             transFadeOut = true;
         }
     }
     else  // Transition fade out logic
     {
         transAlpha -= 0.05f;
-        
+
         if (transAlpha <= 0)
         {
             transAlpha = 0;
@@ -234,19 +234,19 @@ static void UpdateDrawFrame(void)
     //----------------------------------------------------------------------------------
     if (!onTransition)
     {
-        switch(currentScreen) 
+        switch(currentScreen)
         {
-            case LOGO_RL: 
+            case LOGO_RL:
             {
                 rlUpdateLogoScreen();
-                
+
                 if (rlFinishLogoScreen()) TransitionToScreen(TITLE);
 
             } break;
-            case TITLE: 
+            case TITLE:
             {
                 UpdateTitleScreen();
-                
+
                 if (FinishTitleScreen() == 1)
                 {
                     StopMusicStream(music);
@@ -255,9 +255,9 @@ static void UpdateDrawFrame(void)
 
             } break;
             case GAMEPLAY:
-            { 
+            {
                 UpdateGameplayScreen();
-                
+
                 if (FinishGameplayScreen() == 1) ChangeToScreen(LOGO_RL);
                 else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
@@ -270,28 +270,28 @@ static void UpdateDrawFrame(void)
         // Update transition (fade-in, fade-out)
         UpdateTransition();
     }
-    
+
     if (currentScreen != GAMEPLAY) UpdateMusicStream(music);
     //----------------------------------------------------------------------------------
-    
+
     // Draw
     //----------------------------------------------------------------------------------
     BeginDrawing();
-    
+
         ClearBackground(RAYWHITE);
-        
-        switch(currentScreen) 
+
+        switch(currentScreen)
         {
             case LOGO_RL: rlDrawLogoScreen(); break;
             case TITLE: DrawTitleScreen(); break;
             case GAMEPLAY: DrawGameplayScreen(); break;
             default: break;
         }
-    
+
         if (onTransition) DrawTransition();
-    
+
         //DrawFPS(10, 10);
-    
+
     EndDrawing();
     //----------------------------------------------------------------------------------
 }

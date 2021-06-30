@@ -111,14 +111,14 @@ void InitGameplayScreen(void)
     finishScreen = 0;
     pause = false;
     endingStatus = 0;
-    
+
     // Textures loading
     texBackground = LoadTexture("resources/textures/background_gameplay.png");
     texPlayer = LoadTexture("resources/textures/player.png");
     texSampleSmall = LoadTexture("resources/textures/sample_small.png");
     texSampleMid = LoadTexture("resources/textures/sample_mid.png");
     texSampleBig = LoadTexture("resources/textures/sample_big.png");
-    
+
     waveRec = (Rectangle){ 32, 32, 1280 - 64, 105 };
     waveTarget = LoadRenderTexture(waveRec.width, waveRec.height);
 
@@ -126,42 +126,42 @@ void InitGameplayScreen(void)
     fxSampleOn = LoadSound("resources/audio/sample_on.wav");
     fxSampleOff = LoadSound("resources/audio/sample_off.wav");
     fxPause = LoadSound("resources/audio/pause.wav");
-    
+
     SetSoundVolume(fxSampleOn, 0.6f);
     SetSoundVolume(fxPause, 0.5f);
 
     // Initialize player data
     playerArea = (Rectangle){ 200, 160, 80, 400 };
-    
+
     player.width = 20;
     player.height = 60;
     player.speed = (Vector2){ 15, 15 };
     player.color = GOLD;
-    player.position = (Vector2){ playerArea.x + playerArea.width/2 - texPlayer.width/2, 
+    player.position = (Vector2){ playerArea.x + playerArea.width/2 - texPlayer.width/2,
                                  playerArea.y + playerArea.height/2 - texPlayer.height/2 };
-                                 
+
     warpCounter = 395;
     synchro = 0.2f;
-    
+
     combo = 0;
     maxCombo = 0;
 
     // Initialize wave and samples data
     Wave wave = LoadWave("resources/audio/wave.ogg");
     float *waveData = LoadWaveSamples(wave);        // TODO: Be careful with channels!
-    
+
     // We calculate the required parameters to adjust audio time to gameplay time
     // that way samples collected correspond to audio playing
     // Synchonization is not perfect due to possible rounding issues (float to int)
     waveTime = wave.sampleCount/wave.sampleRate;     // Total sample time in seconds
     float requiredSamples = (MAX_SAMPLES_SPEED*waveTime*60 - 1000)/SAMPLES_SPACING;
     int samplesDivision = (int)(wave.sampleCount/requiredSamples);
-    
+
     totalSamples = wave.sampleCount/samplesDivision;
-    
+
     // We don't need wave any more (already got waveData)
     UnloadWave(wave);
-    
+
     collectedSamples = 0;
 
     // Init samples
@@ -170,13 +170,13 @@ void InitGameplayScreen(void)
     // Normalize wave data (min vs max values) to scale properly
     float minSampleValue = 0.0f;
     float maxSampleValue = 0.0f;
-    
+
     for (int i = 0; i < totalSamples; i++)
     {
         if (waveData[i*samplesDivision] < minSampleValue) minSampleValue = waveData[i*samplesDivision];
         if (waveData[i*samplesDivision] > maxSampleValue) maxSampleValue = waveData[i*samplesDivision];
     }
-    
+
     float sampleScaleFactor = 1.0f/(maxSampleValue - minSampleValue);  // 400 pixels maximum size
 
     // Initialize samples
@@ -184,12 +184,12 @@ void InitGameplayScreen(void)
     {
         samples[i].value = waveData[i*samplesDivision]*sampleScaleFactor;   // Normalized value [-1.0..1.0]
         samples[i].position.x = player.position.x + 1000 + i*SAMPLES_SPACING;
-        
+
         samples[i].position.y = GetScreenHeight()/2 + samples[i].value*SAMPLES_MULTIPLIER;
-        
+
         if (samples[i].position.y > GetScreenHeight()/2 + MAX_GAME_HEIGHT/2) samples[i].position.y = GetScreenHeight()/2 - MAX_GAME_HEIGHT/2;
         else if (samples[i].position.y < GetScreenHeight()/2 - MAX_GAME_HEIGHT/2) samples[i].position.y = GetScreenHeight()/2 + MAX_GAME_HEIGHT/2;
-        
+
         samples[i].radius = 6;
         samples[i].active = true;
         samples[i].collected = false;
@@ -199,14 +199,14 @@ void InitGameplayScreen(void)
 
     samplesSpeed = MAX_SAMPLES_SPEED;
     currentSample = 0;
-    
+
     //FILE *samplesFile = fopen("resources/samples.data", "wb");
     //fwrite(samples, totalSamples*sizeof(Sample), 1, samplesFile);
     //fclose(samplesFile);
 
     // We already saved the samples we needed for the game, we can free waveData
     UnloadWaveSamples(waveData);
-    
+
     // Load and start playing music
     // NOTE: Music is loaded in main code base
     StopMusicStream(music);
@@ -220,7 +220,7 @@ void UpdateGameplayScreen(void)
     {
         PlaySound(fxPause);
         pause = !pause;
-        
+
         if (pause) PauseMusicStream(music);
         else ResumeMusicStream(music);
     }
@@ -228,10 +228,10 @@ void UpdateGameplayScreen(void)
     if (!pause)
     {
         framesCounter++;        // Time starts counting to awake enemies
-        
+
         // Player movement logic (mouse)
         player.position.y = GetMousePosition().y;
-        
+
         // Player movement logic (keyboard)
         if (IsKeyDown(KEY_W)) player.position.y -= player.speed.y;
         else if (IsKeyDown(KEY_S)) player.position.y += player.speed.y;
@@ -241,10 +241,10 @@ void UpdateGameplayScreen(void)
         if (IsGamepadAvailable(0))
         {
             Vector2 movement = { 0 };
-            
+
             movement.x = GetGamepadAxisMovement(0, GAMEPAD_PS3_AXIS_LEFT_X);
             movement.y = GetGamepadAxisMovement(0, GAMEPAD_PS3_AXIS_LEFT_Y);
-            
+
             player.position.x += movement.x*0.1f;   // Scale gamepad movement value
             player.position.y += movement.y*0.1f;   // Scale gamepad movement value
         }
@@ -253,7 +253,7 @@ void UpdateGameplayScreen(void)
         // Player logic: check player area limits
         if (player.position.x < playerArea.x) player.position.x = playerArea.x;
         else if ((player.position.x + player.width) > (playerArea.x + playerArea.width)) player.position.x = playerArea.x + playerArea.width - player.width;
-        
+
         if (player.position.y < playerArea.y) player.position.y = playerArea.y;
         else if ((player.position.y + player.height) > (playerArea.y + playerArea.height)) player.position.y = playerArea.y + playerArea.height - player.height;
 
@@ -262,38 +262,38 @@ void UpdateGameplayScreen(void)
         {
             // Samples movement logic
             samples[i].position.x -= samplesSpeed;
-            
-            if (((samples[i].position.x + samples[i].radius) > -SAMPLES_SPACING) && 
+
+            if (((samples[i].position.x + samples[i].radius) > -SAMPLES_SPACING) &&
                 ((samples[i].position.x - samples[i].radius) < GetScreenWidth())) samples[i].renderable = true;
             else samples[i].renderable = false;
-               
+
             // Samples catch logic
             if (!samples[i].collected && CheckCollisionCircleRec(samples[i].position, samples[i].radius, (Rectangle){ (int)player.position.x, (int)player.position.y, player.width, player.height }))
             {
                 samples[i].collected = true;
                 collectedSamples++;
                 synchro += 0.02;
-                
+
                 combo++;
                 if (combo > maxCombo) maxCombo = combo;
-                
+
                 if (synchro >= 1.0f) synchro = 1.0f;
-                
+
                 // Set sound pitch depending on sample position (base pitch: 1.0f)
                 // NOTE: waveData[i*WAVE_SAMPLES_DIV] is scaled to [0.3..1.7]
                 SetSoundPitch(fxSampleOn, samples[i].value*1.4f + 0.7f);
-                
+
                 PlaySound(fxSampleOn);
             }
-            
+
             if ((samples[i].position.x - samples[i].radius) < player.position.x)
             {
                 currentSample = i;  // Register last sample going out range
-                
+
                 if (samples[i].active)
                 {
                     samples[i].active = false;
-                    
+
                     if (!samples[i].collected)
                     {
                         synchro -= 0.05f;
@@ -303,25 +303,25 @@ void UpdateGameplayScreen(void)
                 }
             }
         }
-        
+
         if (IsKeyDown(KEY_SPACE) && (warpCounter > 0))
         {
             warpCounter--;
             if (warpCounter < 0) warpCounter = 0;
-            
+
             samplesSpeed -= 0.1f;
             if (samplesSpeed <= MIN_SAMPLES_SPEED) samplesSpeed = MIN_SAMPLES_SPEED;
-            
+
             SetMusicPitch(music, samplesSpeed/MAX_SAMPLES_SPEED);
         }
         else
         {
             warpCounter++;
             if (warpCounter > 395) warpCounter = 395;
-            
+
             samplesSpeed += 0.1f;
             if (samplesSpeed >= MAX_SAMPLES_SPEED) samplesSpeed = MAX_SAMPLES_SPEED;
-            
+
             SetMusicPitch(music, samplesSpeed/MAX_SAMPLES_SPEED);
         }
 
@@ -358,22 +358,22 @@ void DrawGameplayScreen(void)
         if (samples[i].renderable)
         {
             Color col = samples[i].color;
-            
+
             if (i < (currentSample + 1)) col = Fade(DARKGRAY, 0.5f);
             else col = WHITE;
-            
-            if (!samples[i].collected) 
+
+            if (!samples[i].collected)
             {
                 //DrawCircleV(samples[i].position, samples[i].radius, col);
-                
+
                 if (combo > 30) DrawTexture(texSampleSmall, samples[i].position.x - texSampleSmall.width/2, samples[i].position.y - texSampleSmall.height/2, col);
                 else if (combo > 15) DrawTexture(texSampleMid, samples[i].position.x - texSampleMid.width/2, samples[i].position.y - texSampleMid.height/2, col);
                 else DrawTexture(texSampleBig, samples[i].position.x - texSampleBig.width/2, samples[i].position.y - texSampleBig.height/2, col);
             }
-            
+
             if (i < (currentSample + 1)) col = Fade(GRAY, 0.3f);
             else col = Fade(RED, 0.5f);
-            
+
             // Draw line between samples
             DrawLineEx(samples[i].position, samples[i + 1].position, 3.0f, col);
         }
@@ -382,7 +382,7 @@ void DrawGameplayScreen(void)
     // Draw player
     //DrawRectangle((int)player.position.x, (int)player.position.y, player.width, player.height, player.color);
     DrawTexture(texPlayer, player.position.x - 32, player.position.y - 24, WHITE);
- 
+
     // Draw pause message
     if (pause) DrawTextEx(font, "WAVE PAUSED", (Vector2){ 235, 400 }, font.baseSize*2, 0, WHITE);
 
@@ -390,30 +390,30 @@ void DrawGameplayScreen(void)
     //DrawText(TextFormat("%05i", collectedSamples), 900, 200, 40, GRAY);
     //DrawText(TextFormat("%05i", totalSamples), 900, 250, 40, GRAY);
     DrawTextEx(font, TextFormat("%05i / %05i", collectedSamples, totalSamples), (Vector2){810, 170}, font.baseSize, -2, SKYBLUE);
-    
+
     // Draw combo
     DrawTextEx(font, TextFormat("Combo: %02i [max: %02i]", combo, maxCombo), (Vector2){200, 170}, font.baseSize/2, -2, SKYBLUE);
 
     // Draw synchonicity level
     DrawRectangle(99, 622, 395, 32, Fade(RAYWHITE, 0.8f));
-        
+
     if (synchro <= 0.3f) DrawRectangle(99, 622, synchro*395, 32, Fade(RED, 0.8f));
     else if (synchro <= 0.8f) DrawRectangle(99, 622, synchro*395, 32, Fade(ORANGE,0.8f));
     else if (synchro < 1.0f) DrawRectangle(99, 622, synchro*395, 32, Fade(LIME,0.8f));
     else DrawRectangle(99, 622, synchro*395, 32, Fade(GREEN, 0.9f));
-    
+
     DrawRectangleLines(99, 622, 395, 32, MAROON);
 
     if (synchro == 1.0f) DrawTextEx(font, TextFormat("%02i%%", (int)(synchro*100)), (Vector2){99 + 390, 600}, font.baseSize, -2, GREEN);
     else DrawTextEx(font, TextFormat("%02i%%", (int)(synchro*100)), (Vector2){99 + 390, 600}, font.baseSize, -2, SKYBLUE);
-    
+
     // Draw time warp coool-down bar
     DrawRectangle(754, 622, 395, 32, Fade(RAYWHITE, 0.8f));
     DrawRectangle(754, 622, warpCounter, 32, Fade(SKYBLUE, 0.8f));
     DrawRectangleLines(754, 622, 395, 32, DARKGRAY);
     //DrawText(TextFormat("%02i%%", (int)(synchro*100)), 754 + 410, 628, 20, DARKGRAY);
     DrawTextEx(font, TextFormat("%02i%%", (int)((float)warpCounter/395.0f*100.0f)), (Vector2){754 + 390, 600}, font.baseSize, -2, SKYBLUE);
-    
+
     // Draw wave
     if (waveTarget.texture.id <= 0)     // Render target could not be loaded (OpenGL 1.1)
     {
@@ -430,7 +430,7 @@ void DrawGameplayScreen(void)
         EndTextureMode();
 
         // TODO: Apply antialiasing shader
-        
+
         DrawTextureEx(waveTarget.texture, (Vector2){ waveRec.x, waveRec.y }, 0.0f, 1.0f, WHITE);
         DrawRectangle(waveRec.x + (int)currentSample*1215/totalSamples, waveRec.y, 2, 99, DARKGRAY);
     }
@@ -440,14 +440,14 @@ void DrawGameplayScreen(void)
 void UnloadGameplayScreen(void)
 {
     StopMusicStream(music);
-    
+
     // Unload textures
     UnloadTexture(texBackground);
     UnloadTexture(texPlayer);
     UnloadTexture(texSampleSmall);
     UnloadTexture(texSampleMid);
     UnloadTexture(texSampleBig);
-    
+
     UnloadRenderTexture(waveTarget);
 
     // Unload sounds
@@ -470,7 +470,7 @@ int FinishGameplayScreen(void)
 
 // Draw samples in wave form (including already played samples in a different color!)
 // NOTE: For proper visualization, MSAA x4 is recommended, alternatively
-// it should be rendered to a bigger texture and then scaled down with 
+// it should be rendered to a bigger texture and then scaled down with
 // bilinear/trilinear texture filtering
 static void DrawSamplesMap(Sample *samples, int sampleCount, int playedSamples, Rectangle bounds, Color color)
 {
@@ -478,13 +478,13 @@ static void DrawSamplesMap(Sample *samples, int sampleCount, int playedSamples, 
     float sampleIncrementX = (float)bounds.width/sampleCount;
 
     Color col = color;
-    
+
     for (int i = 0; i < sampleCount - 1; i++)
     {
         if (i < playedSamples) col = GRAY;
         else col = color;
 
-        DrawLineV((Vector2){ (float)bounds.x + (float)i*sampleIncrementX, (float)(bounds.y + bounds.height/2) + samples[i].value*bounds.height }, 
+        DrawLineV((Vector2){ (float)bounds.x + (float)i*sampleIncrementX, (float)(bounds.y + bounds.height/2) + samples[i].value*bounds.height },
                   (Vector2){ (float)bounds.x + (float)(i + 1)*sampleIncrementX, (float)(bounds.y  + bounds.height/2) + + samples[i + 1].value*bounds.height }, col);
     }
 }

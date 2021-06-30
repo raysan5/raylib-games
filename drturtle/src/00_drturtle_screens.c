@@ -21,16 +21,16 @@ int main()
     //--------------------------------------------------------------------------------------
     const int screenWidth = 1280;
     const int screenHeight = 720;
-    
+
     // Init window
     InitWindow(screenWidth, screenHeight, "Dr. Turtle & Mr. GAMERA");
-    
+
     // Define current screen
     GameScreen currentScreen = TITLE;
-    
+
     SetTargetFPS(60);       // Setup game frames per second
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -47,7 +47,7 @@ int main()
                 {
                     currentScreen = GAMEPLAY;
                 }
-                
+
             } break;
             case GAMEPLAY:
             {
@@ -56,7 +56,7 @@ int main()
                 {
                     currentScreen = ENDING;
                 }
-            
+
             } break;
             case ENDING:
             {
@@ -65,18 +65,18 @@ int main()
                 {
                     currentScreen = TITLE;
                 }
-      
+
             } break;
             default: break;
         }
         //----------------------------------------------------------------------------------
-        
+
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
-        
+
             ClearBackground(RAYWHITE);
-            
+
             switch (currentScreen)
             {
                 case TITLE:
@@ -84,21 +84,21 @@ int main()
                     // Draw title screen
                     DrawRectangle(0, 0, screenWidth, screenHeight, GREEN);
                     DrawText("TITLE SCREEN", 20, 20, 40, DARKGREEN);
-                
+
                 } break;
                 case GAMEPLAY:
                 {
                     // Draw gameplay screen
                     DrawRectangle(0, 0, screenWidth, screenHeight, RED);
                     DrawText("GAMEPLAY SCREEN", 20, 20, 40, MAROON);
-                
+
                 } break;
                 case ENDING:
                 {
                     // Draw ending screen
                     DrawRectangle(0, 0, screenWidth, screenHeight, BLUE);
                     DrawText("ENDING SCREEN", 20, 20, 40, DARKBLUE);
-                    
+
                 } break;
                 default: break;
             }
@@ -111,6 +111,6 @@ int main()
     //--------------------------------------------------------------------------------------
     CloseWindow();          // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
-    
+
     return 0;
 }

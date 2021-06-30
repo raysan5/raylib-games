@@ -51,26 +51,26 @@ void InitGameplayScreen(void)
     // Initialize GAMEPLAY screen variables
     framesCounter = 0;
     finishScreen = 0;
-       
+
     target = LoadRenderTexture(720, 720);
     SetTextureFilter(target.texture, FILTER_BILINEAR);
-       
+
     // Generate player character!
     //player = GenerateCharacter();
     playerBase = player;
-    
+
     // Generate dating character!
     dating = GenerateCharacter();
     datingBase = dating;
-    
+
     // TODO: Generate dating character likes
     // For the different types of properties we assign random like values: 0% (total-dislike) -> 100% (total-like)
-    
+
     // The total match point will be the (like accumulated amount)/(num properties)
     // Some of the elements add points or remove points
-    
+
     // At the end we can show the like percentadge of every element
-    
+
     doHairCut = false;
     doHairTint = false;
     doEyeLiner = false;
@@ -87,7 +87,7 @@ void UpdateGameplayScreen(void)
         player = GenerateCharacter();
         playerBase = player;
     }
-    
+
     if (IsKeyPressed(KEY_ENTER)) finishScreen = 1;
 }
 
@@ -96,10 +96,10 @@ void DrawGameplayScreen(void)
 {
     // Draw background
     DrawTexture(background, 0, 0, GetColor(0xf6aa60ff));
-    
+
     // Draw left menu buttons
     GuiButton((Rectangle){ 20, 40, 300, 60 }, "RE-TOUCH:", 2);
-    
+
     if (GuiButton((Rectangle){ 20, 40 + 90, 300, 80 }, "HAIR TINT", doHairTint? 3 : -1))
     {
         doHairTint = true;
@@ -130,20 +130,20 @@ void DrawGameplayScreen(void)
     {
         doGlasses = true;
     }
-    
+
     // Draw player
     DrawCharacter(player, (Vector2){ GetScreenWidth()/2 - 125, 80 });
 
     // Draw dating view
     GuiButton((Rectangle){ 970, 40, 260, 60 }, "DATING:", 2);
     GuiButton((Rectangle){ 970, 40 + 70, 260, 260 }, " ", 0);
-    
+
     BeginTextureMode(target);
         DrawCharacter(dating, (Vector2){ (720 - 250)/2, (720 - 500)/2 });
     EndTextureMode();
-    
+
     DrawTexturePro(target.texture, (Rectangle){ 0.0f, 0.0f, (float)target.texture.width, (float)-target.texture.height }, (Rectangle){ 970, 40 + 70, 260, 260 }, (Vector2){ 0, 0 }, 0.0f, WHITE);
-   
+
     // Draw left button: date!
     if (GuiButton((Rectangle){ 970, 580, 260, 90 }, "GO DATE!", -1))
     {

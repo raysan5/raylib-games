@@ -11,12 +11,12 @@ typedef struct Player {
     Rectangle bounds;
     Texture2D texture;
     Color color;
-    
+
     // Animation variables
     Rectangle frameRec;
     int currentFrame;
     int currentSeq;
-    
+
     bool key;
     int numLifes;
     bool dead;

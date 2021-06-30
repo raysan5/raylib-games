@@ -118,7 +118,7 @@ int main(void)
 #else
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -131,7 +131,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadGame();         // Unload loaded data (textures, sounds, models...)
-    
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -148,12 +148,12 @@ static void InitGame(void)
     int posx, posy;
     int velx = 0;
     int vely = 0;
-    
+
     framesCounter = 0;
     gameOver = false;
     pause = false;
     score = 0;
-    
+
     victory = false;
     lose = false;
     awake = true;
@@ -259,7 +259,7 @@ void UpdateGame(void)
                         shoot[i].position = (Vector2){ player.position.x, player.position.y - shipHeight };
                         shoot[i].speed.y = PLAYER_SPEED;
                         shoot[i].active = true;
-                        
+
                         linePosition = (Vector2){ player.position.x, player.position.y};
 
                         break;
@@ -338,7 +338,7 @@ void UpdateGame(void)
                     // Meteor vs wall collision logic
                     if (((bigBalls[i].position.x + bigBalls[i].radius) >= screenWidth) || ((bigBalls[i].position.x - bigBalls[i].radius) <= 0)) bigBalls[i].speed.x *= -1;
                     if ((bigBalls[i].position.y - bigBalls[i].radius) <= 0) bigBalls[i].speed.y *= -1.5;
-                    
+
                     if ((bigBalls[i].position.y + bigBalls[i].radius) >= screenHeight)
                     {
                         bigBalls[i].speed.y *= -1;
@@ -436,7 +436,7 @@ void UpdateGame(void)
                                 mediumBalls[countmediumBallss].active = true;
                                 countmediumBallss ++;
                             }
-                            
+
                             a = MAX_BIG_BALLS;
                         }
                     }
@@ -529,7 +529,7 @@ void UpdateGame(void)
             gameOver = false;
         }
     }
-    
+
     // Points move-up and fade logic
     for (int z = 0; z < 5; z++)
     {
@@ -538,7 +538,7 @@ void UpdateGame(void)
             points[z].position.y -= 2;
             points[z].alpha -= 0.02f;
         }
-        
+
         if (points[z].alpha < 0.0f) points[z].alpha = 0.0f;
     }
 }
@@ -549,7 +549,7 @@ void DrawGame(void)
     BeginDrawing();
 
         ClearBackground(RAYWHITE);
-        
+
         if (!gameOver)
         {
             // Draw player
@@ -596,13 +596,13 @@ void DrawGame(void)
 
             // Draw score (UI)
             DrawText(TextFormat("SCORE: %i", score), 10, 10, 20, LIGHTGRAY);
-            
-            if (victory) 
+
+            if (victory)
             {
                 DrawText("YOU WIN!", screenWidth/2 - MeasureText("YOU WIN!", 60)/2, 100, 60, LIGHTGRAY);
                 DrawText("PRESS [ENTER] TO PLAY AGAIN", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] TO PLAY AGAIN", 20)/2, GetScreenHeight()/2 - 50, 20, LIGHTGRAY);
             }
-            
+
             if (pause) DrawText("GAME PAUSED", screenWidth/2 - MeasureText("GAME PAUSED", 40)/2, screenHeight/2 - 40, 40, LIGHTGRAY);
         }
         else DrawText("PRESS [ENTER] TO PLAY AGAIN", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] TO PLAY AGAIN", 20)/2, GetScreenHeight()/2 - 50, 20, LIGHTGRAY);

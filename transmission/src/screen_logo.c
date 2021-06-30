@@ -62,17 +62,17 @@ void InitLogoScreen(void)
     finishScreen = 0;
     framesCounter = 0;
     lettersCount = 0;
-    
+
     logoPositionX = GetScreenWidth()/2 - 128;
     logoPositionY = GetScreenHeight()/2 - 128;
-    
+
     topSideRecWidth = LOGO_RECS_SIDE;
     leftSideRecHeight = LOGO_RECS_SIDE;
     bottomSideRecWidth = LOGO_RECS_SIDE;
     rightSideRecHeight = LOGO_RECS_SIDE;
-    
+
     for (int i = 0; i < 8; i++) raylib[i] = '\0';
-    
+
     state = 0;
     alpha = 1.0f;
 
@@ -138,7 +138,7 @@ void UpdateLogoScreen(void)
     else if (state == 4)
     {
         framesCounter++;
-        
+
         if (framesCounter > 100)
         {
             alpha -= 0.02f;
@@ -155,7 +155,7 @@ void UpdateLogoScreen(void)
     {
         alpha += 0.02f;
         if (alpha >= 1.0f) alpha = 1.0f;
-        
+
         framesCounter++;
         if (framesCounter > 200)
         {
@@ -167,7 +167,7 @@ void UpdateLogoScreen(void)
     {
         alpha -= 0.02f;
         if (alpha >= 1.0f) alpha = 1.0f;
-        
+
         framesCounter++;
         if (framesCounter > 100)
         {
@@ -220,7 +220,7 @@ void DrawLogoScreen(void)
         DrawRectangle(GetScreenWidth()/2 - 112, GetScreenHeight()/2 - 112, 224, 224, Fade(RAYWHITE, alpha));
 
         DrawText(raylib, GetScreenWidth()/2 - 44, GetScreenHeight()/2 + 48, 50, Fade(BLACK, alpha));
-        
+
         if (framesCounter > 20) DrawText("powered by", logoPositionX, logoPositionY - 27, 20, Fade(DARKGRAY, alpha));
     }
     else if ((state == 5) || (state == 6)) DrawTexture(texLogoCW, GetScreenWidth()/2 - texLogoCW.width/2, GetScreenHeight()/2 - texLogoCW.height/2, Fade(WHITE, alpha));

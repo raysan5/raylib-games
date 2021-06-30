@@ -70,28 +70,28 @@ void InitTitleScreen(void)
     // TODO: Initialize TITLE screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     texBackground = LoadTexture("resources/textures/title_background.png");
     fxTyping = LoadSound("resources/audio/fx_typing.ogg");
     fontTitle = LoadFontEx("resources/fonts/mom_typewritter.ttf", 96, 0, 0);
-    
+
     titleSize = 44;
     transmissionPosition = (Vector2){519, 221};
     missionPositon = (Vector2){580, 261};
-    
+
     titleColor = BLACK;
     speedText = 15;
-    
+
     missionLenght = 0;
     transmissionLenght = 0;
-    
+
     missionMaxLenght = 7;
     transmissionMaxLenght = 12;
-    
+
     writeTransmission = true;
     writeMission = false;
     writeEnd = false;
-    
+
     currentMission = 0;
 }
 
@@ -101,13 +101,13 @@ void UpdateTitleScreen(void)
     if (!writeEnd)
     {
         framesCounter ++;
-        
+
         if (framesCounter%speedText == 0)
         {
             framesCounter = 0;
             if (writeTransmission)
             {
-                transmissionLenght++;   
+                transmissionLenght++;
                 if (transmissionLenght == transmissionMaxLenght)
                 {
                     writeTransmission = false;
@@ -123,7 +123,7 @@ void UpdateTitleScreen(void)
                     writeEnd = true;
                 }
             }
-            
+
             PlaySound(fxTyping);
         }
     }
@@ -131,7 +131,7 @@ void UpdateTitleScreen(void)
     if (IsButtonPressed())
     {
         MissionScreen();
-    }    
+    }
     else if (IsKeyPressed(KEY_ENTER)) MissionScreen();
 }
 
@@ -140,7 +140,7 @@ void DrawTitleScreen(void)
 {
     DrawTexture(texBackground, 0,0, WHITE);
     DrawTextEx(fontTitle, TextSubtext(textTitle, 0, transmissionLenght), transmissionPosition, titleSize, 0, titleColor);
-    DrawTextEx(fontTitle, TextSubtext(textTitle, 12, missionLenght), missionPositon, titleSize, 0, titleColor);      
+    DrawTextEx(fontTitle, TextSubtext(textTitle, 12, missionLenght), missionPositon, titleSize, 0, titleColor);
 
     DrawButton("start");
 }
@@ -167,7 +167,7 @@ static void MissionScreen(void)
     transmissionLenght = transmissionMaxLenght;
     missionLenght = missionMaxLenght;
     writeEnd = true;
-    
+
     //finishScreen = 1;   // OPTIONS
     finishScreen = true;   // GAMEPLAY
     //PlaySound(fxCoin);

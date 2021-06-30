@@ -67,7 +67,7 @@ void InitLogoScreen(void)
     // Initialize LOGO screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     logoPositionX = GetScreenWidth()/2 - 128;
     logoPositionY = GetScreenHeight()/2 - 128;
 }
@@ -77,7 +77,7 @@ void UpdateLogoScreen(void)
 {
     // Update LOGO screen
     framesCounter++;    // Count frames
-    
+
     // Update LOGO screen variables
     if (logoScreenState == 0)                 // State 0: Small box blinking
     {
@@ -160,7 +160,7 @@ void UpdateLogoScreen(void)
     if (msgLogoBDone)
     {
         framesCounter++;
-        
+
         if (framesCounter > 90) finishScreen = true;
     }
 }
@@ -187,7 +187,7 @@ void DrawLogoScreen(void)
         DrawRectangle(logoPositionX, logoPositionY + 240 - 60, bottomSideRecWidth, 16, BLACK);
     }
     else if (logoScreenState == 3)
-    {         
+    {
         DrawRectangle(logoPositionX, logoPositionY - 60, topSideRecWidth, 16, BLACK);
         DrawRectangle(logoPositionX, logoPositionY + 16 - 60, 16, leftSideRecHeight - 32, BLACK);
 

@@ -72,7 +72,7 @@ static int scroll = 0;
 void InitAisle02Screen(void)
 {
     ResetPlayer();
-    
+
     // Reset Screen variables
     monsterHover = false;
     monsterCheck = -1;
@@ -80,14 +80,14 @@ void InitAisle02Screen(void)
     msgCounter = 0;
     lettersCounter = 0;
     for (int i = 0; i < 256; i++) msgBuffer[i] = '\0';
-    
+
     framesCounter = 0;
     finishScreen = 0;
-    
+
     background = LoadTexture("resources/textures/background_aisle02.png");
-    
+
     scroll = player.position.x - 200;
-    
+
     // Initialize doors
     doorLeft.position = (Vector2) { -10, 136 };
     doorLeft.facing = 0;
@@ -107,7 +107,7 @@ void InitAisle02Screen(void)
     lamp.selected = false;
     lamp.active = false;
     lamp.spooky = true;
-    
+
     // Monster init: chair
     chair.position = (Vector2){ 1400, 404 };
     chair.texture = LoadTexture("resources/textures/monster_chair_right.png");
@@ -119,7 +119,7 @@ void InitAisle02Screen(void)
     chair.selected = false;
     chair.active = false;
     chair.spooky = false;
-    
+
     // Monster init: picture
     picture.position = (Vector2){ 837, 162 };
     picture.texture = LoadTexture("resources/textures/monster_picture.png");
@@ -131,7 +131,7 @@ void InitAisle02Screen(void)
     picture.selected = false;
     picture.active = false;
     picture.spooky = true;
-    
+
     // Monster init: arc
     arc.position = (Vector2){ 388, 423 };
     arc.texture = LoadTexture("resources/textures/monster_arc.png");
@@ -154,10 +154,10 @@ void UpdateAisle02Screen(void)
     if (player.key)
     {
         // Door: left
-        if ((CheckCollisionPointRec(GetMousePosition(), doorLeft.bound)) || 
-            (CheckCollisionRecs(player.bounds, doorLeft.bound))) doorLeft.selected = true; 
+        if ((CheckCollisionPointRec(GetMousePosition(), doorLeft.bound)) ||
+            (CheckCollisionRecs(player.bounds, doorLeft.bound))) doorLeft.selected = true;
         else doorLeft.selected = false;
-        
+
         if ((doorLeft.selected) && (CheckCollisionRecs(player.bounds, doorLeft.bound)))
         {
             if (((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && CheckCollisionPointRec(GetMousePosition(), doorLeft.bound)) || (IsKeyPressed(KEY_SPACE)))
@@ -172,104 +172,101 @@ void UpdateAisle02Screen(void)
             }
         }
     }
-        
+
     if (msgState > 2)
     {
-        UpdatePlayer();
-	
-		// Monsters logic
+        UpdatePlayer();        	// Monsters logic
         UpdateMonster(&lamp);
         UpdateMonster(&chair);
         UpdateMonster(&picture);
         UpdateMonster(&arc);
     }
-    
+
     // Update monster bounds
     lamp.bounds.x = lamp.position.x + 200 - scroll;
     chair.bounds.x = chair.position.x + 50 - scroll;
     picture.bounds.x = picture.position.x + 44 - scroll;
-    arc.bounds.x = arc.position.x + 44 - scroll;
-	
+    arc.bounds.x = arc.position.x + 44 - scroll;    
     // Check player hover monsters to interact
     if (((CheckCollisionRecs(player.bounds, lamp.bounds)) && !lamp.active) ||
         ((CheckCollisionRecs(player.bounds, chair.bounds)) && !chair.active) ||
         ((CheckCollisionRecs(player.bounds, picture.bounds)) && !picture.active) ||
         ((CheckCollisionRecs(player.bounds, arc.bounds)) && !arc.active)) monsterHover = true;
     else monsterHover = false;
-    
-    
+
+
     // Monters logic: lamp
     if ((CheckCollisionRecs(player.bounds, lamp.bounds)) && !lamp.active)
     {
         lamp.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), lamp.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 1;
         }
     }
     else lamp.selected = false;
-    
+
     // Monters logic: chair
     if ((CheckCollisionRecs(player.bounds, chair.bounds)) && !chair.active)
     {
         chair.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), chair.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 2;
         }
     }
     else chair.selected = false;
-    
+
     // Monters logic: picture
     if ((CheckCollisionRecs(player.bounds, picture.bounds)) && !picture.active)
     {
         picture.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), picture.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 3;
         }
     }
     else picture.selected = false;
-    
+
     // Monters logic: arc
     if ((CheckCollisionRecs(player.bounds, arc.bounds)) && !arc.active)
     {
         arc.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), arc.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 4;
         }
     }
     else arc.selected = false;
-    
+
     if (searching)
     {
         framesCounter++;
-        
+
         if (framesCounter > 180)
         {
             if (monsterCheck == 1)
@@ -280,7 +277,7 @@ void UpdateAisle02Screen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 lamp.active = true;
                 lamp.selected = false;
             }
@@ -292,7 +289,7 @@ void UpdateAisle02Screen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 chair.active = true;
                 chair.selected = false;
             }
@@ -304,7 +301,7 @@ void UpdateAisle02Screen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 picture.active = true;
                 picture.selected = false;
             }
@@ -316,19 +313,19 @@ void UpdateAisle02Screen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 arc.active = true;
                 arc.selected = false;
             }
-  
+
             searching = false;
             framesCounter = 0;
         }
     }
-    
+
     // Text animation
     framesCounter++;
-    
+
     if ((framesCounter%2) == 0) lettersCounter++;
 
     if (msgState == 0)
@@ -341,13 +338,13 @@ void UpdateAisle02Screen(void)
             lettersCounter = 0;
             msgState = 1;
         }
-        
+
         if (IsKeyPressed(KEY_ENTER)) msgState = 1;
     }
     else if (msgState == 1)
     {
         msgCounter++;
-        
+
         if ((IsKeyPressed(KEY_ENTER)) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)))
         {
             msgState = 2;
@@ -357,15 +354,15 @@ void UpdateAisle02Screen(void)
     else if (msgState == 2)
     {
         msgCounter++;
-        
+
         if (msgCounter > 180) msgState = 3;
     }
     else msgCounter++;
-        
+
     if (player.position.x > 200)
     {
         scroll = player.position.x - 200;
-        
+
         if (scroll > 620) scroll = 620;
     }
 }
@@ -374,31 +371,30 @@ void UpdateAisle02Screen(void)
 void DrawAisle02Screen(void)
 {
     DrawTexture(background, -scroll, 0, WHITE);
-    
-    // Draw monsters
-	DrawMonster(lamp, scroll);
+
+    // Draw monsters    DrawMonster(lamp, scroll);
     DrawMonster(arc, scroll);
     DrawMonster(picture, scroll);
     DrawMonster(chair, scroll);
-    
+
     // Draw door
     Vector2 doorScrollPos = { doorLeft.position.x - scroll, doorLeft.position.y };
-    
+
     if (doorLeft.selected) DrawTextureRec(doors, doorLeft.frameRec, doorScrollPos, GREEN);
     else DrawTextureRec(doors, doorLeft.frameRec, doorScrollPos, WHITE);
-    
+
     // Draw messsages
     if (msgState < 2) DrawRectangle(0, 40, GetScreenWidth(), 200, Fade(LIGHTGRAY, 0.5f));
     else if (msgState == 2) DrawRectangle(0, 80, GetScreenWidth(), 100, Fade(LIGHTGRAY, 0.5f));
 
-    if (msgState == 0) 
+    if (msgState == 0)
     {
         DrawTextEx(font, msgBuffer, (Vector2){ msgPosX, 80 }, font.baseSize, 2, WHITE);
     }
     else if (msgState == 1)
     {
         DrawTextEx(font, message, (Vector2){ msgPosX, 80 }, font.baseSize, 2, WHITE);
-        
+
         if ((msgCounter/30)%2) DrawText("PRESS ENTER or CLICK", GetScreenWidth() - 280, 200, 20, BLACK);
     }
     else if (msgState == 2)
@@ -406,7 +402,7 @@ void DrawAisle02Screen(void)
         if ((msgCounter/30)%2)
         {
             DrawTextEx(font, "CHOOSE WISELY!", (Vector2){ 300, 95 }, font.baseSize*2, 2, WHITE);
-            
+
             DrawRectangleRec(lamp.bounds, Fade(RED, 0.6f));
             DrawRectangleRec(arc.bounds, Fade(RED, 0.6f));
             DrawRectangleRec(chair.bounds, Fade(RED, 0.6f));
@@ -429,8 +425,7 @@ void DrawAisle02Screen(void)
 void UnloadAisle02Screen(void)
 {
     // TODO: Unload GAMEPLAY screen variables here!
-    UnloadTexture(background);
-	
+    UnloadTexture(background);    
     UnloadMonster(lamp);
     UnloadMonster(chair);
     UnloadMonster(picture);

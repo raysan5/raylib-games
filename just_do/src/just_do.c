@@ -2,7 +2,7 @@
 *
 *   JUST DO [GLOBAL GAME JAM 2015]
 *
-*   Experimental puzzle game that lets the user try to find a logic 
+*   Experimental puzzle game that lets the user try to find a logic
 *   solution to different shape-color-based situations.
 *
 *   This game has been created using raylib 1.6 (www.raylib.com)
@@ -45,11 +45,11 @@ static Music music = { 0 };
 // Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
 static void ChangeToScreen(int screen);     // Change to screen, no transition effect
-                                            
+
 static void TransitionToScreen(int screen); // Request transition to next screen
 static void UpdateTransition(void);         // Update transition effect
 static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
-                                            
+
 static void UpdateDrawFrame(void);          // Update and draw one frame
 
 //----------------------------------------------------------------------------------
@@ -63,20 +63,20 @@ int main(void)
 
     // Load global data here (assets that must be available in all screens, i.e. fonts)
     InitAudioDevice();
-    
+
     levelWin = LoadSound("resources/win.wav");
     music = LoadMusicStream("resources/ambient.ogg");
-    
+
     // Setup and Init first screen
     currentScreen = LOGO;
     InitLogoScreen();
-    
+
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
 #else
     SetTargetFPS(60);   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -86,13 +86,13 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    
+
     // Unload all global loaded data (i.e. fonts) here!
     UnloadSound(levelWin);
     UnloadMusicStream(music);
-    
+
     CloseAudioDevice();
-    
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ static void ChangeToScreen(int screen)
         case GAMEPLAY: UnloadGameplayScreen(); break;
         default: break;
     }
-    
+
     switch (screen)
     {
         case LOGO: rlInitLogoScreen(); break;
@@ -120,7 +120,7 @@ static void ChangeToScreen(int screen)
         case GAMEPLAY: InitGameplayScreen(); break;
         default: break;
     }
-    
+
     currentScreen = screen;
 }
 
@@ -174,7 +174,7 @@ static void UpdateDrawFrame(void)
     // Update
     //----------------------------------------------------------------------------------
     if (currentScreen != LOGO) UpdateMusicStream(music);
-    
+
     if (!onTransition)
     {
         if (IsKeyPressed('0'))
@@ -227,27 +227,27 @@ static void UpdateDrawFrame(void)
             TransitionToScreen(LEVEL09);
             InitLevel08Screen();
         }
-        
-        switch(currentScreen) 
+
+        switch(currentScreen)
         {
-            case LOGO: 
+            case LOGO:
             {
                 UpdateLogoScreen();
-                
+
                 if (FinishLogoScreen())
                 {
                     UnloadLogoScreen();
                     TransitionToScreen(LEVEL00);
                     InitLevel00Screen();
-                    
+
                     PlayMusicStream(music);
                     SetMusicVolume(music, 0.6f);
                 }
             } break;
-            case LEVEL00: 
+            case LEVEL00:
             {
                 UpdateLevel00Screen();
-                
+
                 if (FinishLevel00Screen())
                 {
                     UnloadLevel00Screen();
@@ -255,10 +255,10 @@ static void UpdateDrawFrame(void)
                     InitLevel01Screen();
                 }
             } break;
-            case LEVEL01: 
+            case LEVEL01:
             {
                 UpdateLevel01Screen();
-                
+
                 if (FinishLevel01Screen())
                 {
                     UnloadLevel01Screen();
@@ -266,10 +266,10 @@ static void UpdateDrawFrame(void)
                     InitLevel02Screen();
                 }
             } break;
-            case LEVEL02: 
+            case LEVEL02:
             {
                 UpdateLevel02Screen();
-                
+
                 if (FinishLevel02Screen())
                 {
                     UnloadLevel02Screen();
@@ -277,10 +277,10 @@ static void UpdateDrawFrame(void)
                     InitLevel03Screen();
                 }
             } break;
-            case LEVEL03: 
+            case LEVEL03:
             {
                 UpdateLevel03Screen();
-                
+
                 if (FinishLevel03Screen())
                 {
                     UnloadLevel03Screen();
@@ -288,10 +288,10 @@ static void UpdateDrawFrame(void)
                     InitLevel04Screen();
                 }
             } break;
-            case LEVEL04: 
+            case LEVEL04:
             {
                 UpdateLevel04Screen();
-                
+
                 if (FinishLevel04Screen())
                 {
                     UnloadLevel04Screen();
@@ -299,10 +299,10 @@ static void UpdateDrawFrame(void)
                     InitLevel05Screen();
                 }
             } break;
-            case LEVEL05: 
+            case LEVEL05:
             {
                 UpdateLevel05Screen();
-                
+
                 if (FinishLevel05Screen())
                 {
                     UnloadLevel05Screen();
@@ -310,10 +310,10 @@ static void UpdateDrawFrame(void)
                     InitLevel06Screen();
                 }
             } break;
-            case LEVEL06: 
+            case LEVEL06:
             {
                 UpdateLevel06Screen();
-                
+
                 if (FinishLevel06Screen())
                 {
                     UnloadLevel06Screen();
@@ -321,10 +321,10 @@ static void UpdateDrawFrame(void)
                     InitLevel07Screen();
                 }
             } break;
-            case LEVEL07: 
+            case LEVEL07:
             {
                 UpdateLevel07Screen();
-                
+
                 if (FinishLevel07Screen())
                 {
                     UnloadLevel07Screen();
@@ -332,10 +332,10 @@ static void UpdateDrawFrame(void)
                     InitLevel08Screen();
                 }
             } break;
-            case LEVEL08: 
+            case LEVEL08:
             {
                 UpdateLevel08Screen();
-                
+
                 if (FinishLevel08Screen())
                 {
                     UnloadLevel08Screen();
@@ -343,10 +343,10 @@ static void UpdateDrawFrame(void)
                     InitLevel09Screen();
                 }
             } break;
-            case LEVEL09: 
+            case LEVEL09:
             {
                 UpdateLevel09Screen();
-                
+
                 if (FinishLevel09Screen())
                 {
                     UnloadLevel09Screen();
@@ -359,14 +359,14 @@ static void UpdateDrawFrame(void)
     }
     else UpdateTransition(); // Update transition (fade-in, fade-out)
     //----------------------------------------------------------------------------------
-    
+
     // Draw
     //----------------------------------------------------------------------------------
     BeginDrawing();
-    
+
         ClearBackground(RAYWHITE);
-        
-        switch(currentScreen) 
+
+        switch(currentScreen)
         {
             case LOGO: DrawLogoScreen(); break;
             case LEVEL00: DrawLevel00Screen(); break;
@@ -381,9 +381,9 @@ static void UpdateDrawFrame(void)
             case LEVEL09: DrawLevel09Screen(); break;
             default: break;
         }
-    
+
         if (onTransition) DrawTransition();
-    
+
     EndDrawing();
     //----------------------------------------------------------------------------------
 }

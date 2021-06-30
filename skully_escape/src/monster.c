@@ -26,16 +26,16 @@ void UpdateMonster(Monster *monster)
     {
         monster->framesCounter++;
         monster->currentSeq = 0;
-        
+
         if (monster->framesCounter > 7)
         {
             monster->currentFrame++;
             monster->framesCounter = 0;
-            
+
             if (monster->currentFrame > monster->numFrames - 1) monster->currentFrame = 1;
         }
     }
-    
+
     monster->frameRec.x = monster->currentFrame*monster->texture.width/monster->numFrames;
     monster->frameRec.y = monster->currentSeq*monster->texture.height;
 }
@@ -43,7 +43,7 @@ void UpdateMonster(Monster *monster)
 void DrawMonster(Monster monster, int scroll)
 {
     Vector2 scrollPos = { monster.position.x - scroll, monster.position.y };
-    
+
     if (monster.selected) DrawTextureRec(monster.texture, monster.frameRec, scrollPos, RED);
     else DrawTextureRec(monster.texture, monster.frameRec, scrollPos, WHITE);
 }

@@ -109,7 +109,7 @@ int main(void)
 #else
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -122,7 +122,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadGame();         // Unload loaded data (textures, sounds, models...)
-    
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -419,7 +419,7 @@ void UpdateGame(void)
                             shoot[i].lifeSpawn = 0;
                             bigMeteor[a].active = false;
                             destroyedMeteorsCount++;
-                            
+
                             for (int j = 0; j < 2; j ++)
                             {
                                 if (midMeteorsCount%2 == 0)
@@ -450,7 +450,7 @@ void UpdateGame(void)
                             shoot[i].lifeSpawn = 0;
                             mediumMeteor[b].active = false;
                             destroyedMeteorsCount++;
-                            
+
                             for (int j = 0; j < 2; j ++)
                             {
                                  if (smallMeteorsCount%2 == 0)
@@ -516,7 +516,7 @@ void DrawGame(void)
             Vector2 v2 = { player.position.x - cosf(player.rotation*DEG2RAD)*(PLAYER_BASE_SIZE/2), player.position.y - sinf(player.rotation*DEG2RAD)*(PLAYER_BASE_SIZE/2) };
             Vector2 v3 = { player.position.x + cosf(player.rotation*DEG2RAD)*(PLAYER_BASE_SIZE/2), player.position.y + sinf(player.rotation*DEG2RAD)*(PLAYER_BASE_SIZE/2) };
             DrawTriangle(v1, v2, v3, MAROON);
-            
+
             // Draw meteors
             for (int i = 0; i < MAX_BIG_METEORS; i++)
             {
@@ -547,7 +547,7 @@ void DrawGame(void)
             if (pause) DrawText("GAME PAUSED", screenWidth/2 - MeasureText("GAME PAUSED", 40)/2, screenHeight/2 - 40, 40, GRAY);
         }
         else DrawText("PRESS [ENTER] TO PLAY AGAIN", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] TO PLAY AGAIN", 20)/2, GetScreenHeight()/2 - 50, 20, GRAY);
-        
+
     EndDrawing();
 }
 

@@ -45,7 +45,7 @@ void InitTitleScreen(void)
     // Initialize TITLE screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     title = LoadTexture("resources/textures/title.png");
 }
 
@@ -54,9 +54,9 @@ void UpdateTitleScreen(void)
 {
     // Update TITLE screen variables here!
     framesCounter++;
-    
+
     titleAlpha += 0.005f;
-    
+
     if (titleAlpha >= 1.0f) titleAlpha = 1.0f;
 
     // Press enter to change to ATTIC screen
@@ -72,7 +72,7 @@ void DrawTitleScreen(void)
     //DrawText("TITLE SCREEN", 100, 100, 140, Fade(BLACK, titleAlpha));
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), DARKGRAY);
     DrawTexture(title, GetScreenWidth()/2 - title.width/2, 20, Fade(WHITE, titleAlpha));
-    
+
     if ((framesCounter > 180) && ((framesCounter/40)%2)) DrawText("PRESS ENTER to START", 380, 545, 40, BLACK);
 }
 

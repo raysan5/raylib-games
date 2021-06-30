@@ -73,7 +73,7 @@
 #define BEE_SPAWNCHANCE     10       // Chance of spawning bees everytime a tree spawns
 #define EAGLE_SPAWNCHANCE    5       // Chance of spawning eagles everytime a tree spawns
 
-#define EAGLE_TIME_DELAY   600       
+#define EAGLE_TIME_DELAY   600
 
 //SCORE - Score increase everytime an enemy is killed
 #define DINGOSCORE          100       // Score increase everytime a dingo is killed
@@ -88,7 +88,7 @@
 #define STARTINGMONTH                   0       // Starting month (0 = January (summer))
 
 #define PROGRESION_START               3600       // Time to start the progresion
-#define PROGRESION_DURATION           12000       // Maximum time    
+#define PROGRESION_DURATION           12000       // Maximum time
 #define PROGRESOIN_MAX_SPAWNCHANCE       30       // Maximum spawn chance increase
 #define PROGRESION_MAX_SPEED            0.5       // Maximum speed modification by progresion
 
@@ -442,7 +442,7 @@ void InitGameplayScreen(void)
     currentMonth = ptm->tm_mon;
     initMonth = ptm->tm_mon;
     years = 1900 + ptm->tm_year;
-    
+
     Reset();
 }
 
@@ -480,7 +480,7 @@ void UpdateGameplayScreen(void)
         seasonTimer += speedMod*TIME_FACTOR;
         monthTimer += speedMod*TIME_FACTOR;
         eagleDelay += speedMod*TIME_FACTOR;
-        
+
         globalFrameCounter++;
 
         if (monthTimer >= monthChange)
@@ -509,7 +509,7 @@ void UpdateGameplayScreen(void)
                 clockSpeedRotation = 0;
                 seasons++;
             }
-            else if (currentMonth == 7) 
+            else if (currentMonth == 7)
             {
                 clockInitRotation = 135;
                 clockFinalRotation = clockInitRotation + 90;
@@ -517,10 +517,10 @@ void UpdateGameplayScreen(void)
                 clockSpeedRotation = 0;
                 seasons++;
             }
-            
+
             currentMonth++;
             monthTimer = 0;
-            
+
             //EagleSpawn();
         }
 
@@ -539,7 +539,7 @@ void UpdateGameplayScreen(void)
 
             transitionFramesCounter = 0;
             randomMessage = GetRandomValue(0, 10);
-            
+
             fog = false;
 
             initcolor00 = color00;                                  // Summer Color
@@ -578,7 +578,7 @@ void UpdateGameplayScreen(void)
 
             transitionFramesCounter = 0;
             randomMessage = GetRandomValue(0, 10);
-            
+
             initcolor00 = color00;                                  // Fall Color
             initcolor01 = color01;
             initcolor02 = color02;
@@ -629,7 +629,7 @@ void UpdateGameplayScreen(void)
 
             transitionFramesCounter = 0;
             randomMessage = GetRandomValue(0, 9);
-            
+
             fog = false;
 
             initcolor00 = color00;                                  // Spring Color
@@ -660,7 +660,7 @@ void UpdateGameplayScreen(void)
             rayParticles.active = false;
             backRayParticles.active = false;
             snowStormParticle.active = false;
-            
+
             fog = false;
 
             transitionFramesCounter += speedMod*TIME_FACTOR;
@@ -682,9 +682,9 @@ void UpdateGameplayScreen(void)
             scrollFront -= scrollSpeed;
             scrollMiddle -= (scrollSpeed*0.75f);
             scrollBack -= scrollSpeed/2;
-            
+
             fogPosition -= fogSpeed;
-            
+
             groundPos -= speed;
             clockRotation += clockSpeedRotation;
         }
@@ -692,7 +692,7 @@ void UpdateGameplayScreen(void)
         player.y += gravity;
         bambooTimer += (speedMod*TIME_FACTOR);
         speed = SPEED*speedMod;
-        
+
         if (player.x >= GetScreenWidth()*0.6 && state != FINALFORM)
         {
             speedIncrease = (player.x - GetScreenWidth()*0.6f)/GetScreenWidth();
@@ -701,15 +701,15 @@ void UpdateGameplayScreen(void)
         {
             speedIncrease = 0;
         }
-        
+
         if (state != FINALFORM) speedMod = 1.2 + speedIncrease + speedProgresion;
-        
+
         progresionDelay++;
-        
+
         if (progresionDelay >= PROGRESION_START)
         {
             progresionFramesCounter++;
-            
+
             if (progresionFramesCounter < PROGRESION_DURATION)
             {
                 speedProgresion = LinearEaseIn((float)progresionFramesCounter, 0.0f, (float)PROGRESION_MAX_SPEED, (float)PROGRESION_DURATION);
@@ -722,16 +722,16 @@ void UpdateGameplayScreen(void)
         if (scrollBack <= -GetScreenWidth()) scrollBack = 0;
         if (groundPos <= -GetScreenWidth()) groundPos = 0;
         if (fogPosition <= -GetScreenWidth()) fogPosition = 0;
-        
+
         if (fogAlpha > 0 && !fog) fogAlpha -= 0.03f*speedMod;
         else if (fog && fogAlpha < 1) fogAlpha += 0.03f*speedMod;
-        
+
         if (filterAlpha > 0 && !fog) filterAlpha -= 0.02f*speedMod;
         else if (fog && filterAlpha < 0.15f) filterAlpha += 0.02f*speedMod;
-        
+
         //if (state != FINALFORM) clockSpeedRotation = (float)((90/(float)seasonChange)*speedMod)*1.75;
         clockSpeedRotation += speedMod*TIME_FACTOR;
-        
+
         if (clockSpeedRotation <= (SEASONCHANGE)) clockRotation = (float)LinearEaseIn((float)clockSpeedRotation, clockInitRotation, 90.0f, (float)(SEASONCHANGE));
         else clockRotation = clockFinalRotation;
 
@@ -739,11 +739,11 @@ void UpdateGameplayScreen(void)
         {
            if (UIfade > 0.4f) UIfade -= 0.01f*TIME_FACTOR;
         }
-        else 
+        else
         {
             if (UIfade < 1) UIfade += 0.01f*TIME_FACTOR;
         }
-        
+
         //----------------------------------------------------------------------------------
         // Animations
         //----------------------------------------------------------------------------------
@@ -855,14 +855,14 @@ void UpdateGameplayScreen(void)
                     alertRectangle.width += 100*TIME_FACTOR;
                     alertRectangle.height += 5*TIME_FACTOR;
                     alertRectangle.y -= 5*TIME_FACTOR;
-                    
+
                     if (alertRectangle.height >= 100) eagleAlert = false;
                 }
                 else
                 {
                     alertRectangle.height -= 1*TIME_FACTOR;
                     alertRectangle.y += 1*TIME_FACTOR;
-                    
+
                     if (alertRectangle.height <= 0)
                     {
                         eagleAlert = true;
@@ -891,16 +891,16 @@ void UpdateGameplayScreen(void)
                     beeVelocity = 8;
                     killHistory[killCounter] = 5;
                     killCounter++;
-                    
+
                     score += EAGLESCORE;
                     eagleKillCounter++;
                     globalKillCounter++;
-                    
+
                     popupEagle.position = (Vector2){ eagle.x, eagle.y };
                     popupEagle.scale = 1.0f;
                     popupEagle.alpha = 1.0f;
-                    popupEagle.score = EAGLESCORE; 
-                    popupEagle.active = true; 
+                    popupEagle.score = EAGLESCORE;
+                    popupEagle.active = true;
                 }
             }
             else if (isHitEagle)
@@ -915,18 +915,18 @@ void UpdateGameplayScreen(void)
                 beeVelocity -= 1*TIME_FACTOR*TIME_FACTOR;
                 eagle.y -= beeVelocity*TIME_FACTOR;
             }
-            
+
             if (eagle.x + eagle.width <= 0) eagleActive = false;
-            
+
             // Bee Alert Animation
             if (alertBeeActive)
             {
-                
+
                 beeAlertRectangle.x -= 100*TIME_FACTOR;
                 beeAlertRectangle.width += 100*TIME_FACTOR;
                 beeAlertRectangle.height += 2.5*TIME_FACTOR;
                 beeAlertRectangle.y += 1.25*TIME_FACTOR;
-                
+
                 if (beeAlertRectangle.height >= 100)
                 {
                     beeActive = true;
@@ -955,16 +955,16 @@ void UpdateGameplayScreen(void)
                     beeVelocity = 8;
                     killHistory[killCounter] = 4;
                     killCounter++;
-                    
+
                     score += BEESCORE;
                     beeKillCounter++;
                     globalKillCounter++;
-                    
+
                     popupBee.position = (Vector2){ bee.x, bee.y };
                     popupBee.scale = 1.0f;
                     popupBee.alpha = 1.0f;
-                    popupBee.score = BEESCORE; 
-                    popupBee.active = true; 
+                    popupBee.score = BEESCORE;
+                    popupBee.active = true;
                 }
             }
             else if (isHitBee)
@@ -979,7 +979,7 @@ void UpdateGameplayScreen(void)
                 beeVelocity -= 1*TIME_FACTOR*TIME_FACTOR;
                 bee.y -= beeVelocity*TIME_FACTOR;
             }
-            
+
             if (bee.x + bee.width <= 0) beeActive = false;
         }
 
@@ -991,27 +991,27 @@ void UpdateGameplayScreen(void)
         if (currentLeaves >= LEAVESTOTRANSFORM && !coolDown)
         {
             flyColor = ORANGE;
-            
+
             if (leafGUIglow)
             {
                 leafGUIglowFade += 0.01f*TIME_FACTOR;
                 if (leafGUIglowFade >= 1) leafGUIglow = false;
-            }    
-            else 
+            }
+            else
             {
                 leafGUIglowFade -= 0.01f*TIME_FACTOR;
                 if (leafGUIglowFade <= 0) leafGUIglow = true;
             }
-            
+
             leafGUIpulseFade -= 0.01f*TIME_FACTOR;
             leafGUIpulseScale += 0.005F*TIME_FACTOR;
-            
-            if (leafGUIpulseFade <= 0) 
-            {    
+
+            if (leafGUIpulseFade <= 0)
+            {
                 leafGUIpulseFade = 1;
                 leafGUIpulseScale = 1;
             }
-                
+
 #if (defined(PLATFORM_ANDROID) || defined(PLATFORM_WEB))
             if ((IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetTouchPosition(0), powerButton)) && (state != FINALFORM))
             {
@@ -1034,7 +1034,7 @@ void UpdateGameplayScreen(void)
                 curFrameKoala = 0;
                 thisFrameKoala = 0;
                 superKoalaCounter++;
-            }          
+            }
 #endif
         }
 #if defined(DEBUG)
@@ -1043,7 +1043,7 @@ void UpdateGameplayScreen(void)
         if (coolDown)
         {
             power += 20;
-            
+
             if (power >= maxPower) coolDown = false;
         }
 
@@ -1084,7 +1084,7 @@ void UpdateGameplayScreen(void)
 
                 onResin = true;
                 grabCounter = 10;
-                
+
                 //gravity = 0;
                 state = GRABED;
             }
@@ -1267,11 +1267,11 @@ void UpdateGameplayScreen(void)
                     enemyVel[k] = 8;
                     killHistory[killCounter] = 1;
                     killCounter++;
-                    
+
                     snakeKillCounter++;
                     globalKillCounter++;
                     score += SNAKESCORE;
-                    
+
                     PlaySound(fxDieSnake);
 
                     enemyHit[k].position = (Vector2){ snake[k].x, snake[k].y };
@@ -1281,12 +1281,12 @@ void UpdateGameplayScreen(void)
                     //enemyHit[i].color = (Color){ GetRandomValue(0, 255), GetRandomValue(0, 255), GetRandomValue(0, 255), 255 };
                     enemyHit[k].alpha = 1.0f;
                     enemyHit[k].active = true;
-                    
+
                     popupScore[k].position = (Vector2){ snake[k].x,snake[k].y };
                     popupScore[k].scale = 1.0f;
                     popupScore[k].alpha = 1.0f;
-                    popupScore[k].score = SNAKESCORE; 
-                    popupScore[k].active = true; 
+                    popupScore[k].score = SNAKESCORE;
+                    popupScore[k].active = true;
                 }
             }
 
@@ -1307,7 +1307,7 @@ void UpdateGameplayScreen(void)
                     enemyVel[k] = 8;
                     killHistory[killCounter] = 2;
                     killCounter++;
-                    
+
                     score += DINGOSCORE;
                     dingoKillCounter++;
                     globalKillCounter++;
@@ -1325,7 +1325,7 @@ void UpdateGameplayScreen(void)
                     popupScore[k].alpha = 1.0f;
                     popupScore[k].score = DINGOSCORE;
                     popupScore[k].active = true;
-                }              
+                }
             }
 
             if (CheckCollisionRecs(player, owl[k]) && (state != KICK) && !isHitOwl[k])
@@ -1345,7 +1345,7 @@ void UpdateGameplayScreen(void)
                     enemyVel[k] = 8;
                     killHistory[killCounter] = 3;
                     killCounter++;
-                    
+
                     score += OWLSCORE;
                     owlKillCounter++;
                     globalKillCounter++;
@@ -1362,7 +1362,7 @@ void UpdateGameplayScreen(void)
                     popupScore[k].scale = 1.0f;
                     popupScore[k].alpha = 1.0f;
                     popupScore[k].score = OWLSCORE;
-                    popupScore[k].active = true; 
+                    popupScore[k].active = true;
                 }
             }
 
@@ -1412,8 +1412,8 @@ void UpdateGameplayScreen(void)
             //leaf[j].x -= speed;
 
             leafParticles[j].position = (Vector2){ leaf[j].x, leaf[j].y};
-            
-           
+
+
             if (leaf[j].x <= -leaf[j].width) leafActive[j] = false;
 
             if (CheckCollisionRecs(player, leaf[j]) && leafActive[j])
@@ -1421,8 +1421,8 @@ void UpdateGameplayScreen(void)
                 popupLeaves[j].position = (Vector2){ leaf[j].x, leaf[j].y };
                 popupLeaves[j].scale = 1.0f;
                 popupLeaves[j].alpha = 1.0f;
-                popupLeaves[j].active = true; 
-                
+                popupLeaves[j].active = true;
+
                 PlaySound(fxEatLeaves);
 
                 if (leafType[j] == 0)
@@ -1468,11 +1468,11 @@ void UpdateGameplayScreen(void)
         //----------------------------------------------------------------------------------
         // Particles Logic
         //----------------------------------------------------------------------------------
-        
+
         // Leaf particles logic
         for (int i = 0; i < MAX_LEAVES; i++)
         {
-            
+
             if (leafParticles[i].active == true)
             {
 
@@ -1500,7 +1500,7 @@ void UpdateGameplayScreen(void)
                     }
                 }
             }
-            
+
             if (popupLeaves[i].active)
             {
                 //mouseTail[i].position.y += gravity;
@@ -1524,7 +1524,7 @@ void UpdateGameplayScreen(void)
 
                 if (enemyHit[i].alpha <= 0.0f) enemyHit[i].active = false;
             }
-            
+
             if (popupScore[i].active)
             {
                 //mouseTail[i].position.y += gravity;
@@ -1536,7 +1536,7 @@ void UpdateGameplayScreen(void)
                 if (popupScore[i].alpha <= 0.0f) popupScore[i].active = false;
             }
         }
-        
+
         if (popupBee.active)
         {
             //mouseTail[i].position.y += gravity;
@@ -1547,7 +1547,7 @@ void UpdateGameplayScreen(void)
 
             if (popupBee.alpha <= 0.0f) popupBee.active = false;
         }
-        
+
         if (popupEagle.active)
         {
             //mouseTail[i].position.y += gravity;
@@ -1593,7 +1593,7 @@ void UpdateGameplayScreen(void)
                     }
                 }
             }
-            
+
             // Autumn leaves particles
             if (planetreeParticle.active)
             {
@@ -1721,7 +1721,7 @@ void UpdateGameplayScreen(void)
                             rainStormParticle.particles[i+j].active = true;
                             rainStormParticle.particles[i+j].position = (Vector2){ GetRandomValue(100, GetScreenWidth() + 1000), GetRandomValue(-10,-20) };
                         }
-                        
+
                         rainStormParticle.spawnTime = 0;
                         rainStormParticle.maxTime = 4;
                     }
@@ -2021,7 +2021,7 @@ void UpdateGameplayScreen(void)
                 windCounter += 1*TIME_FACTOR;
                 resinCount += 1*TIME_FACTOR;
                 //speedMod = 1;
-                
+
                 thisFrameKoala += 1*TIME_FACTOR;
 
                 if (thisFrameKoala >= 24)
@@ -2048,7 +2048,7 @@ void UpdateGameplayScreen(void)
                         onResin = false;
                         thisFrameKoala = 0;
                         PlaySound(fxJump);
-                        
+
                         jumpCounter++;
                     }
 
@@ -2072,7 +2072,7 @@ void UpdateGameplayScreen(void)
                         //thisFrameKoala = 0;
                     }
 #elif (defined(PLATFORM_DESKTOP) || defined(PLATFORM_WEB))
-                        
+
                     if (IsKeyPressed(KEY_SPACE) || (CheckCollisionPointRec(GetMousePosition(), rightButton) && IsMouseButtonPressed(0)))
                     {
                         state = JUMPING;
@@ -2210,7 +2210,7 @@ void UpdateGameplayScreen(void)
                 player.y -= velocity;
                 framesCounter += 1*TIME_FACTOR;
                 grabCounter+= 1*TIME_FACTOR;
-                
+
             } break;
             case KICK:
             {
@@ -2249,7 +2249,7 @@ void UpdateGameplayScreen(void)
                         popupScore[i].scale = 1.0f;
                         popupScore[i].alpha = 1.0f;
                         popupScore[i].score = SNAKESCORE;
-                        popupScore[i].active = true; 
+                        popupScore[i].active = true;
                     }
 
                     if (CheckCollisionRecs(player, dingo[i]) && !isHitDingo[i] && dingoActive[i])
@@ -2274,12 +2274,12 @@ void UpdateGameplayScreen(void)
                         enemyHit[i].rotation = 0.0f;
                         enemyHit[i].alpha = 1.0f;
                         enemyHit[i].active = true;
-                        
+
                         popupScore[i].position = (Vector2){ dingo[i].x,dingo[i].y };
                         popupScore[i].scale = 1.0f;
                         popupScore[i].alpha = 1.0f;
                         popupScore[i].score = DINGOSCORE;
-                        popupScore[i].active = true; 
+                        popupScore[i].active = true;
                     }
 
                     if (CheckCollisionRecs(player, owl[i]) && !isHitOwl[i] && owlActive[i])
@@ -2304,15 +2304,15 @@ void UpdateGameplayScreen(void)
                         enemyHit[i].rotation = 0.0f;
                         enemyHit[i].alpha = 1.0f;
                         enemyHit[i].active = true;
-                        
+
                         popupScore[i].position = (Vector2){ owl[i].x,owl[i].y };
                         popupScore[i].scale = 1.0f;
                         popupScore[i].alpha = 1.0f;
                         popupScore[i].score = OWLSCORE;
-                        popupScore[i].active = true; 
+                        popupScore[i].active = true;
                     }
                 }
-                
+
                 if (CheckCollisionRecs(player, bee) && !isHitBee && beeActive)
                 {
                     state = JUMPING;
@@ -2327,14 +2327,14 @@ void UpdateGameplayScreen(void)
                     killCounter++;
                     beeKillCounter++;
                     globalKillCounter++;
-                    
+
                     popupBee.position = (Vector2){ bee.x, bee.y };
                     popupBee.scale = 1.0f;
                     popupBee.alpha = 1.0f;
-                    popupBee.score = BEESCORE; 
-                    popupBee.active = true; 
+                    popupBee.score = BEESCORE;
+                    popupBee.active = true;
                 }
-                
+
                 if (CheckCollisionRecs(player, eagle) && !isHitEagle && eagleActive)
                 {
                     state = JUMPING;
@@ -2349,12 +2349,12 @@ void UpdateGameplayScreen(void)
                     killCounter++;
                     eagleKillCounter++;
                     globalKillCounter++;
-                    
+
                     popupEagle.position = (Vector2){ eagle.x, eagle.y };
                     popupEagle.scale = 1.0f;
                     popupEagle.alpha = 1.0f;
-                    popupEagle.score = EAGLESCORE; 
-                    popupEagle.active = true; 
+                    popupEagle.score = EAGLESCORE;
+                    popupEagle.active = true;
                 }
             } break;
             case FINALFORM:
@@ -2365,9 +2365,9 @@ void UpdateGameplayScreen(void)
                     transCount += 1*TIME_FACTOR;
                     transRotation += 1*TIME_FACTOR;
                     transAniCounter += 1*TIME_FACTOR;
-                    
+
                     thisFrameKoala += 1*TIME_FACTOR;
-                    
+
                     currentLeaves = LinearEaseIn((float)transCount, (float)initLeaves, (float)-LEAVESTOTRANSFORM, 120.0f);
 
                     if (thisFrameKoala >= 24)
@@ -2375,7 +2375,7 @@ void UpdateGameplayScreen(void)
                         curFrameKoala += 1;
                         thisFrameKoala = 0;
                     }
-                    
+
                     if (curFrameKoala <= 1) koalaAnimationTransform.x = gameplay_koala_transform.x + koalaAnimationTransform.width*curFrameKoala;
 
                     if (transAniCounter >= 5)
@@ -2418,12 +2418,12 @@ void UpdateGameplayScreen(void)
                         curFrameKoala ++;
                         thisFrameKoala = 0;
                     }
-                    
+
                     if (curFrameKoala > 1) curFrameKoala = 0;
                     if (curFrameKoala <= 1) koalaAnimationFly.x = gameplay_koala_fly.x + koalaAnimationFly.width*curFrameKoala;
                     if (player.x > GetScreenWidth()/3) player.x -= 2;
                     if (player.x < GetScreenWidth()/3) player.x++;
-                    
+
                     if (power <= maxPower/5)
                     {
                         finalFormEnd += 1*TIME_FACTOR;
@@ -2432,7 +2432,7 @@ void UpdateGameplayScreen(void)
                             transBackAnim = !transBackAnim;
                             finalFormEnd = 0;
                         }
-                        
+
                         if (transBackAnim)
                         {
                             finalColor = RED;
@@ -2444,7 +2444,7 @@ void UpdateGameplayScreen(void)
                         }
                     }
                     else finalColor = WHITE;
-                    
+
 #if (defined(PLATFORM_ANDROID) || defined(PLATFORM_WEB))
                     if ((IsGestureDetected(GESTURE_HOLD) || (GetGestureDetected() == GESTURE_DRAG)) && CheckCollisionPointRec(GetTouchPosition(0), leftButton)) player.y += FLYINGMOV;
                     if ((IsGestureDetected(GESTURE_HOLD) || (GetGestureDetected() == GESTURE_DRAG)) && CheckCollisionPointRec(GetTouchPosition(0), rightButton)) player.y -= FLYINGMOV;
@@ -2497,7 +2497,7 @@ void UpdateGameplayScreen(void)
             if (!transforming)
             {
                 BambooSpawn();
-                
+
                 if (state != FINALFORM && eagleDelay >= EAGLE_TIME_DELAY)EagleSpawn(EAGLE_SPAWNCHANCE);
 
                 switch (season)
@@ -2687,9 +2687,9 @@ void DrawGameplayScreen(void)
                                 Fade(enemyHit[i].color, enemyHit[i].alpha));
         }
     }
-    
+
     // Only one bee / eagle / alert at the same time
-    
+
     for (int i = 0; i < MAX_LEAVES; i++)
     {
         if (leafActive[i])
@@ -2723,16 +2723,16 @@ void DrawGameplayScreen(void)
             }
         }
     }
-    
+
     if (beeActive && !isHitBee) DrawTextureRec(atlas01, beeAnimation, (Vector2){bee.x, bee.y - gameplay_enemy_bee.height/2}, WHITE);
     else if (beeActive && isHitBee) DrawTexturePro(atlas01, (Rectangle){gameplay_enemy_bee.x + beeAnimation.width*4, gameplay_enemy_bee.y, beeAnimation.width, gameplay_enemy_bee.height},
                                                     (Rectangle){bee.x, bee.y, beeAnimation.width, gameplay_enemy_bee.height}, (Vector2){0, 0}, 0, WHITE);
-                                                    
+
     if (eagleActive && !isHitEagle) DrawTextureRec(atlas01, eagleAnimation, (Vector2){eagle.x, eagle.y}, WHITE);
     else if (eagleActive && isHitEagle) DrawTextureRec(atlas01, gameplay_enemy_eagle_death, (Vector2){eagle.x, eagle.y}, WHITE);
-    
+
     if (alertActive) DrawTexturePro(atlas01, gameplay_fx_eaglealert, alertRectangle, (Vector2){0, 0}, 0, Fade(RED, 0.7f));
-    if (alertBeeActive) DrawTexturePro(atlas01, gameplay_fx_eaglealert, beeAlertRectangle, (Vector2){0, 0}, 0, Fade(ORANGE, 0.7f));                                        
+    if (alertBeeActive) DrawTexturePro(atlas01, gameplay_fx_eaglealert, beeAlertRectangle, (Vector2){0, 0}, 0, Fade(ORANGE, 0.7f));
 
     if (transforming)
     {
@@ -2762,7 +2762,7 @@ void DrawGameplayScreen(void)
             {
                 if (transforming)DrawTexturePro(atlas01, koalaAnimationTransform, (Rectangle){player.x - player.width, player.y - gameplay_koala_transform.height/4, gameplay_koala_transform.width/2, gameplay_koala_transform.height}, (Vector2){0, 0}, 0, finalColor);
                 else DrawTexturePro(atlas01, koalaAnimationFly, (Rectangle){player.x - gameplay_koala_fly.width/3, player.y - gameplay_koala_fly.height/4, gameplay_koala_fly.width/2, gameplay_koala_fly.height}, (Vector2){0, 0}, 0, finalColor);//DrawTextureRec((koalaFly), (Rectangle){0, 0, 128, 128}, (Vector2){player.x - 50, player.y - 40}, WHITE);
-            
+
             } break;
             case ONWIND: DrawTexturePro(atlas01, gameplay_koala_jump, (Rectangle){player.x - player.width, player.y - gameplay_koala_jump.height/4, gameplay_koala_jump.width, gameplay_koala_jump.height}, (Vector2) { 0, 0}, 0, WHITE); break;
             default: break;
@@ -2776,7 +2776,7 @@ void DrawGameplayScreen(void)
         if (windActive[i]) DrawTextureRec(atlas01, windAnimation, (Vector2){wind[i].x - 14, wind[i].y - 14}, WHITE);
     }
 
-    if (playerActive && !play) 
+    if (playerActive && !play)
     {
         if (initSeason == 0) DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade((Color){216, 200, 39, 255}, 0.4));
         else if (initSeason == 1) DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade((Color){155, 70, 22, 255}, 0.4));
@@ -2811,7 +2811,7 @@ void DrawGameplayScreen(void)
                                                (Vector2){ particle_waterdrop.width*rainParticle.particles[i].size/2, particle_waterdrop.height*rainParticle.particles[i].size/2 }, rainParticle.particles[i].rotation,
                                                Fade(rainParticle.particles[i].color, rainParticle.particles[i].alpha));
     }
-    
+
     // Draw Speed Particles
     for (int i = 0; i < MAX_PARTICLES_SPEED; i++)
     {
@@ -2847,7 +2847,7 @@ void DrawGameplayScreen(void)
         DrawTexturePro(atlas02, background_fog02, (Rectangle){ fogPosition, GetScreenHeight()*0.6, GetScreenWidth(), background_fog02.height}, (Vector2){ 0 , 0 }, 0, Fade(WHITE, fogAlpha));
         DrawTexturePro(atlas02, background_fog02, (Rectangle){ fogPosition+GetScreenWidth(), GetScreenHeight()*0.6, GetScreenWidth(), background_fog02.height}, (Vector2){ 0 , 0 }, 0, Fade(WHITE, fogAlpha));
     }
-    
+
     if (filterAlpha != 0 && state != FINALFORM) DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(SKYBLUE, filterAlpha));
 
     DrawTexturePro(atlas01, gameplay_gui_leafcounter_base, (Rectangle){ 0, 0, gameplay_gui_leafcounter_base.width, gameplay_gui_leafcounter_base.height}, (Vector2){ 0 , 0 }, 0, WHITE);
@@ -2856,36 +2856,36 @@ void DrawGameplayScreen(void)
                     clockRotation, Fade(WHITE, UIfade));
 
     DrawTexturePro(atlas01, gameplay_gui_seasonsclock_base, (Rectangle){ (GetScreenWidth() - gameplay_gui_seasonsclock_base.width ), 0, gameplay_gui_seasonsclock_base.width, gameplay_gui_seasonsclock_base.height}, (Vector2){ 0 , 0 }, 0, Fade(WHITE, UIfade));
-    
+
     for (int i = 0; i < 20; i++)
     {
         if (((currentLeaves/5) > i) && (state != FINALFORM)) DrawTexturePro(atlas01, gameplay_gui_leafcounter_cell, (Rectangle) {87, 83, gameplay_gui_leafcounter_cell.width, gameplay_gui_leafcounter_cell.height}, (Vector2) {gameplay_gui_leafcounter_cell.width/4, 69}, i*(-18), WHITE);
         else if ((power/18 >= i) && (state == FINALFORM)) DrawTexturePro(atlas01, gameplay_gui_leafcounter_cell, (Rectangle) {87, 83, gameplay_gui_leafcounter_cell.width, gameplay_gui_leafcounter_cell.height}, (Vector2) {gameplay_gui_leafcounter_cell.width/4, 69}, i*(-18), WHITE);
     }
 
-    if ((currentLeaves >= LEAVESTOTRANSFORM) && (state != FINALFORM)) 
+    if ((currentLeaves >= LEAVESTOTRANSFORM) && (state != FINALFORM))
     {
-        DrawTexturePro(atlas01, gameplay_gui_leafcounter_pulsel, 
-                      (Rectangle){ 85, 84, gameplay_gui_leafcounter_pulsel.width*leafGUIpulseScale, gameplay_gui_leafcounter_pulsel.height*leafGUIpulseScale}, 
+        DrawTexturePro(atlas01, gameplay_gui_leafcounter_pulsel,
+                      (Rectangle){ 85, 84, gameplay_gui_leafcounter_pulsel.width*leafGUIpulseScale, gameplay_gui_leafcounter_pulsel.height*leafGUIpulseScale},
                       (Vector2){ gameplay_gui_leafcounter_pulsel.width*leafGUIpulseScale/2 , gameplay_gui_leafcounter_pulsel.height*leafGUIpulseScale/2 }, 0, Fade((Color){126, 248, 25, 255}, leafGUIpulseFade));
-                      
-        DrawTexturePro(atlas01, gameplay_gui_leafcounter_glow, 
-                        (Rectangle){ 84, 83, gameplay_gui_leafcounter_glow.width, gameplay_gui_leafcounter_glow.height}, 
+
+        DrawTexturePro(atlas01, gameplay_gui_leafcounter_glow,
+                        (Rectangle){ 84, 83, gameplay_gui_leafcounter_glow.width, gameplay_gui_leafcounter_glow.height},
                         (Vector2){ gameplay_gui_leafcounter_glow.width/2 , gameplay_gui_leafcounter_glow.height/2 }, 0, Fade(WHITE, leafGUIglowFade));
     }
-    
+
     if ((play == false) && playerActive)
     {
-        if (startNum == 3) DrawTexturePro(atlas01, gameplay_countdown_3, 
-                      (Rectangle){ GetScreenWidth()/2, GetScreenHeight()/2, gameplay_countdown_3.width*numberScale, gameplay_countdown_3.height*numberScale}, 
+        if (startNum == 3) DrawTexturePro(atlas01, gameplay_countdown_3,
+                      (Rectangle){ GetScreenWidth()/2, GetScreenHeight()/2, gameplay_countdown_3.width*numberScale, gameplay_countdown_3.height*numberScale},
                       (Vector2){ gameplay_countdown_3.width*numberScale/2 , gameplay_countdown_3.height*numberScale/2 }, 0, Fade(RED, numberAlpha));
-        else if (startNum == 2) DrawTexturePro(atlas01, gameplay_countdown_2, 
-                      (Rectangle){ GetScreenWidth()/2, GetScreenHeight()/2, gameplay_countdown_2.width*numberScale, gameplay_countdown_2.height*numberScale}, 
+        else if (startNum == 2) DrawTexturePro(atlas01, gameplay_countdown_2,
+                      (Rectangle){ GetScreenWidth()/2, GetScreenHeight()/2, gameplay_countdown_2.width*numberScale, gameplay_countdown_2.height*numberScale},
                       (Vector2){ gameplay_countdown_2.width*numberScale/2 , gameplay_countdown_2.height*numberScale/2 }, 0, Fade(RED, leafGUIpulseFade));
-        else if (startNum == 1) DrawTexturePro(atlas01, gameplay_countdown_1, 
-                      (Rectangle){ GetScreenWidth()/2, GetScreenHeight()/2, gameplay_countdown_1.width*numberScale, gameplay_countdown_1.height*numberScale}, 
+        else if (startNum == 1) DrawTexturePro(atlas01, gameplay_countdown_1,
+                      (Rectangle){ GetScreenWidth()/2, GetScreenHeight()/2, gameplay_countdown_1.width*numberScale, gameplay_countdown_1.height*numberScale},
                       (Vector2){ gameplay_countdown_1.width*numberScale/2 , gameplay_countdown_1.height*numberScale/2 }, 0, Fade(RED, leafGUIpulseFade));
-    }        
+    }
 
     // Draw text elements
     //--------------------------
@@ -2896,7 +2896,7 @@ void DrawGameplayScreen(void)
             DrawTextEx(font, TextFormat("%i", popupScore[i].score), popupScore[i].position, font.baseSize/4*popupScore[i].scale, -5, Fade((Color){255, 73, 73, 255}, popupScore[i].alpha));
         }
     }
-    
+
     if (popupBee.active) DrawTextEx(font, TextFormat("%i", popupBee.score), popupBee.position, font.baseSize/4*popupBee.scale, -5, Fade((Color){255, 73, 73, 255}, popupBee.alpha));
     if (popupEagle.active) DrawTextEx(font, TextFormat("%i", popupEagle.score), popupEagle.position, font.baseSize/4*popupEagle.scale, -5, Fade((Color){255, 73, 73, 255}, popupEagle.alpha));
 
@@ -2904,48 +2904,48 @@ void DrawGameplayScreen(void)
     {
         if (popupLeaves[i].active) DrawTextEx(font, TextFormat("+ %i", popupLeaves[i].score), popupLeaves[i].position, font.baseSize/4*popupLeaves[i].scale, -5, Fade((Color){139, 179, 0, 255}, popupLeaves[i].alpha));
     }
-    
+
 
     DrawTextEx(font, TextFormat("%03i", currentLeaves), (Vector2){ 47, 50 }, font.baseSize, -8, counterColor);
 
     if (transforming) DrawTextEx(font, textFinalForm, (Vector2){ GetScreenWidth()/2 - MeasureText(textFinalForm, 40)/2, GetScreenHeight()/4}, font.baseSize, -5, (Color){246, 133, 133, 255});
-    
+
     if ((currentMonth == 7) && (transitionFramesCounter >= SEASONTRANSITION/2))
     {
         if (randomMessage <= 4) DrawTextEx(font, textSpring1, (Vector2){GetScreenWidth()/2 - MeasureText(textSpring1, 40)/2, GetScreenHeight()/3}, font.baseSize, -5, (Color){185, 222, 105, 255});
         else DrawTextEx(font, textSpring2, (Vector2){GetScreenWidth()/2 - MeasureText(textSpring2, 40)/2, GetScreenHeight()/3}, font.baseSize, -5, (Color){185, 222, 105, 255});
-    }      
+    }
     else if ((currentMonth == 10) && (transitionFramesCounter >= SEASONTRANSITION/2))
     {
-        if (randomMessage <= 4) DrawTextEx(font, textSummer1, (Vector2){GetScreenWidth()/2 - MeasureText(textSummer1, 40)/2, GetScreenHeight()/3}, font.baseSize, -5, (Color){253, 200, 108, 255}); 
-        else DrawTextEx(font, textSummer2, (Vector2){GetScreenWidth()/2 - MeasureText(textSummer2, 40)/2, GetScreenHeight()/3}, font.baseSize, -5, (Color){253, 200, 108, 255}); 
-    }    
+        if (randomMessage <= 4) DrawTextEx(font, textSummer1, (Vector2){GetScreenWidth()/2 - MeasureText(textSummer1, 40)/2, GetScreenHeight()/3}, font.baseSize, -5, (Color){253, 200, 108, 255});
+        else DrawTextEx(font, textSummer2, (Vector2){GetScreenWidth()/2 - MeasureText(textSummer2, 40)/2, GetScreenHeight()/3}, font.baseSize, -5, (Color){253, 200, 108, 255});
+    }
     else if ((currentMonth == 1) && (transitionFramesCounter >= SEASONTRANSITION/2))
     {
-        if (randomMessage <= 4) DrawTextEx(font, textFall1, (Vector2){GetScreenWidth()/2 - MeasureText(textFall1, 40)/2, GetScreenHeight()/3}, font.baseSize, -5, (Color){255, 149, 107, 255}); 
-        else DrawTextEx(font, textFall2, (Vector2){GetScreenWidth()/2 - MeasureText(textFall2, 40)/2, GetScreenHeight()/3}, font.baseSize, -5, (Color){255, 149, 107, 255}); 
-    }    
-    else if (currentMonth == 4 && transitionFramesCounter >= SEASONTRANSITION/2) 
+        if (randomMessage <= 4) DrawTextEx(font, textFall1, (Vector2){GetScreenWidth()/2 - MeasureText(textFall1, 40)/2, GetScreenHeight()/3}, font.baseSize, -5, (Color){255, 149, 107, 255});
+        else DrawTextEx(font, textFall2, (Vector2){GetScreenWidth()/2 - MeasureText(textFall2, 40)/2, GetScreenHeight()/3}, font.baseSize, -5, (Color){255, 149, 107, 255});
+    }
+    else if (currentMonth == 4 && transitionFramesCounter >= SEASONTRANSITION/2)
     {
         if (randomMessage <= 4) DrawTextEx(font, textWinter1, (Vector2){GetScreenWidth()/2 - MeasureText(textWinter1, 40)/2, GetScreenHeight()/3}, font.baseSize, -5, (Color){133, 249, 253, 255});
         else DrawTextEx(font, textWinter2, (Vector2){GetScreenWidth()/2 - MeasureText(textWinter2, 40)/2, GetScreenHeight()/3}, font.baseSize, -5, (Color){133, 249, 253, 255});
     }
-    
+
 #if defined(DEBUG)
     DrawRectangle(player.x, player.y, player.width, player.height, Fade(WHITE, 0.5));
-    
+
     for (int i = 0; i < MAX_WIND; i++)
     {
         if (windActive[i]) DrawRectangleRec(wind[i], Fade (GRAY, 0.4));
     }
-    
+
     for (int i = 0; i < MAX_ENEMIES; i++)
     {
         if (owlActive[i]) DrawRectangleRec(owl[i], Fade(BLACK, 0.5f));
         if (dingoActive[i]) DrawRectangleRec(dingo[i], Fade(BLACK, 0.5f));
         if (snakeActive[i]) DrawRectangleRec(snake[i], BLACK);
     }
-    
+
     if (beeActive) DrawRectangleRec(bee, Fade(BLACK, 0.5f));
     if (eagleActive) DrawRectangleRec(eagle, Fade(BLACK, 0.5f));
 
@@ -2978,11 +2978,11 @@ void DrawGameplayScreen(void)
         case TRANSITION:
         {
             if (currentMonth == 4) DrawText("May", GetScreenWidth() - 140, GetScreenHeight() - 20, 20, RED);
-            
+
         } break;
         default: break;
     }
-    
+
     DrawText(TextFormat("Score: %02i", score), 140, GetScreenHeight() - 20, 20, RED);
     DrawText(TextFormat("HighScore: %02i", hiscore), 600, GetScreenHeight() - 20, 20, RED);
     DrawText(TextFormat("SeasonChange: %03i", seasonTimer), 300, GetScreenHeight() - 20, 20, RED);
@@ -3033,7 +3033,7 @@ static void SnakeSpawn(int chance)
             if ((!snakeActive[k]) && (counter < 1))
             {
                 position = GetRandomValue(0, 4);
-                
+
                 if (counter == 0) posArray[counter] = position;
 
                 snake[k].x = GetScreenWidth() - 15;
@@ -3061,7 +3061,7 @@ static void DingoSpawn(int chance)
             if ((!dingoActive[k]) && (counter < 1))
             {
                 position = GetRandomValue(1, 3);
-                
+
                 if (counter == 0) posArray[counter] = position;
 
                 dingo[k].x = GetScreenWidth() - 15;
@@ -3109,7 +3109,7 @@ static void LeafSpawn(void)
 {
     int counter = 0;
     int maxLeavesCounter = GetRandomValue(0, 2);
-    
+
     for (int z = 0; z < 2; z++) posArrayLeaf[z] = -1;
 
     for (int k = 0; k < MAX_LEAVES; k++)
@@ -3123,7 +3123,7 @@ static void LeafSpawn(void)
 
             if (counter == 0)
             {
-                while (CheckArrayValue(posArray, 2, leafPosition)) leafPosition = GetRandomValue(0, 4); 
+                while (CheckArrayValue(posArray, 2, leafPosition)) leafPosition = GetRandomValue(0, 4);
                 posArrayLeaf[counter] =  leafPosition;
             }
             else if (counter == 1)
@@ -3140,12 +3140,12 @@ static void LeafSpawn(void)
             leaf[k].y = 30 + GetScreenHeight()/5*leafPosition;
             leaf[k].x = GetScreenWidth() - 18;
             leafActive[k] = true;
-            
+
             if (leafTypeSelection <= 24) leafType[k] = 0;
             else if ((leafTypeSelection > 24) && leafTypeSelection <= 50) leafType[k] = 1;
             else if ((leafTypeSelection > 50) && leafTypeSelection <= 75) leafType[k] = 2;
             else leafType[k] = 3;
-            
+
             counter++;
         }
     }
@@ -3202,9 +3202,9 @@ static void ResinSpawn(int chance)
             if ((!resinActive[k]) && (counter < 1))
             {
                 int resPosition = GetRandomValue(0, 4);
-                
+
                 while (CheckArrayValue(posArray, 2, resPosition)) resPosition = GetRandomValue(0, 4);
-                
+
                 resin[k].y = 25 + GetScreenHeight()/5*resPosition;
                 resin[k].x = GetScreenWidth() + 5;
                 resinActive[k] = true;
@@ -3225,9 +3225,9 @@ static void WindSpawn(int chance)
             if ((!windActive[k]) && (counter < 1))
             {
                 int resPosition = GetRandomValue(0, 4);
-                
+
                 while (CheckArrayValue(posArray, 2, resPosition)) resPosition = GetRandomValue(0, 4);
-                
+
                 wind[k].y = 25 + GetScreenHeight()/5*resPosition;
                 wind[k].x = GetScreenWidth() + 5;
                 windActive[k] = true;
@@ -3301,7 +3301,7 @@ static void DrawParallaxFront(void)
     DrawTexturePro(atlas02, gameplay_back_tree06_layer01, (Rectangle){(int)scrollFront + parallaxFrontOffset + GetScreenWidth() + 140*5, 55, gameplay_back_tree06_layer01.width*2, gameplay_back_tree06_layer01.height*2}, (Vector2){0,0}, 0, color02);
     DrawTexturePro(atlas02, gameplay_back_tree07_layer01, (Rectangle){(int)scrollFront + parallaxFrontOffset + GetScreenWidth() + 140*6, 60, gameplay_back_tree07_layer01.width*2, gameplay_back_tree07_layer01.height*2}, (Vector2){0,0}, 0, color02);
     DrawTexturePro(atlas02, gameplay_back_tree08_layer01, (Rectangle){(int)scrollFront + parallaxFrontOffset+ GetScreenWidth() + 140*7, 60, gameplay_back_tree08_layer01.width*2, gameplay_back_tree08_layer01.height*2}, (Vector2){0,0}, 0, color02);
-    DrawTexturePro(atlas02, gameplay_back_ground01, (Rectangle){(int)scrollFront + GetScreenWidth(), 559, ground01.width*2, ground01.height*2}, (Vector2){0,0}, 0, color01); 
+    DrawTexturePro(atlas02, gameplay_back_ground01, (Rectangle){(int)scrollFront + GetScreenWidth(), 559, ground01.width*2, ground01.height*2}, (Vector2){0,0}, 0, color01);
     DrawTexturePro(atlas02, (Rectangle){ground01.x, ground01.y + ground01.height, ground01.width, -ground01.height}, (Rectangle){(int)scrollFront+ GetScreenWidth(), -33, ground01.width*2, ground01.height*2}, (Vector2){0,0}, 0, color01);
 }
 
@@ -3373,7 +3373,7 @@ static Color ColorTransition(Color initialColor, Color finalColor, int framesCou
     currentColor.g = (unsigned char)LinearEaseIn((float)framesCounter, (float)initialColor.g, (float)(finalColor.g - initialColor.g), (float)(SEASONTRANSITION));
     currentColor.b = (unsigned char)LinearEaseIn((float)framesCounter, (float)initialColor.b, (float)(finalColor.b - initialColor.b), (float)(SEASONTRANSITION));
     currentColor.a = 255;
-    
+
     return currentColor;
 }
 
@@ -3442,24 +3442,24 @@ static void Reset(void)
     fogAlpha = 0;
     seasons = 0;
     fog = false;
-    clockSpeedRotation = 0; 
+    clockSpeedRotation = 0;
     eagleDelay = 0;
-    
+
     parallaxBackOffset = GetRandomValue (10, 100);
     parallaxFrontOffset = GetRandomValue (100, 200);
-    
+
     progresionDelay = 0;
     progresionFramesCounter = 0;
     speedProgresion = 0;
-    
+
     jumpCounter = 0;
     resinCounter = 0;
     tornadoCounter = 0;
     dashCounter = 0;
     superKoalaCounter = 0;
-    
+
     fogSpeed = 2;
-    
+
     leafGUIglow = true;
     leafGUIglowFade = 0;
     leafGUIpulseFade = 1;
@@ -3580,7 +3580,7 @@ static void Reset(void)
     owlAnimation.y = gameplay_enemy_owl.y;
     owlAnimation.width = gameplay_enemy_owl.width/3;
     owlAnimation.height = gameplay_enemy_owl.height;
-    
+
     koalaAnimationIddle = gameplay_koala_idle;
     koalaAnimationIddle.width = gameplay_koala_idle.width/3;
     koalaAnimationJump = gameplay_koala_jump;
@@ -3616,7 +3616,7 @@ static void Reset(void)
     backRayParticles.position = (Vector2){ 0, 0 };
     backRayParticles.active = false;
     speedFX.active = false;
-    
+
     clockPosition = (Vector2){GetScreenWidth(), 0};
 
     for (int j = 0; j < MAX_PARTICLES; j++)
@@ -3694,7 +3694,7 @@ static void Reset(void)
         backRainParticle.particles[j].alpha = 0.7f;
 
     }
-    
+
     for (int j = 0; j < MAX_PARTICLES_SPEED; j++)
     {
         speedFX.particle[j].position = (Vector2){ 0, 0 };
@@ -3836,7 +3836,7 @@ static void Reset(void)
         enemyHit[i].color = RED;
         enemyHit[i].alpha = 1.0f;
         enemyHit[i].active = false;
-        
+
         popupScore[i].position = (Vector2){ GetRandomValue(-20, 20), GetRandomValue(-20, 20) };
         popupScore[i].scale = (float)GetRandomValue(1, 45)/30;
         popupScore[i].alpha = 1.0f;
@@ -3854,7 +3854,7 @@ static void Reset(void)
 
         leafParticles[i].position = (Vector2){ 0, 0 };
         leafParticles[i].active = false;
-        
+
         popupLeaves[i].position = (Vector2){ GetRandomValue(-20, 20), GetRandomValue(-20, 20) };
         popupLeaves[i].scale = (float)GetRandomValue(1, 45)/30;
         popupLeaves[i].alpha = 1.0f;
@@ -3884,7 +3884,7 @@ static void Reset(void)
     bee.width = 50;
     bee.height = 32;
     beeActive = false;
-    
+
     popupBee.position = (Vector2){ GetRandomValue(-20, 20), GetRandomValue(-20, 20) };
     popupBee.scale = (float)GetRandomValue(1, 45)/30;
     popupBee.alpha = 1.0f;
@@ -3895,7 +3895,7 @@ static void Reset(void)
     eagle.width = 200;
     eagle.height = 80;
     eagleActive = false;
-    
+
     popupEagle.position = (Vector2){ GetRandomValue(-20, 20), GetRandomValue(-20, 20) };
     popupEagle.scale = (float)GetRandomValue(1, 45)/30;
     popupEagle.alpha = 1.0f;
@@ -3911,6 +3911,6 @@ static void Reset(void)
 
     firePos.x = -200;
     firePos.y = 0;
-    
+
     textSize = MeasureTextEx(font, "3", font.baseSize*5, 2);
 }

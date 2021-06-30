@@ -52,7 +52,7 @@ void InitLevel04Screen(void)
     // Initialize Level04 screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     circlesCenter = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 };
 }
 
@@ -64,7 +64,7 @@ void UpdateLevel04Screen(void)
 
     if (!done)
     {
-        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) 
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
         {
             if (CheckCollisionPointCircle(GetMousePosition(), circlesCenter, innerCircleRadius))
             {
@@ -77,8 +77,8 @@ void UpdateLevel04Screen(void)
             else
             {
                 outerCircleRadius -= 2;
-                
-                if (outerCircleRadius <= 260) outerCircleRadius = 260;  
+
+                if (outerCircleRadius <= 260) outerCircleRadius = 260;
             }
         }
         else
@@ -92,7 +92,7 @@ void UpdateLevel04Screen(void)
 
         if (innerCircleRadius >= 270) innerCircleRadius = 270;
         else if (innerCircleRadius <= 40) innerCircleRadius = 40;
-        
+
         if (outerCircleRadius >= 600) outerCircleRadius = 600;
 
         if (innerCircleRadius >= outerCircleRadius)
@@ -101,18 +101,18 @@ void UpdateLevel04Screen(void)
             PlaySound(levelWin);
         }
     }
-    
+
     if (done && !levelFinished)
     {
         levelTimeSec = framesCounter/60;
         levelFinished = true;
         framesCounter = 0;
     }
-    
+
     if (levelFinished)
     {
         framesCounter++;
-        
+
         if ((framesCounter > 90) && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) finishScreen = true;
     }
 }

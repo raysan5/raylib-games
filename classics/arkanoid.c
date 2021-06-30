@@ -91,7 +91,7 @@ int main(void)
 #else
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -104,7 +104,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadGame();         // Unload loaded data (textures, sounds, models...)
-    
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -124,13 +124,13 @@ void InitGame(void)
     player.position = (Vector2){ screenWidth/2, screenHeight*7/8 };
     player.size = (Vector2){ screenWidth/10, 20 };
     player.life = PLAYER_MAX_LIFE;
-    
+
     // Initialize ball
     ball.position = (Vector2){ screenWidth/2, screenHeight*7/8 - 30 };
     ball.speed = (Vector2){ 0, 0 };
     ball.radius = 7;
     ball.active = false;
-    
+
     // Initialize bricks
     int initialDownPosition = 50;
 
@@ -168,7 +168,7 @@ void UpdateGame(void)
                     ball.speed = (Vector2){ 0, -5 };
                 }
             }
-            
+
             // Ball movement logic
             if (ball.active)
             {
@@ -180,7 +180,7 @@ void UpdateGame(void)
                 ball.position = (Vector2){ player.position.x, screenHeight*7/8 - 30 };
             }
 
-            // Collision logic: ball vs walls 
+            // Collision logic: ball vs walls
             if (((ball.position.x + ball.radius) >= screenWidth) || ((ball.position.x - ball.radius) <= 0)) ball.speed.x *= -1;
             if ((ball.position.y - ball.radius) <= 0) ball.speed.y *= -1;
             if ((ball.position.y + ball.radius) >= screenHeight)
@@ -250,7 +250,7 @@ void UpdateGame(void)
             else
             {
                 gameOver = true;
-                
+
                 for (int i = 0; i < LINES_OF_BRICKS; i++)
                 {
                     for (int j = 0; j < BRICKS_PER_LINE; j++)
@@ -285,10 +285,10 @@ void DrawGame(void)
 
             // Draw player lives
             for (int i = 0; i < player.life; i++) DrawRectangle(20 + 40*i, screenHeight - 30, 35, 10, LIGHTGRAY);
-            
+
             // Draw ball
             DrawCircleV(ball.position, ball.radius, MAROON);
-            
+
             // Draw bricks
             for (int i = 0; i < LINES_OF_BRICKS; i++)
             {
@@ -301,7 +301,7 @@ void DrawGame(void)
                     }
                 }
             }
-            
+
             if (pause) DrawText("GAME PAUSED", screenWidth/2 - MeasureText("GAME PAUSED", 40)/2, screenHeight/2 - 40, 40, GRAY);
         }
         else DrawText("PRESS [ENTER] TO PLAY AGAIN", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] TO PLAY AGAIN", 20)/2, GetScreenHeight()/2 - 50, 20, GRAY);

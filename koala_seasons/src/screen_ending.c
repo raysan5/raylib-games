@@ -114,25 +114,25 @@ void InitEndingScreen(void)
     replaying = false;
     finalYears = initYears + (seasons/4);
     yearsElapsed = seasons/4;
-    
+
     playButton = (Rectangle){ GetScreenWidth()*0.871, GetScreenHeight()*0.096, 123, 123};
     shopButton = (Rectangle){ GetScreenWidth()*0.871, GetScreenHeight()*0.303, 123, 123};
     trophyButton = (Rectangle){ GetScreenWidth()*0.871, GetScreenHeight()*0.513, 123, 123};
     shareButton = (Rectangle){ GetScreenWidth()*0.871, GetScreenHeight()*0.719, 123, 123};
-    
+
     buttonPlayColor = WHITE;
     buttonShopColor = WHITE;
     buttonTrophyColor = WHITE;
     buttonShareColor = WHITE;
-    
+
     currentScore = 0;
     seasonsCounter = 0;
     currentLeavesEnding = 0;
-    
+
     endingCounter = DELAY;
-    
+
     backgroundColor = (Color){ 176, 167, 151, 255};
-    
+
     for (int j = 0; j < 20; j++)
     {
         leafParticles[j].active = false;
@@ -143,7 +143,7 @@ void InitEndingScreen(void)
         leafParticles[j].color = WHITE;
         leafParticles[j].alpha = 1;
     }
-    
+
     // Seasons death texts
     if (initSeason == 0)
     {
@@ -161,22 +161,22 @@ void InitEndingScreen(void)
     {
         sprintf(initMonthText, "WINTER");
         clockRotation = 45;
-        initRotation = 45;  
+        initRotation = 45;
     }
     else if (initSeason == 3)
     {
         sprintf(initMonthText, "SPRING");
         clockRotation = 315;
-        initRotation = 315; 
+        initRotation = 315;
     }
-    
+
     if (currentSeason == 0)
     {
         sprintf(finalMonthText, "SUMMER");
         finalRotation = 225 + 360*yearsElapsed;
     }
     else if (currentSeason == 1)
-    {    
+    {
         sprintf(finalMonthText, "AUTUMN");
         finalRotation = 135 + 360*yearsElapsed;
     }
@@ -198,7 +198,7 @@ void InitEndingScreen(void)
 void UpdateEndingScreen(void)
 {
     framesCounter += 1*TIME_FACTOR;
-  
+
     switch (endingCounter)
     {
         case DELAY:
@@ -208,7 +208,7 @@ void UpdateEndingScreen(void)
                 endingCounter = SEASONS;
                 framesCounter = 0;
             }
-            
+
         } break;
         case SEASONS:
         {
@@ -216,7 +216,7 @@ void UpdateEndingScreen(void)
             {
                 seasonsCounter = (int)LinearEaseIn((float)framesCounter, 0.0f, (float)(seasons), 90.0f);
                 clockRotation = LinearEaseIn((float)framesCounter, (float)initRotation, (float)-(finalRotation - initRotation), 90.0f);
-                
+
                 if (framesCounter >= 90)
                 {
                     endingCounter = LEAVES;
@@ -224,7 +224,7 @@ void UpdateEndingScreen(void)
                 }
             }
             else endingCounter = LEAVES;
-            
+
 #if (defined(PLATFORM_ANDROID) || defined(PLATFORM_WEB))
             if (IsGestureDetected(GESTURE_TAP))
             {
@@ -243,7 +243,7 @@ void UpdateEndingScreen(void)
             }
 #endif
         } break;
-        case LEAVES: 
+        case LEAVES:
         {
             if (currentLeaves > 0)
             {
@@ -259,7 +259,7 @@ void UpdateEndingScreen(void)
                         currentLeavesEnding += 1;
                         framesCounter = 0;
                     }
-                    
+
                     for (int i = 0; i < 20; i++)
                     {
                         if (!leafParticles[i].active)
@@ -271,7 +271,7 @@ void UpdateEndingScreen(void)
                     }
                 }
             }
-            else endingCounter = KILLS;       
+            else endingCounter = KILLS;
 
 #if (defined(PLATFORM_ANDROID) || defined(PLATFORM_WEB))
             if (IsGestureDetected(GESTURE_TAP))
@@ -286,7 +286,7 @@ void UpdateEndingScreen(void)
                 currentLeavesEnding = currentLeaves;
                 framesCounter = 0;
                 endingCounter = KILLS;
-            }  
+            }
 #endif
         } break;
         case KILLS:
@@ -297,9 +297,9 @@ void UpdateEndingScreen(void)
                 {
                     currentScore = (int)LinearEaseIn((float)framesCounter, 0.0f, (float)(score), 90.0f);
                 }
-                
+
                 framesKillsCounter += 1*TIME_FACTOR;
-                
+
                 for (int i = 0; i < MAX_KILLS; i++)
                 {
                     if (framesKillsCounter >= drawTimer && active[i] == false)
@@ -308,15 +308,15 @@ void UpdateEndingScreen(void)
                         framesKillsCounter = 0;
                     }
                 }
-                
+
                 if (framesCounter >= 90)
                 {
                     endingCounter = REPLAY;
                     framesCounter = 0;
                 }
             }
-            else endingCounter = REPLAY;   
-            
+            else endingCounter = REPLAY;
+
 #if (defined(PLATFORM_ANDROID) || defined(PLATFORM_WEB))
             if (IsGestureDetected(GESTURE_TAP))
             {
@@ -345,18 +345,18 @@ void UpdateEndingScreen(void)
             if (replaying)
             {
                 replayTimer += 1*TIME_FACTOR;
-                
+
                 if (replayTimer >= 30)
                 {
                     finishScreen = 1;
                     initSeason = GetRandomValue(0, 3);
                 }
-                
+
                 buttonPlayColor = GOLD;
             }
         } break;
     }
-    
+
     for (int i = 0; i < 20; i++)
     {
         if (leafParticles[i].active == true)
@@ -373,7 +373,7 @@ void UpdateEndingScreen(void)
             {
                 leafParticles[i].alpha = 0.0f;
                 leafParticles[i].active = false;
-            }               
+            }
         }
     }
 
@@ -384,25 +384,25 @@ void UpdateEndingScreen(void)
         endingCounter = REPLAY;
         replaying = true;
     }
-    
+
 #elif (defined(PLATFORM_DESKTOP) || defined(PLATFORM_WEB))
-    if (CheckCollisionPointRec(GetMousePosition(), playButton)) 
+    if (CheckCollisionPointRec(GetMousePosition(), playButton))
     {
-        buttonPlayColor = GOLD;  
-        if (IsMouseButtonPressed(0)) 
+        buttonPlayColor = GOLD;
+        if (IsMouseButtonPressed(0))
         {
             endingCounter = REPLAY;
             replaying = true;
         }
-    }       
+    }
     else buttonPlayColor = WHITE;
 
     if (CheckCollisionPointRec(GetMousePosition(), shopButton)) buttonShopColor = GOLD;
     else buttonShopColor = WHITE;
-    
+
     if (CheckCollisionPointRec(GetMousePosition(), trophyButton)) buttonTrophyColor = GOLD;
     else buttonTrophyColor = WHITE;
-    
+
     if (CheckCollisionPointRec(GetMousePosition(), shareButton)) buttonShareColor = GOLD;
     else buttonShareColor = WHITE;
 #endif
@@ -415,11 +415,11 @@ void DrawEndingScreen(void)
     {
         DrawTextureRec(atlas02, ending_background, (Vector2){ending_background.width*(x%5), ending_background.height*(x/5)}, backgroundColor);
     }
-    
+
     // Frames and backgrounds
     DrawTexturePro(atlas01, ending_plate_frame, (Rectangle){GetScreenWidth()*0.042, GetScreenHeight()*0.606, ending_plate_frame.width, ending_plate_frame.height}, (Vector2){ 0, 0}, 0, WHITE);
     DrawTexturePro(atlas01, ending_paint_back, (Rectangle){GetScreenWidth()*0.133, GetScreenHeight()*0.097, ending_paint_back.width, ending_paint_back.height}, (Vector2){ 0, 0}, 0, WHITE);
-    
+
     if (killer == 0) DrawTexturePro(atlas01, ending_paint_koalafire, (Rectangle){GetScreenWidth()*0.145, GetScreenHeight()*0.171, ending_paint_koalafire.width, ending_paint_koalafire.height}, (Vector2){ 0, 0}, 0, WHITE);
     else if (killer == 1) DrawTexturePro(atlas01, ending_paint_koalasnake, (Rectangle){GetScreenWidth()*0.145, GetScreenHeight()*0.171, ending_paint_koalasnake.width, ending_paint_koalasnake.height}, (Vector2){ 0, 0}, 0, WHITE);
     else if (killer == 2) DrawTexturePro(atlas01, ending_paint_koaladingo, (Rectangle){GetScreenWidth()*0.145, GetScreenHeight()*0.171, ending_paint_koaladingo.width, ending_paint_koaladingo.height}, (Vector2){ 0, 0}, 0, WHITE);
@@ -427,50 +427,50 @@ void DrawEndingScreen(void)
     else if (killer == 4) DrawTexturePro(atlas01, ending_paint_koalageneric, (Rectangle){GetScreenWidth()*0.133, GetScreenHeight()*0.171, ending_paint_koalageneric.width, ending_paint_koalageneric.height}, (Vector2){ 0, 0}, 0, WHITE);
     else if (killer == 5) DrawTexturePro(atlas01, ending_paint_koalabee, (Rectangle){GetScreenWidth()*0.145, GetScreenHeight()*0.171, ending_paint_koalabee.width, ending_paint_koalabee.height}, (Vector2){ 0, 0}, 0, WHITE);
     else if (killer == 6) DrawTexturePro(atlas01, ending_paint_koalaeagle, (Rectangle){GetScreenWidth()*0.145, GetScreenHeight()*0.171, ending_paint_koalaeagle.width, ending_paint_koalaeagle.height}, (Vector2){ 0, 0}, 0, WHITE);
-    
+
     DrawTexturePro(atlas01, ending_paint_frame, (Rectangle){GetScreenWidth()*0.102, GetScreenHeight()*0.035, ending_paint_frame.width, ending_paint_frame.height}, (Vector2){ 0, 0}, 0, WHITE);
-    
+
     // UI Score planks
     DrawTexturePro(atlas01, ending_score_planksmall, (Rectangle){GetScreenWidth()*0.521, GetScreenHeight()*0.163, ending_score_planksmall.width, ending_score_planksmall.height}, (Vector2){ 0, 0}, 0, WHITE);
     DrawTexturePro(atlas01, ending_score_planklarge, (Rectangle){GetScreenWidth()*0.415, GetScreenHeight()*0.303, ending_score_planklarge.width, ending_score_planklarge.height}, (Vector2){ 0, 0}, 0, WHITE);
     DrawTexturePro(atlas01, ending_score_planksmall, (Rectangle){GetScreenWidth()*0.521, GetScreenHeight()*0.440, ending_score_planksmall.width, ending_score_planksmall.height}, (Vector2){ 0, 0}, 0, WHITE);
-    
+
     // UI Score icons and frames
     DrawTexturePro(atlas01, ending_score_seasonicon, (Rectangle){GetScreenWidth()*0.529, GetScreenHeight()*0.096, ending_score_seasonicon.width, ending_score_seasonicon.height}, (Vector2){ 0, 0}, 0, WHITE);
     DrawTexturePro(atlas01, ending_score_seasonneedle, (Rectangle){GetScreenWidth()*0.579, GetScreenHeight()*0.189, ending_score_seasonneedle.width, ending_score_seasonneedle.height}, (Vector2){ending_score_seasonneedle.width/2, ending_score_seasonneedle.height*0.9}, clockRotation, WHITE);
     DrawTexturePro(atlas01, ending_score_frame, (Rectangle){GetScreenWidth()*0.535, GetScreenHeight()*0.11, ending_score_frame.width, ending_score_frame.height}, (Vector2){ 0, 0}, 0, WHITE);
-    
+
     DrawTexturePro(atlas01, ending_score_frameback, (Rectangle){GetScreenWidth()*0.430, GetScreenHeight()*0.246, ending_score_frameback.width, ending_score_frameback.height}, (Vector2){ 0, 0}, 0, WHITE);
     DrawTexturePro(atlas01, ending_score_frame, (Rectangle){GetScreenWidth()*0.429, GetScreenHeight()*0.244, ending_score_frame.width, ending_score_frame.height}, (Vector2){ 0, 0}, 0, WHITE);
-   
+
     for (int i = 0; i < 20; i++)
     {
         if (leafParticles[i].active)
-        {                
+        {
             DrawTexturePro(atlas01, particle_ecualyptusleaf,
                           (Rectangle){ leafParticles[i].position.x, leafParticles[i].position.y, particle_ecualyptusleaf.width*leafParticles[i].size, particle_ecualyptusleaf.height*leafParticles[i].size },
-                          (Vector2){ particle_ecualyptusleaf.width/2*leafParticles[i].size, particle_ecualyptusleaf.height/2*leafParticles[i].size }, leafParticles[i].rotation, Fade(WHITE,leafParticles[i].alpha));        
+                          (Vector2){ particle_ecualyptusleaf.width/2*leafParticles[i].size, particle_ecualyptusleaf.height/2*leafParticles[i].size }, leafParticles[i].rotation, Fade(WHITE,leafParticles[i].alpha));
         }
     }
-    
+
     DrawTexturePro(atlas01, ending_score_leavesicon, (Rectangle){GetScreenWidth()*0.421, GetScreenHeight()*0.228, ending_score_leavesicon.width, ending_score_leavesicon.height}, (Vector2){ 0, 0}, 0, WHITE);
-    
+
     DrawTexturePro(atlas01, ending_score_frameback, (Rectangle){GetScreenWidth()*0.536, GetScreenHeight()*0.383, ending_score_frameback.width, ending_score_frameback.height}, (Vector2){ 0, 0}, 0, WHITE);
     DrawTexturePro(atlas01, ending_score_frame, (Rectangle){GetScreenWidth()*0.535, GetScreenHeight()*0.383, ending_score_frame.width, ending_score_frame.height}, (Vector2){ 0, 0}, 0, WHITE);
     DrawTexturePro(atlas01, ending_score_enemyicon, (Rectangle){GetScreenWidth()*0.538, GetScreenHeight()*0.414, ending_score_enemyicon.width, ending_score_enemyicon.height}, (Vector2){ 0, 0}, 0, WHITE);
-    
+
     // UI Buttons
     DrawTexturePro(atlas01, ending_button_replay, (Rectangle){GetScreenWidth()*0.871, GetScreenHeight()*0.096, ending_button_replay.width, ending_button_replay.height}, (Vector2){ 0, 0}, 0, buttonPlayColor);
     DrawTexturePro(atlas01, ending_button_shop, (Rectangle){GetScreenWidth()*0.871, GetScreenHeight()*0.303, ending_button_shop.width, ending_button_shop.height}, (Vector2){ 0, 0}, 0, buttonShopColor);
     DrawTexturePro(atlas01, ending_button_trophy, (Rectangle){GetScreenWidth()*0.871, GetScreenHeight()*0.513, ending_button_trophy.width, ending_button_trophy.height}, (Vector2){ 0, 0}, 0, buttonTrophyColor);
     DrawTexturePro(atlas01, ending_button_share, (Rectangle){GetScreenWidth()*0.871, GetScreenHeight()*0.719, ending_button_share.width, ending_button_share.height}, (Vector2){ 0, 0}, 0, buttonShareColor);
-    
+
     DrawTextEx(font, TextFormat("%03i", seasonsCounter), (Vector2){ GetScreenWidth()*0.73f, GetScreenHeight()*0.14f }, font.baseSize, 1, WHITE);
     DrawTextEx(font, TextFormat("%03i", currentLeavesEnding), (Vector2){ GetScreenWidth()*0.73f, GetScreenHeight()*0.29f }, font.baseSize, 1, WHITE);
     DrawTextEx(font, TextFormat("%04i", currentScore), (Vector2){ GetScreenWidth()*0.715f, GetScreenHeight()*0.426f }, font.baseSize, 1, WHITE);
-    
+
     DrawTextEx(font, TextFormat("%s %i - %s %i", initMonthText, initYears, finalMonthText, finalYears), (Vector2){ GetScreenWidth()*0.1f, GetScreenHeight()*0.7f }, font.baseSize/2.0f, 1, WHITE);
-    
+
     for (int i = 0; i < MAX_KILLS; i++)
     {
         if (active[i])
@@ -486,7 +486,7 @@ void DrawEndingScreen(void)
             }
         }
     }
-    
+
 /*
     DrawText(TextFormat("KOALA IS DEAD :("), GetScreenWidth()/2 -  MeasureText("YOU'RE DEAD   ", 60)/2, GetScreenHeight()/3, 60, RED);
     DrawText(TextFormat("Score: %02i - HiScore: %02i", score, hiscore),GetScreenWidth()/2 -  MeasureText("Score: 00 - HiScore: 00", 60)/2, GetScreenHeight()/3 +100, 60, RED);
@@ -494,22 +494,22 @@ void DrawEndingScreen(void)
     DrawText(TextFormat("%02s killed you", killer),GetScreenWidth()/2 -  MeasureText("killer killed you", 60)/2 + 90, GetScreenHeight()/3 +270, 30, RED);
     //DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.5));
 */
-    
+
     //DrawTextEx(font, TextFormat("%02s", killer), (Vector2){ GetScreenWidth()*0.08, GetScreenHeight()*0.78 }, font.baseSize/2, 1, WHITE);
     if (killer == 0) DrawTextEx(font, textFire01, (Vector2){ GetScreenWidth()*0.13f, GetScreenHeight()*0.78f }, font.baseSize/2.0f, 1, WHITE);
     else if (killer == 2) DrawTextEx(font, textDingo01, (Vector2){ GetScreenWidth()*0.13f, GetScreenHeight()*0.78f }, font.baseSize/2.0f, 1, WHITE);
-    else if (killer == 1) 
+    else if (killer == 1)
     {
         DrawTextEx(font, textSnake01, (Vector2){ GetScreenWidth()*0.13f, GetScreenHeight()*0.78f }, font.baseSize/2.0f, 1, WHITE);
         DrawTextEx(font, textSnake02, (Vector2){ GetScreenWidth()*0.13f, GetScreenHeight()*0.83f }, font.baseSize/2.0f, 1, WHITE);
     }
-    else if (killer == 3) 
+    else if (killer == 3)
     {
         DrawTextEx(font, textOwl01, (Vector2){ GetScreenWidth()*0.13f, GetScreenHeight()*0.78f }, font.baseSize/2.0f, 1, WHITE);
         DrawTextEx(font, textOwl02, (Vector2){ GetScreenWidth()*0.13f, GetScreenHeight()*0.83f }, font.baseSize/2.0f, 1, WHITE);
     }
     else if (killer == 4) DrawTextEx(font, textNaturalDeath01, (Vector2){ GetScreenWidth()*0.13f, GetScreenHeight()*0.78f }, font.baseSize/2.0f, 1, WHITE);
-    else if (killer == 5) 
+    else if (killer == 5)
     {
         DrawTextEx(font, textBee01, (Vector2){ GetScreenWidth()*0.13f, GetScreenHeight()*0.78f }, font.baseSize/2.0f, 1, WHITE);
         DrawTextEx(font, textBee02, (Vector2){ GetScreenWidth()*0.13f, GetScreenHeight()*0.83f }, font.baseSize/2.0f, 1, WHITE);

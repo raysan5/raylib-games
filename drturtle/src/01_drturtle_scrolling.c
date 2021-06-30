@@ -21,10 +21,10 @@ int main()
     //--------------------------------------------------------------------------------------
     const int screenWidth = 1280;
     const int screenHeight = 720;
-    
+
     // Init window
     InitWindow(screenWidth, screenHeight, "Dr. Turtle & Mr. GAMERA");
-    
+
     // Load game resources: textures
     Texture2D sky = LoadTexture("resources/sky.png");
     Texture2D mountains = LoadTexture("resources/mountains.png");
@@ -33,13 +33,13 @@ int main()
     // Define scrolling variables
     int backScrolling = 0;
     int seaScrolling = 0;
-    
+
     // Define current screen
     GameScreen currentScreen = TITLE;
-    
+
     SetTargetFPS(60);       // Setup game frames per second
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -53,31 +53,31 @@ int main()
             {
                 // Sea scrolling
                 seaScrolling -= 2;
-                if (seaScrolling <= -screenWidth) seaScrolling = 0; 
-            
+                if (seaScrolling <= -screenWidth) seaScrolling = 0;
+
                 // Press enter to change to gameplay screen
                 if (IsKeyPressed(KEY_ENTER))
                 {
                     currentScreen = GAMEPLAY;
                 }
-                
+
             } break;
             case GAMEPLAY:
             {
                 // Background scrolling logic
                 backScrolling--;
-                if (backScrolling <= -screenWidth) backScrolling = 0; 
-                
+                if (backScrolling <= -screenWidth) backScrolling = 0;
+
                 // Sea scrolling logic
                 seaScrolling -= 8;
                 if (seaScrolling <= -screenWidth) seaScrolling = 0;
-                
+
                 // Press enter to change to ending screen
                 if (IsKeyPressed(KEY_ENTER))
                 {
                     currentScreen = ENDING;
                 }
-                
+
             } break;
             case ENDING:
             {
@@ -86,50 +86,50 @@ int main()
                 {
                     currentScreen = TITLE;
                 }
-      
+
             } break;
             default: break;
         }
         //----------------------------------------------------------------------------------
-        
+
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
-        
+
             ClearBackground(RAYWHITE);
-            
+
             // Draw background (common to all screens)
             DrawTexture(sky, 0, 0, WHITE);
-            
+
             DrawTexture(mountains, backScrolling, 0, WHITE);
             DrawTexture(mountains, screenWidth + backScrolling, 0, WHITE);
-            
+
             DrawTexture(sea, seaScrolling, 0, BLUE);
             DrawTexture(sea, screenWidth + seaScrolling, 0, BLUE);
-            
+
             switch (currentScreen)
             {
                 case TITLE:
                 {
                     // Draw title screen
                     DrawText("PRESS ENTER", 450, 420, 40, BLACK);
-                
+
                 } break;
                 case GAMEPLAY:
                 {
                     // Draw gameplay screen
                     DrawText("GAMEPLAY SCREEN", 20, 20, 40, MAROON);
-                
+
                 } break;
                 case ENDING:
                 {
                     // Draw ending screen
-                    
+
                     // Draw a transparent black rectangle that covers all screen
                     DrawRectangle(0, 0, screenWidth, screenHeight, Fade(BLACK, 0.4f));
-                    
+
                     DrawText("ENDING SCREEN", 20, 20, 40, DARKBLUE);
-                    
+
                 } break;
                 default: break;
             }
@@ -140,7 +140,7 @@ int main()
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    
+
     // Unload textures
     UnloadTexture(sky);
     UnloadTexture(mountains);
@@ -148,6 +148,6 @@ int main()
 
     CloseWindow();          // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
-    
+
     return 0;
 }

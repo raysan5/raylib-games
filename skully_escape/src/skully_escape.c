@@ -45,16 +45,16 @@ static int transToScreen = -1;
 static int framesCounter = 0;
 
 Music music = { 0 };
-    
+
 //----------------------------------------------------------------------------------
 // Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
 static void ChangeToScreen(int screen);     // Change to screen, no transition effect
-                                            
+
 static void TransitionToScreen(int screen); // Request transition to next screen
 static void UpdateTransition(void);         // Update transition effect
 static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
-                                            
+
 static void UpdateDrawFrame(void);          // Update and draw one frame
 
 //----------------------------------------------------------------------------------
@@ -68,17 +68,17 @@ int main(void)
 
     // Global data loading (assets that must be available in all screens, i.e. fonts)
     InitAudioDevice();
-    
+
     music = LoadMusicStream("resources/audio/come_play_with_me.ogg");
     PlayMusicStream(music);
-    
+
     font = LoadFont("resources/textures/alagard.png");
     doors = LoadTexture("resources/textures/doors.png");
     sndDoor = LoadSound("resources/audio/door.ogg");
     sndScream = LoadSound("resources/audio/scream.ogg");
-    
+
     InitPlayer();
-    
+
     // Setup and Init first screen
     currentScreen = LOGO;
     InitLogoScreen();
@@ -98,18 +98,18 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    
+
     // Unload all global loaded data (i.e. fonts) here!
     UnloadPlayer();
     UnloadFont(font);
     UnloadTexture(doors);
     UnloadSound(sndDoor);
     UnloadSound(sndScream);
-    
+
     UnloadMusicStream(music);
-    
+
     CloseAudioDevice();
-    
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -137,7 +137,7 @@ static void ChangeToScreen(int screen)
         case ENDING: UnloadEndingScreen(); break;
         default: break;
     }
-    
+
     switch (screen)
     {
         case LOGO: InitLogoScreen(); break;
@@ -153,7 +153,7 @@ static void ChangeToScreen(int screen)
         case ENDING: InitEndingScreen(); break;
         default: break;
     }
-    
+
     currentScreen = screen;
 }
 
@@ -175,7 +175,7 @@ static void UpdateTransition(void)
         if (transAlpha >= 1.0)
         {
             transAlpha = 1.0;
-        
+
             switch (transFromScreen)
             {
                 case LOGO: UnloadLogoScreen(); break;
@@ -191,74 +191,74 @@ static void UpdateTransition(void)
                 case ENDING: UnloadEndingScreen(); break;
                 default: break;
             }
-            
+
             switch (transToScreen)
             {
                 case LOGO:
                 {
-                    InitLogoScreen(); 
-                    currentScreen = LOGO; 
+                    InitLogoScreen();
+                    currentScreen = LOGO;
                 } break;
                 case LOGO_RL:
                 {
                     rlInitLogoScreen();
                     currentScreen = LOGO_RL;
                 } break;
-                case TITLE: 
+                case TITLE:
                 {
                     InitTitleScreen();
-                    currentScreen = TITLE;                  
+                    currentScreen = TITLE;
                 } break;
                 case ATTIC:
                 {
-                    InitAtticScreen(); 
+                    InitAtticScreen();
                     currentScreen = ATTIC;
                 } break;
                 case AISLE01:
                 {
-                    InitAisle01Screen(); 
+                    InitAisle01Screen();
                     currentScreen = AISLE01;
                 } break;
                 case AISLE02:
                 {
-                    InitAisle02Screen(); 
+                    InitAisle02Screen();
                     currentScreen = AISLE02;
                 } break;
                 case BATHROOM:
                 {
-                    InitBathroomScreen(); 
+                    InitBathroomScreen();
                     currentScreen = BATHROOM;
                 } break;
                 case LIVINGROOM:
                 {
-                    InitLivingroomScreen(); 
+                    InitLivingroomScreen();
                     currentScreen = LIVINGROOM;
                 } break;
                 case KITCHEN:
                 {
-                    InitKitchenScreen(); 
+                    InitKitchenScreen();
                     currentScreen = KITCHEN;
                 } break;
                 case ARMORY:
                 {
-                    InitArmoryScreen(); 
+                    InitArmoryScreen();
                     currentScreen = ARMORY;
                 } break;
                 case ENDING:
                 {
-                    InitEndingScreen(); 
+                    InitEndingScreen();
                     currentScreen = ENDING;
                 } break;
                 default: break;
             }
-            
+
             transFadeOut = true;
         }
     }
     else  // Transition fade out logic
     {
         transAlpha -= 0.05f;
-        
+
         if (transAlpha <= 0)
         {
             transAlpha = 0;
@@ -286,98 +286,98 @@ static void UpdateDrawFrame(void)
         if (player.dead)
         {
             framesCounter++;
-            
+
             if (framesCounter > 80)
             {
                 framesCounter = 0;
                 player.dead = false;
                 player.numLifes = 4;
-                
+
                 TransitionToScreen(TITLE);
             }
         }
-        
-        switch(currentScreen) 
+
+        switch(currentScreen)
         {
-            case LOGO: 
+            case LOGO:
             {
                 UpdateLogoScreen();
-                
+
                 if (FinishLogoScreen()) ChangeToScreen(LOGO_RL);
-                
+
             } break;
-            case LOGO_RL: 
+            case LOGO_RL:
             {
                 rlUpdateLogoScreen();
-                
+
                 if (rlFinishLogoScreen()) TransitionToScreen(TITLE);
-                
+
             } break;
-            case TITLE: 
+            case TITLE:
             {
                 UpdateTitleScreen();
-                
+
                 if (FinishTitleScreen() == 1) TransitionToScreen(ATTIC);
 
             } break;
             case ATTIC:
-            { 
+            {
                 UpdateAtticScreen();
-                
+
                 if (FinishAtticScreen() == 1) TransitionToScreen(AISLE01);
 
             } break;
             case AISLE01:
-            { 
+            {
                 UpdateAisle01Screen();
-                
+
                 if (FinishAisle01Screen() == 1) TransitionToScreen(BATHROOM);
                 else if (FinishAisle01Screen() == 2) TransitionToScreen(KITCHEN);
                 else if (FinishAisle01Screen() == 3) TransitionToScreen(LIVINGROOM);
 
             } break;
             case BATHROOM:
-            { 
+            {
                 UpdateBathroomScreen();
-                
+
                 if (FinishBathroomScreen() == 1) TransitionToScreen(AISLE01);
 
             } break;
             case LIVINGROOM:
-            { 
+            {
                 UpdateLivingroomScreen();
-                
+
                 if (FinishLivingroomScreen() == 1) TransitionToScreen(AISLE01);
                 else if (FinishLivingroomScreen() == 2)TransitionToScreen(AISLE02);
 
             } break;
             case AISLE02:
-            { 
+            {
                 UpdateAisle02Screen();
-                
+
                 if (FinishAisle02Screen() == 1) TransitionToScreen(KITCHEN);
 
             } break;
             case KITCHEN:
-            { 
+            {
                 UpdateKitchenScreen();
-                
+
                 if (FinishKitchenScreen() == 1) TransitionToScreen(ARMORY);
                 else if (FinishKitchenScreen() == 2)TransitionToScreen(AISLE02);
 
             } break;
             case ARMORY:
-            { 
+            {
                 UpdateArmoryScreen();
-                
+
                 if (FinishArmoryScreen() == 1) TransitionToScreen(ENDING);
                 else if (FinishArmoryScreen() == 2) TransitionToScreen(KITCHEN);
 
             } break;
-            case ENDING: 
+            case ENDING:
             {
                 UpdateEndingScreen();
-                
+
                 if (FinishEndingScreen()) TransitionToScreen(TITLE);
 
             } break;
@@ -389,17 +389,17 @@ static void UpdateDrawFrame(void)
         // Update transition (fade-in, fade-out)
         UpdateTransition();
     }
-    
+
     UpdateMusicStream(music);
     //----------------------------------------------------------------------------------
-    
+
     // Draw
     //----------------------------------------------------------------------------------
     BeginDrawing();
-    
+
         ClearBackground(RAYWHITE);
-        
-        switch(currentScreen) 
+
+        switch(currentScreen)
         {
             case LOGO: DrawLogoScreen(); break;
             case LOGO_RL: rlDrawLogoScreen(); break;
@@ -414,11 +414,11 @@ static void UpdateDrawFrame(void)
             case ENDING: DrawEndingScreen(); break;
             default: break;
         }
-    
+
         if (onTransition) DrawTransition();
-    
+
         //DrawFPS(10, 10);
-    
+
     EndDrawing();
     //----------------------------------------------------------------------------------
 }

@@ -70,7 +70,7 @@ static bool searching = false;
 void InitKitchenScreen(void)
 {
     ResetPlayer();
-    
+
     // Reset Screen variables
     monsterHover = false;
     monsterCheck = -1;
@@ -78,12 +78,12 @@ void InitKitchenScreen(void)
     msgCounter = 0;
     lettersCounter = 0;
     for (int i = 0; i < 256; i++) msgBuffer[i] = '\0';
-    
+
     framesCounter = 0;
     finishScreen = 0;
-    
+
     background = LoadTexture("resources/textures/background_kitchen.png");
-    
+
     // Initialize doors
     doorLeft.position = (Vector2) { -45, 136 };
     doorLeft.facing = 0;
@@ -91,7 +91,7 @@ void InitKitchenScreen(void)
     doorLeft.frameRec =(Rectangle) {((doors.width/3)*doorLeft.facing), doors.height/2, doors.width/3, doors.height/2};
     doorLeft.bound = (Rectangle) { doorLeft.position.x, doorLeft.position.y, doors.width/3, doors.height/2};
     doorLeft.selected = false;
-    
+
     doorRight.position = (Vector2) { 1090, 148 };
     doorRight.facing = 2;
     doorRight.locked = true;
@@ -110,7 +110,7 @@ void InitKitchenScreen(void)
     closet.selected = false;
     closet.active = false;
     closet.spooky = true;
-    
+
     // Monster init: chair
     chair.position = (Vector2){ 230, 410 };
     chair.texture = LoadTexture("resources/textures/monster_chair_left.png");
@@ -122,7 +122,7 @@ void InitKitchenScreen(void)
     chair.selected = false;
     chair.active = false;
     chair.spooky = true;
-    
+
     // Monster init: window
     window.position = (Vector2){ 715, 88 };
     window.texture = LoadTexture("resources/textures/monster_window.png");
@@ -142,10 +142,10 @@ void UpdateKitchenScreen(void)
     if (player.key)
     {
         // Door: left
-        if ((CheckCollisionPointRec(GetMousePosition(), doorLeft.bound)) || 
-            (CheckCollisionRecs(player.bounds, doorLeft.bound))) doorLeft.selected = true; 
+        if ((CheckCollisionPointRec(GetMousePosition(), doorLeft.bound)) ||
+            (CheckCollisionRecs(player.bounds, doorLeft.bound))) doorLeft.selected = true;
         else doorLeft.selected = false;
-        
+
         if ((doorLeft.selected) && (CheckCollisionRecs(player.bounds, doorLeft.bound)))
         {
             if (((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && CheckCollisionPointRec(GetMousePosition(), doorLeft.bound)) || (IsKeyPressed(KEY_SPACE)))
@@ -159,12 +159,12 @@ void UpdateKitchenScreen(void)
                 else finishScreen = 1;
             }
         }
-        
+
         // Door: right
-        if ((CheckCollisionPointRec(GetMousePosition(), doorRight.bound)) || 
-            (CheckCollisionRecs(player.bounds, doorRight.bound))) doorRight.selected = true; 
+        if ((CheckCollisionPointRec(GetMousePosition(), doorRight.bound)) ||
+            (CheckCollisionRecs(player.bounds, doorRight.bound))) doorRight.selected = true;
         else doorRight.selected = false;
-        
+
         if ((doorRight.selected) && (CheckCollisionRecs(player.bounds, doorRight.bound)))
         {
             if (((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && CheckCollisionPointRec(GetMousePosition(), doorRight.bound)) || (IsKeyPressed(KEY_SPACE)))
@@ -179,77 +179,74 @@ void UpdateKitchenScreen(void)
             }
         }
     }
-        
+
     if (msgState > 2)
     {
-        UpdatePlayer();
-	
-		// Monsters logic
+        UpdatePlayer();        	// Monsters logic
         UpdateMonster(&closet);
         UpdateMonster(&chair);
         UpdateMonster(&window);
-    }
-	
+    }    
     // Check player hover monsters to interact
     if (((CheckCollisionRecs(player.bounds, closet.bounds)) && !closet.active) ||
         ((CheckCollisionRecs(player.bounds, window.bounds)) && !window.active)) monsterHover = true;
     else monsterHover = false;
-    
+
     // Monters logic: closet
     if ((CheckCollisionRecs(player.bounds, closet.bounds)) && !closet.active)
     {
         closet.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), closet.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 1;
         }
     }
     else closet.selected = false;
-    
+
     // Monters logic: chair
     if ((CheckCollisionRecs(player.bounds, chair.bounds)) && !chair.active)
     {
         chair.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), chair.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 2;
         }
     }
     else chair.selected = false;
-    
+
     // Monters logic: window
     if ((CheckCollisionRecs(player.bounds, window.bounds)) && !window.active)
     {
         window.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), window.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 3;
         }
     }
     else window.selected = false;
-    
+
     if (searching)
     {
         framesCounter++;
-        
+
         if (framesCounter > 180)
         {
             if (monsterCheck == 1)
@@ -260,7 +257,7 @@ void UpdateKitchenScreen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 closet.active = true;
                 closet.selected = false;
             }
@@ -272,7 +269,7 @@ void UpdateKitchenScreen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 chair.active = true;
                 chair.selected = false;
             }
@@ -284,19 +281,19 @@ void UpdateKitchenScreen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 window.active = true;
                 window.selected = false;
             }
-            
+
             searching = false;
             framesCounter = 0;
         }
     }
-    
+
     // Text animation
     framesCounter++;
-    
+
     if ((framesCounter%2) == 0) lettersCounter++;
 
     if (msgState == 0)
@@ -309,13 +306,13 @@ void UpdateKitchenScreen(void)
             lettersCounter = 0;
             msgState = 1;
         }
-        
+
         if (IsKeyPressed(KEY_ENTER)) msgState = 1;
     }
     else if (msgState == 1)
     {
         msgCounter++;
-        
+
         if ((IsKeyPressed(KEY_ENTER)) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)))
         {
             msgState = 2;
@@ -325,7 +322,7 @@ void UpdateKitchenScreen(void)
     else if (msgState == 2)
     {
         msgCounter++;
-        
+
         if (msgCounter > 180) msgState = 3;
     }
     else msgCounter++;
@@ -335,31 +332,30 @@ void UpdateKitchenScreen(void)
 void DrawKitchenScreen(void)
 {
     DrawTexture(background, 0, 0, WHITE);
-    
+
     // Draw monsters
-    DrawMonster(closet, 0);
-	DrawMonster(chair, 0);
+    DrawMonster(closet, 0);    DrawMonster(chair, 0);
     DrawMonster(window, 0);
 
     // Draw door
     if (doorRight.selected) DrawTextureRec(doors, doorRight.frameRec, doorRight.position, GREEN);
     else DrawTextureRec(doors, doorRight.frameRec, doorRight.position, WHITE);
-    
+
     if (doorLeft.selected) DrawTextureRec(doors, doorLeft.frameRec, doorLeft.position, GREEN);
     else DrawTextureRec(doors, doorLeft.frameRec, doorLeft.position, WHITE);
-    
+
     // Draw messsages
     if (msgState < 2) DrawRectangle(0, 40, GetScreenWidth(), 200, Fade(LIGHTGRAY, 0.5f));
     else if (msgState == 2) DrawRectangle(0, 80, GetScreenWidth(), 100, Fade(LIGHTGRAY, 0.5f));
 
-    if (msgState == 0) 
+    if (msgState == 0)
     {
         DrawTextEx(font, msgBuffer, (Vector2){ msgPosX, 80 }, font.baseSize, 2, WHITE);
     }
     else if (msgState == 1)
     {
         DrawTextEx(font, message, (Vector2){ msgPosX, 80 }, font.baseSize, 2, WHITE);
-        
+
         if ((msgCounter/30)%2) DrawText("PRESS ENTER or CLICK", GetScreenWidth() - 280, 200, 20, BLACK);
     }
     else if (msgState == 2)
@@ -367,7 +363,7 @@ void DrawKitchenScreen(void)
         if ((msgCounter/30)%2)
         {
             DrawTextEx(font, "CHOOSE WISELY!", (Vector2){ 300, 95 }, font.baseSize*2, 2, WHITE);
-            
+
             DrawRectangleRec(closet.bounds, Fade(RED, 0.6f));
             DrawRectangleRec(window.bounds, Fade(RED, 0.6f));
             DrawRectangleRec(chair.bounds, Fade(RED, 0.6f));
@@ -389,8 +385,7 @@ void DrawKitchenScreen(void)
 void UnloadKitchenScreen(void)
 {
     // TODO: Unload GAMEPLAY screen variables here!
-    UnloadTexture(background);
-	
+    UnloadTexture(background);    
     UnloadMonster(closet);
     UnloadMonster(chair);
     UnloadMonster(window);

@@ -59,10 +59,10 @@ void InitLogoScreen(void)
     finishScreen = 0;
     framesCounter = 0;
     lettersCount = 0;
-    
+
     logoPositionX = GetScreenWidth()/2 - 128;
     logoPositionY = GetScreenHeight()/2 - 128;
-    
+
     topSideRecWidth = LOGO_RECS_SIDE;
     leftSideRecHeight = LOGO_RECS_SIDE;
     bottomSideRecWidth = LOGO_RECS_SIDE;
@@ -84,7 +84,7 @@ void UpdateLogoScreen(void)
         {
             state = 1;
             framesCounter = 0;      // Reset counter... will be used later...
-            
+
             PlayMusicStream(music); // Start playing music... ;)
         }
     }
@@ -106,7 +106,7 @@ void UpdateLogoScreen(void)
     {
         framesCounter++;
 
-        if (lettersCount < 10) 
+        if (lettersCount < 10)
         {
             if (framesCounter/15)   // Every 12 frames, one more letter!
             {
@@ -161,7 +161,7 @@ void DrawLogoScreen(void)
         DrawRectangle(GetScreenWidth()/2 - 112, GetScreenHeight()/2 - 112, 224, 224, Fade(RAYWHITE, alpha));
 
         DrawText(TextSubtext("raylib", 0, lettersCount), GetScreenWidth()/2 - 44, GetScreenHeight()/2 + 48, 50, Fade(BLACK, alpha));
-        
+
         if (framesCounter > 20) DrawText("powered by", logoPositionX, logoPositionY - 27, 20, Fade(DARKGRAY, alpha));
     }
 }

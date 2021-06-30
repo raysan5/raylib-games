@@ -99,7 +99,7 @@ int main(void)
 #else
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -112,7 +112,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadGame();         // Unload loaded data (textures, sounds, models...)
-    
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -190,12 +190,12 @@ void UpdateGame(void)
                     if (!smooth)
                     {
                         alpha += 0.02f;
-                        
+
                         if (alpha >= 1.0f) smooth = true;
                     }
-                    
+
                     if (smooth) alpha -= 0.02f;
-                    
+
                     if (enemiesKill == activeEnemies)
                     {
                         enemiesKill = 0;
@@ -204,7 +204,7 @@ void UpdateGame(void)
                         {
                             if (!enemy[i].active) enemy[i].active = true;
                         }
-                        
+
                         activeEnemies = SECOND_WAVE;
                         wave = SECOND;
                         smooth = false;
@@ -216,12 +216,12 @@ void UpdateGame(void)
                     if (!smooth)
                     {
                         alpha += 0.02f;
-                        
+
                         if (alpha >= 1.0f) smooth = true;
                     }
-                    
+
                     if (smooth) alpha -= 0.02f;
-                    
+
                     if (enemiesKill == activeEnemies)
                     {
                         enemiesKill = 0;
@@ -230,7 +230,7 @@ void UpdateGame(void)
                         {
                             if (!enemy[i].active) enemy[i].active = true;
                         }
-                        
+
                         activeEnemies = THIRD_WAVE;
                         wave = THIRD;
                         smooth = false;
@@ -242,14 +242,14 @@ void UpdateGame(void)
                     if (!smooth)
                     {
                         alpha += 0.02f;
-                        
+
                         if (alpha >= 1.0f) smooth = true;
                     }
-                    
+
                     if (smooth) alpha -= 0.02f;
-                    
+
                     if (enemiesKill == activeEnemies) victory = true;
-                        
+
                 } break;
                 default: break;
             }
@@ -326,7 +326,7 @@ void UpdateGame(void)
                                 enemiesKill++;
                                 score += 100;
                             }
-                            
+
                             if (shoot[i].rec.x + shoot[i].rec.width >= screenWidth)
                             {
                                 shoot[i].active = false;
@@ -354,7 +354,7 @@ void DrawGame(void)
     BeginDrawing();
 
         ClearBackground(RAYWHITE);
-        
+
         if (!gameOver)
         {
             DrawRectangleRec(player.rec, player.color);
@@ -362,7 +362,7 @@ void DrawGame(void)
             if (wave == FIRST) DrawText("FIRST WAVE", screenWidth/2 - MeasureText("FIRST WAVE", 40)/2, screenHeight/2 - 40, 40, Fade(BLACK, alpha));
             else if (wave == SECOND) DrawText("SECOND WAVE", screenWidth/2 - MeasureText("SECOND WAVE", 40)/2, screenHeight/2 - 40, 40, Fade(BLACK, alpha));
             else if (wave == THIRD) DrawText("THIRD WAVE", screenWidth/2 - MeasureText("THIRD WAVE", 40)/2, screenHeight/2 - 40, 40, Fade(BLACK, alpha));
-            
+
             for (int i = 0; i < activeEnemies; i++)
             {
                 if (enemy[i].active) DrawRectangleRec(enemy[i].rec, enemy[i].color);
@@ -372,11 +372,11 @@ void DrawGame(void)
             {
                 if (shoot[i].active) DrawRectangleRec(shoot[i].rec, shoot[i].color);
             }
-            
+
             DrawText(TextFormat("%04i", score), 20, 20, 40, GRAY);
-        
+
             if (victory) DrawText("YOU WIN", screenWidth/2 - MeasureText("YOU WIN", 40)/2, screenHeight/2 - 40, 40, BLACK);
-        
+
             if (pause) DrawText("GAME PAUSED", screenWidth/2 - MeasureText("GAME PAUSED", 40)/2, screenHeight/2 - 40, 40, GRAY);
         }
         else DrawText("PRESS [ENTER] TO PLAY AGAIN", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] TO PLAY AGAIN", 20)/2, GetScreenHeight()/2 - 50, 20, GRAY);

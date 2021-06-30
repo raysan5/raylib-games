@@ -70,7 +70,7 @@ static bool searching = false;
 void InitArmoryScreen(void)
 {
     ResetPlayer();
-    
+
     // Reset Screen variables
     monsterHover = false;
     monsterCheck = -1;
@@ -78,12 +78,12 @@ void InitArmoryScreen(void)
     msgCounter = 0;
     lettersCounter = 0;
     for (int i = 0; i < 256; i++) msgBuffer[i] = '\0';
-    
+
     framesCounter = 0;
     finishScreen = 0;
-    
+
     background = LoadTexture("resources/textures/background_armory.png");
-    
+
     // Initialize doors
     doorLeft.position = (Vector2) { -50, 145 };
     doorLeft.facing = 0;
@@ -91,7 +91,7 @@ void InitArmoryScreen(void)
     doorLeft.frameRec =(Rectangle) {((doors.width/3)*doorLeft.facing), doors.height/2, doors.width/3, doors.height/2};
     doorLeft.bound = (Rectangle) { doorLeft.position.x, doorLeft.position.y, doors.width/3, doors.height/2};
     doorLeft.selected = false;
-    
+
     doorRight.position = (Vector2) { 1074, 140 };
     doorRight.facing = 2;
     doorRight.locked = true;
@@ -110,7 +110,7 @@ void InitArmoryScreen(void)
     blazon01.selected = false;
     blazon01.active = false;
     blazon01.spooky = true;
-    
+
     // Monster init: blazon02
     blazon02.position = (Vector2){ 550, 260 };
     blazon02.texture = LoadTexture("resources/textures/monster_blazon02.png");
@@ -122,7 +122,7 @@ void InitArmoryScreen(void)
     blazon02.selected = false;
     blazon02.active = false;
     blazon02.spooky = true;
-    
+
     // Monster init: blazon03
     blazon03.position = (Vector2){ 800, 260 };
     blazon03.texture = LoadTexture("resources/textures/monster_blazon03.png");
@@ -142,10 +142,10 @@ void UpdateArmoryScreen(void)
     if (player.key)
     {
         // Door: left
-        if ((CheckCollisionPointRec(GetMousePosition(), doorLeft.bound)) || 
-            (CheckCollisionRecs(player.bounds, doorLeft.bound))) doorLeft.selected = true; 
+        if ((CheckCollisionPointRec(GetMousePosition(), doorLeft.bound)) ||
+            (CheckCollisionRecs(player.bounds, doorLeft.bound))) doorLeft.selected = true;
         else doorLeft.selected = false;
-        
+
         if ((doorLeft.selected) && (CheckCollisionRecs(player.bounds, doorLeft.bound)))
         {
             if (((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && CheckCollisionPointRec(GetMousePosition(), doorLeft.bound)) || (IsKeyPressed(KEY_SPACE)))
@@ -159,12 +159,12 @@ void UpdateArmoryScreen(void)
                 else finishScreen = 1;
             }
         }
-        
+
         // Door: right
-        if ((CheckCollisionPointRec(GetMousePosition(), doorRight.bound)) || 
-            (CheckCollisionRecs(player.bounds, doorRight.bound))) doorRight.selected = true; 
+        if ((CheckCollisionPointRec(GetMousePosition(), doorRight.bound)) ||
+            (CheckCollisionRecs(player.bounds, doorRight.bound))) doorRight.selected = true;
         else doorRight.selected = false;
-        
+
         if ((doorRight.selected) && (CheckCollisionRecs(player.bounds, doorRight.bound)))
         {
             if (((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && CheckCollisionPointRec(GetMousePosition(), doorRight.bound)) || (IsKeyPressed(KEY_SPACE)))
@@ -179,78 +179,75 @@ void UpdateArmoryScreen(void)
             }
         }
     }
-        
+
     if (msgState > 2)
     {
-        UpdatePlayer();
-	
-		// Monsters logic
+        UpdatePlayer();        	// Monsters logic
         UpdateMonster(&blazon01);
         UpdateMonster(&blazon02);
         UpdateMonster(&blazon03);
-    }
-	
+    }    
     // Check player hover monsters to interact
     if (((CheckCollisionRecs(player.bounds, blazon01.bounds)) && !blazon01.active) ||
         ((CheckCollisionRecs(player.bounds, blazon02.bounds)) && !blazon02.active) ||
         ((CheckCollisionRecs(player.bounds, blazon03.bounds)) && !blazon03.active)) monsterHover = true;
     else monsterHover = false;
-    
+
     // Monters logic: blazon01
     if ((CheckCollisionRecs(player.bounds, blazon01.bounds)) && !blazon01.active)
     {
         blazon01.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), blazon01.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 1;
         }
     }
     else blazon01.selected = false;
-    
+
     // Monters logic: blazon02
     if ((CheckCollisionRecs(player.bounds, blazon02.bounds)) && !blazon02.active)
     {
         blazon02.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), blazon02.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 2;
         }
     }
     else blazon02.selected = false;
-    
+
     // Monters logic: blazon03
     if ((CheckCollisionRecs(player.bounds, blazon03.bounds)) && !blazon03.active)
     {
         blazon03.selected = true;
-        
-        if ((IsKeyPressed(KEY_SPACE)) || 
+
+        if ((IsKeyPressed(KEY_SPACE)) ||
             ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) && (CheckCollisionPointRec(GetMousePosition(), blazon03.bounds))))
         {
             SearchKeyPlayer();
             searching = true;
             framesCounter = 0;
-            
+
             monsterCheck = 3;
         }
     }
     else blazon03.selected = false;
-    
+
     if (searching)
     {
         framesCounter++;
-        
+
         if (framesCounter > 180)
         {
             if (monsterCheck == 1)
@@ -261,7 +258,7 @@ void UpdateArmoryScreen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 blazon01.active = true;
                 blazon01.selected = false;
             }
@@ -273,7 +270,7 @@ void UpdateArmoryScreen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 blazon02.active = true;
                 blazon02.selected = false;
             }
@@ -285,19 +282,19 @@ void UpdateArmoryScreen(void)
                     PlaySound(sndScream);
                 }
                 else FindKeyPlayer();
-                
+
                 blazon03.active = true;
                 blazon03.selected = false;
             }
-  
+
             searching = false;
             framesCounter = 0;
         }
     }
-    
+
     // Text animation
     framesCounter++;
-    
+
     if ((framesCounter%2) == 0) lettersCounter++;
 
     if (msgState == 0)
@@ -310,13 +307,13 @@ void UpdateArmoryScreen(void)
             lettersCounter = 0;
             msgState = 1;
         }
-        
+
         if (IsKeyPressed(KEY_ENTER)) msgState = 1;
     }
     else if (msgState == 1)
     {
         msgCounter++;
-        
+
         if ((IsKeyPressed(KEY_ENTER)) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)))
         {
             msgState = 2;
@@ -326,7 +323,7 @@ void UpdateArmoryScreen(void)
     else if (msgState == 2)
     {
         msgCounter++;
-        
+
         if (msgCounter > 180) msgState = 3;
     }
     else msgCounter++;
@@ -336,19 +333,18 @@ void UpdateArmoryScreen(void)
 void DrawArmoryScreen(void)
 {
     DrawTexture(background, 0, 0, WHITE);
-    
-    // Draw monsters
-	DrawMonster(blazon01, 0);
+
+    // Draw monsters    DrawMonster(blazon01, 0);
     DrawMonster(blazon02, 0);
     DrawMonster(blazon03, 0);
-    
+
     // Draw door
     if (doorLeft.selected) DrawTextureRec(doors, doorLeft.frameRec, doorLeft.position, GREEN);
     else DrawTextureRec(doors, doorLeft.frameRec, doorLeft.position, WHITE);
-    
+
     if (doorRight.selected) DrawTextureRec(doors, doorRight.frameRec, doorRight.position, GREEN);
     else DrawTextureRec(doors, doorRight.frameRec, doorRight.position, WHITE);
-    
+
     // Draw messsages
     if (msgState < 2) DrawRectangle(0, 40, GetScreenWidth(), 200, Fade(LIGHTGRAY, 0.5f));
     else if (msgState == 2) DrawRectangle(0, 80, GetScreenWidth(), 100, Fade(LIGHTGRAY, 0.5f));
@@ -360,7 +356,7 @@ void DrawArmoryScreen(void)
     else if (msgState == 1)
     {
         DrawTextEx(font, message, (Vector2){ msgPosX, 80 }, font.baseSize, 2, WHITE);
-        
+
         if ((msgCounter/30)%2) DrawText("PRESS ENTER or CLICK", GetScreenWidth() - 280, 200, 20, BLACK);
     }
     else if (msgState == 2)
@@ -368,7 +364,7 @@ void DrawArmoryScreen(void)
         if ((msgCounter/30)%2)
         {
             DrawTextEx(font, "CHOOSE WISELY!", (Vector2){ 300, 95 }, font.baseSize*2, 2, WHITE);
-            
+
             DrawRectangleRec(blazon01.bounds, Fade(RED, 0.6f));
             DrawRectangleRec(blazon02.bounds, Fade(RED, 0.6f));
             DrawRectangleRec(blazon03.bounds, Fade(RED, 0.6f));
@@ -390,8 +386,7 @@ void DrawArmoryScreen(void)
 void UnloadArmoryScreen(void)
 {
     // TODO: Unload GAMEPLAY screen variables here!
-    UnloadTexture(background);
-	
+    UnloadTexture(background);    
     UnloadMonster(blazon01);
     UnloadMonster(blazon02);
     UnloadMonster(blazon03);

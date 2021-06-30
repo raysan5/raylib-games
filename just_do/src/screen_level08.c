@@ -54,13 +54,13 @@ void InitLevel08Screen(void)
     // TODO: Initialize Level08 screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     movingBox = (Rectangle){ 20, GetScreenHeight()/2 - 20, 40, 40 };
-    
+
     leftColumnRec = (Rectangle){ 240, 0, 100, GetScreenHeight() };
     middleColumnRec = (Rectangle){ GetScreenWidth()/2 - 50, 0, 100, GetScreenHeight() };
     rightColumnRec = (Rectangle){ 920, 0, 100, GetScreenHeight() };
-    
+
     leftColumnActive = true;
     middleColumnActive = false;
     rightColumnActive = true;
@@ -71,13 +71,13 @@ void UpdateLevel08Screen(void)
 {
     // Update Level08 screen variables here!
     framesCounter++;
-    
+
     if (!done)
     {
         movingBox.x += moveSpeed;
-        
+
         if (movingBox.x <= 0) moveSpeed *= -1;
-            
+
         if ((leftColumnActive && (CheckCollisionRecs(leftColumnRec, movingBox))) ||
             (middleColumnActive && (CheckCollisionRecs(middleColumnRec, movingBox))) ||
             (rightColumnActive && (CheckCollisionRecs(rightColumnRec, movingBox)))) moveSpeed *= -1;
@@ -100,25 +100,25 @@ void UpdateLevel08Screen(void)
                 middleColumnActive = true;
             }
         }
-    
+
         if (movingBox.x >= 1100)
         {
             done = true;
             PlaySound(levelWin);
         }
     }
-        
+
     if (done && !levelFinished)
     {
         levelTimeSec = framesCounter/60;
         levelFinished = true;
         framesCounter = 0;
     }
-    
+
     if (levelFinished)
     {
         framesCounter++;
-        
+
         if ((framesCounter > 90) && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) finishScreen = true;
     }
 }
@@ -130,7 +130,7 @@ void DrawLevel08Screen(void)
     DrawRectangle(1100, GetScreenHeight()/2 - 20, 40, 40, GRAY);
 
     DrawRectangleRec(movingBox, LIGHTGRAY);
-    
+
     if (leftColumnActive) DrawRectangleRec(leftColumnRec, GRAY);
     if (middleColumnActive) DrawRectangleRec(middleColumnRec, GRAY);
     if (rightColumnActive) DrawRectangleRec(rightColumnRec, GRAY);

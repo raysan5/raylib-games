@@ -66,17 +66,17 @@ static Music music;
 // Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
 static void ChangeToScreen(int screen);     // Change to screen, no transition effect
-                                            
+
 static void TransitionToScreen(int screen); // Request transition to next screen
 static void UpdateTransition(void);         // Update transition effect
 static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
-                                            
+
 static void UpdateDrawFrame(void);          // Update and draw one frame
 
 //----------------------------------------------------------------------------------
 // Main entry point
 //----------------------------------------------------------------------------------
-int main(void) 
+int main(void)
 {
     // Initialization (Note windowTitle is unused on Android)
     //---------------------------------------------------------
@@ -87,7 +87,7 @@ int main(void)
 
     atlas01 = LoadTexture("resources/graphics/atlas01.png");
     atlas02 = LoadTexture("resources/graphics/atlas02.png");
-    
+
 #if defined(PLATFORM_WEB) || defined(PLATFORM_RPI) || defined(PLATFORM_ANDROID)
     colorBlend = LoadShader(0, "resources/shaders/glsl100/blend_color.fs");
 #else
@@ -95,7 +95,7 @@ int main(void)
 #endif
 
     InitAudioDevice();
-    
+
     // Load sounds data
     fxJump = LoadSound("resources/audio/jump.ogg");
     fxDash = LoadSound("resources/audio/dash.ogg");
@@ -105,7 +105,7 @@ int main(void)
     fxDieSnake = LoadSound("resources/audio/snake_die.ogg");
     fxDieDingo = LoadSound("resources/audio/dingo_die.ogg");
     fxDieOwl = LoadSound("resources/audio/owl_die.ogg");
-    
+
     music = LoadMusicStream("resources/audio/jngl.xm");
     PlayMusicStream(music);
     SetMusicVolume(music, 2.0f);
@@ -120,7 +120,7 @@ int main(void)
 #else
     SetTargetFPS(60);   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose()) UpdateDrawFrame();
 #endif
@@ -131,13 +131,13 @@ int main(void)
     UnloadTitleScreen();
     UnloadGameplayScreen();
     UnloadLogoScreen();
-    
+
     UnloadTexture(atlas01);
     UnloadTexture(atlas02);
     UnloadFont(font);
-    
+
     UnloadShader(colorBlend);   // Unload color overlay blending shader
-    
+
     UnloadSound(fxJump);
     UnloadSound(fxDash);
     UnloadSound(fxEatLeaves);
@@ -146,9 +146,9 @@ int main(void)
     UnloadSound(fxDieSnake);
     UnloadSound(fxDieDingo);
     UnloadSound(fxDieOwl);
-    
+
     UnloadMusicStream(music);
-    
+
     CloseAudioDevice();         // Close audio device
 
     CloseWindow();              // Close window and OpenGL context
@@ -170,7 +170,7 @@ static void ChangeToScreen(int screen)
         case GAMEPLAY: UnloadGameplayScreen(); break;
         default: break;
     }
-    
+
     switch (screen)
     {
         case LOGO: rlInitLogoScreen(); break;
@@ -178,7 +178,7 @@ static void ChangeToScreen(int screen)
         case GAMEPLAY: InitGameplayScreen(); break;
         default: break;
     }
-    
+
     currentScreen = screen;
 }
 
@@ -256,7 +256,7 @@ void UpdateDrawFrame(void)
                 else if (FinishTitleScreen() == 2)
                 {
                     UnloadTitleScreen();
-                    
+
                     InitGameplayScreen();
                     TransitionToScreen(GAMEPLAY);
                 }
@@ -268,9 +268,9 @@ void UpdateDrawFrame(void)
                 if (FinishGameplayScreen())
                 {
                     UnloadGameplayScreen();
-                    
+
                     InitEndingScreen();
-                    TransitionToScreen(ENDING); 
+                    TransitionToScreen(ENDING);
                 }
             } break;
             case ENDING:
@@ -280,16 +280,16 @@ void UpdateDrawFrame(void)
                 if (FinishEndingScreen())
                 {
                     UnloadEndingScreen();
-                    
+
                     InitGameplayScreen();
-                    TransitionToScreen(GAMEPLAY); 
+                    TransitionToScreen(GAMEPLAY);
                 }
             } break;
             default: break;
         }
     }
     else UpdateTransition();
-    
+
     UpdateMusicStream(music);
     //----------------------------------------------------------------------------------
 
@@ -298,7 +298,7 @@ void UpdateDrawFrame(void)
     BeginDrawing();
 
         ClearBackground(WHITE);
-        
+
         switch (currentScreen)
         {
             case LOGO: DrawLogoScreen(); break;

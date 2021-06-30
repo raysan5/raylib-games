@@ -51,10 +51,10 @@ void InitLevel01Screen(void)
     // Initialize Level01 screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     outerLeftRec = (Rectangle){ 0, 0, GetScreenWidth()/2, GetScreenHeight() };
     outerRightRec = (Rectangle){ GetScreenWidth()/2, 0, GetScreenWidth()/2, GetScreenHeight() };
-    
+
     innerLeftRec = (Rectangle){ GetScreenWidth()/4 - 200, GetScreenHeight()/2 - 200, 400, 400};
     innerRightRec = (Rectangle){ GetScreenWidth()/2 + GetScreenWidth()/4 - 200, GetScreenHeight()/2 - 200, 400, 400};
 }
@@ -64,7 +64,7 @@ void UpdateLevel01Screen(void)
 {
     // Update Level01 screen
     framesCounter++;
-    
+
     if (!done)
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -104,8 +104,8 @@ void UpdateLevel01Screen(void)
                 innerRightRec.height += 40;
             }
         }
-    
-    
+
+
         if (((innerRightRec.width == 0) && (innerLeftRec.height >= GetScreenHeight())) ||
             ((innerLeftRec.width == 0) && (innerRightRec.height >= GetScreenHeight())))
             {
@@ -113,18 +113,18 @@ void UpdateLevel01Screen(void)
                 PlaySound(levelWin);
             }
     }
-    
+
     if (done && !levelFinished)
     {
         levelTimeSec = framesCounter/60;
         levelFinished = true;
         framesCounter = 0;
     }
-    
+
     if (levelFinished)
     {
         framesCounter++;
-        
+
         if ((framesCounter > 90) && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) finishScreen = true;
     }
 }
@@ -135,12 +135,12 @@ void DrawLevel01Screen(void)
     // Draw Level01 screen
     if (!levelFinished) DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), LIGHTGRAY);
     else DrawRectangle(60, 60, GetScreenWidth() - 120, GetScreenHeight() - 120, LIGHTGRAY);
-    
+
     DrawRectangleRec(outerLeftRec, GRAY);
     DrawRectangleRec(innerLeftRec, RAYWHITE);
     DrawRectangleRec(outerRightRec, RAYWHITE);
     DrawRectangleRec(innerRightRec, GRAY);
-    
+
     if (levelFinished)
     {
         DrawRectangleBordersRec((Rectangle){0, 0, GetScreenWidth(), GetScreenHeight()}, 0, 0, 60, Fade(LIGHTGRAY, 0.6f));

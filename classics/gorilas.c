@@ -130,7 +130,7 @@ int main(void)
 
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -144,7 +144,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadGame();         // Unload loaded data (textures, sounds, models...)
-    
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -165,7 +165,7 @@ void InitGame(void)
 
     InitBuildings();
     InitPlayers();
-    
+
     // Init explosions
     for (int i = 0; i < MAX_EXPLOSIONS; i++)
     {
@@ -201,7 +201,7 @@ void UpdateGame(void)
                             if (!player[i].isLeftTeam) rightTeamAlive = true;
                         }
                     }
-                    
+
                     if (leftTeamAlive && rightTeamAlive)
                     {
                         ballOnAir = false;
@@ -214,7 +214,7 @@ void UpdateGame(void)
                     else
                     {
                         gameOver = true;
-                        
+
                         // if (leftTeamAlive) left team wins
                         // if (rightTeamAlive) right team wins
                     }
@@ -249,7 +249,7 @@ void DrawGame(void)
             {
                 if (explosion[i].active) DrawCircle(explosion[i].position.x, explosion[i].position.y, explosion[i].radius, RAYWHITE);
             }
-            
+
             // Draw players
             for (int i = 0; i < MAX_PLAYERS; i++)
             {
@@ -289,7 +289,7 @@ void DrawGame(void)
                     DrawText(TextFormat("Aiming Power %i", player[playerTurn].aimingPower), screenWidth*3/4, 170, 20, DARKBLUE);
                 }
                 */
-                
+
                 // Draw aim
                 if (player[playerTurn].isLeftTeam)
                 {

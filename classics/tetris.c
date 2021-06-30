@@ -118,7 +118,7 @@ int main(void)
 #else
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -131,7 +131,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadGame();         // Unload loaded data (textures, sounds, models...)
-    
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -227,7 +227,7 @@ void UpdateGame(void)
                         // We make sure the piece is going to fall this frame
                         gravityMovementCounter += gravitySpeed;
                     }
-                    
+
                     if (gravityMovementCounter >= gravitySpeed)
                     {
                         // Basic falling movement
@@ -241,14 +241,14 @@ void UpdateGame(void)
 
                         gravityMovementCounter = 0;
                     }
-                    
+
                     // Move laterally at player's will
                     if (lateralMovementCounter >= LATERAL_SPEED)
                     {
                         // Update the lateral movement and if success, reset the lateral counter
                         if (!ResolveLateralMovement()) lateralMovementCounter = 0;
                     }
-                    
+
                     // Turn the piece at player's will
                     if (turnMovementCounter >= TURNING_SPEED)
                     {
@@ -282,7 +282,7 @@ void UpdateGame(void)
                     DeleteCompleteLines();
                     fadeLineCounter = 0;
                     lineToDelete = false;
-                    
+
                     lines++;
                 }
             }
@@ -354,13 +354,13 @@ void DrawGame(void)
                 offset.x = controller;
                 offset.y += SQUARE_SIZE;
             }
-            
+
             // Draw incoming piece (hardcoded)
             offset.x = 500;
             offset.y = 45;
 
             int controler = offset.x;
-            
+
             for (int j = 0; j < 4; j++)
             {
                 for (int i = 0; i < 4; i++)
@@ -383,10 +383,10 @@ void DrawGame(void)
                 offset.x = controler;
                 offset.y += SQUARE_SIZE;
             }
-            
+
             DrawText("INCOMING:", offset.x, offset.y - 100, 10, GRAY);
             DrawText(TextFormat("LINES:      %04i", lines), offset.x, offset.y + 20, 10, GRAY);
-            
+
             if (pause) DrawText("GAME PAUSED", screenWidth/2 - MeasureText("GAME PAUSED", 40)/2, screenHeight/2 - 40, 40, GRAY);
         }
         else DrawText("PRESS [ENTER] TO PLAY AGAIN", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] TO PLAY AGAIN", 20)/2, GetScreenHeight()/2 - 50, 20, GRAY);
@@ -421,7 +421,7 @@ static bool Createpiece()
         GetRandompiece();
         beginPlay = false;
     }
-    
+
     // We assign the incoming piece to the actual piece
     for (int i = 0; i < 4; i++)
     {
@@ -430,7 +430,7 @@ static bool Createpiece()
             piece[i][j] = incomingPiece[i][j];
         }
     }
-    
+
     // We assign a random piece to the incoming one
     GetRandompiece();
 
@@ -501,7 +501,7 @@ static void ResolveFallingMovement(bool *detection, bool *pieceActive)
                 }
             }
         }
-        
+
         piecePositionY++;
     }
 }
@@ -525,7 +525,7 @@ static bool ResolveLateralMovement()
                 }
             }
         }
-        
+
         // If able, move left
         if (!collision)
         {
@@ -563,7 +563,7 @@ static bool ResolveLateralMovement()
                 }
             }
         }
-        
+
         // If able move right
         if (!collision)
         {
@@ -708,7 +708,7 @@ static bool ResolveTurnMovement()
                 }
             }
         }
-        
+
         return true;
     }
 
@@ -769,7 +769,7 @@ static void DeleteCompleteLines()
             {
                 grid[i][j] = EMPTY;
             }
-            
+
             for (int j2 = j-1; j2 >= 0; j2--)
             {
                 for (int i2 = 1; i2 < GRID_HORIZONTAL_SIZE - 1; i2++)

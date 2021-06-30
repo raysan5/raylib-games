@@ -200,14 +200,14 @@ void UpdateGame(void)
             if (CheckCollisionCircles(player.position, player.radius, enemy.position, enemy.radius) && !home.save)
             {
                 gameOver = true;
-                
+
                 if (hiScore < score) hiScore = score;
             }
 
             if (CheckCollisionCircleRec(player.position, player.radius, home.rec))
             {
                follow = false;
-               
+
                if (!points.active)
                {
                     score += points.value;
@@ -216,7 +216,7 @@ void UpdateGame(void)
                     enemy.speed.y += 0.5;
                     points.position = (Vector2){GetRandomValue(points.radius, screenWidth - points.radius), GetRandomValue(points.radius, screenHeight - points.radius)};
                }
-               
+
                home.save = true;
             }
             else home.save = false;
@@ -236,9 +236,9 @@ void UpdateGame(void)
 void DrawGame(void)
 {
     BeginDrawing();
-    
+
         ClearBackground(RAYWHITE);
-    
+
         if (!gameOver)
         {
             if (follow)
@@ -246,12 +246,12 @@ void DrawGame(void)
                 DrawRectangle(0, 0, screenWidth, screenHeight, RED);
                 DrawRectangle(10, 10, screenWidth - 20, screenHeight - 20, RAYWHITE);
             }
-            
+
             DrawRectangleLines(home.rec.x, home.rec.y, home.rec.width, home.rec.height, BLUE);
 
             DrawCircleLines(enemy.position.x, enemy.position.y, enemy.radiusBounds, RED);
             DrawCircleV(enemy.position, enemy.radius, MAROON);
-            
+
             DrawCircleV(player.position, player.radius, GRAY);
             if (points.active) DrawCircleV(points.position, points.radius, GOLD);
 

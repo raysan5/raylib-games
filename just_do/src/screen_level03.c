@@ -52,7 +52,7 @@ void InitLevel03Screen(void)
     // Initialize Level03 screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    
+
     holeRec = (Rectangle){ GetScreenWidth()/2 - 50, GetScreenHeight()/2 - 50, 100, 100 };
     pieceRec = (Rectangle){ 200, 400, 100, 100 };
 }
@@ -62,43 +62,43 @@ void UpdateLevel03Screen(void)
 {
     // Update Level03 screen variables here!
     framesCounter++;
-    
+
     Vector2 mousePos = GetMousePosition();
-        
+
     if (!done)
     {
         if (CheckCollisionPointRec(mousePos, holeRec)) showPiece = true;
         else showPiece = false;
-            
+
         if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
         {
             if (CheckCollisionPointRec(mousePos, pieceRec))
             {
                 pieceSelected = true;
-                
+
                 pieceRec.x = ((int)mousePos.x - 50);
                 pieceRec.y = ((int)mousePos.y - 50);
             }
         }
-    
+
         if ((pieceRec.x == holeRec.x) && !(CheckCollisionPointRec(mousePos, holeRec)))
         {
             done = true;
             PlaySound(levelWin);
         }
     }
-    
+
     if (done && !levelFinished)
     {
         levelTimeSec = framesCounter/60;
         levelFinished = true;
         framesCounter = 0;
     }
-    
+
     if (levelFinished)
     {
         framesCounter++;
-        
+
         if ((framesCounter > 90) && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) finishScreen = true;
     }
 }
@@ -109,9 +109,9 @@ void DrawLevel03Screen(void)
     // Draw Level03 screen
     DrawRectangleRec(holeRec, GRAY);
     DrawRectangleRec(pieceRec, RAYWHITE);
-    
+
     if (showPiece) DrawRectangleLines(pieceRec.x, pieceRec.y, pieceRec.width, pieceRec.height, Fade(LIGHTGRAY, 0.8f));
-    
+
     if (levelFinished)
     {
         DrawRectangleBordersRec((Rectangle){0, 0, GetScreenWidth(), GetScreenHeight()}, 0, 0, 60, Fade(LIGHTGRAY, 0.6f));
