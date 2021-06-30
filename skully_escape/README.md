@@ -8,18 +8,13 @@ Ah! Home, sweet home! Time for some automatic cleaning... if the worst enemy of 
 
 ### Features
 
- - Two players: Cat and Roomba
+ - TODO.
 
 ### Controls
 
-Keyboard:
-
- - A-W-S-D -> Move the Roomba and clean the room.
- - SPACE -> Play Roomba sound.
- 
 Mouse:
- - Mouse move -> Control Cat movement, click on destination to go there.
- - Mouse right button -> Play Cat sound.
+ - Mouse move -> Select place to move character.
+ - Mouse right button -> Execute action on the selected element.
 
 
 ### License

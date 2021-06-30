@@ -26,10 +26,9 @@
 #include "raylib.h"
 #include "screens.h"
 
-#include <stdio.h>
-
-#include <stdlib.h>                 // Required for: malloc(), free()
-#include <math.h>                   // Required for: sqrtf(), asinf()
+#include <stdio.h>      // Required for:
+#include <stdlib.h>     // Required for: malloc(), free()
+#include <math.h>       // Required for: sqrtf(), asinf()
 
 #define MAX_SAMPLES_SPEED       7   // Max speed for samples movement
 #define MIN_SAMPLES_SPEED       3   // Min speed for samples movement
@@ -59,47 +58,42 @@ typedef struct Sample {
 } Sample;
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-
-// Gameplay screen global variables
-static int framesCounter;
-static int finishScreen;
-static bool pause;
+static int framesCounter = 0;
+static int finishScreen = 0;
+static bool pause = false;
 
 // Player variables
-static Player player;
-static Rectangle playerArea;    // Define player movement area (and sample collection limits)
-
-static float warpCounter;       // Time warp counter
-static float synchro;           // Calculates collected samples relation [0..1]
-
-static int combo;
-static int maxCombo;
-
-static Rectangle waveRec;
+static Player player = { 0 };
+static Rectangle playerArea = { 0 };    // Define player movement area (and sample collection limits)
+static float warpCounter = 0.0f;        // Time warp counter
+static float synchro = 0.0f;            // Calculates collected samples relation [0..1]
+static int combo = 0;
+static int maxCombo = 0;
+static Rectangle waveRec = { 0 };
 
 // Samples variables
-static Sample *samples;         // Game samples
-static int totalSamples;        // Total game samples (proportional to waveData num samples)
-static int collectedSamples;    // Samples collected by player
-static int currentSample;       // Last sample to go through player collect area
-static float samplesSpeed;      // All samples move at the same speed
-static float waveTime;          // Total sample time in ms
+static Sample *samples = NULL;          // Game samples
+static int totalSamples = 0;            // Total game samples (proportional to waveData num samples)
+static int collectedSamples = 0;        // Samples collected by player
+static int currentSample = 0;           // Last sample to go through player collect area
+static float samplesSpeed = 0.0f;       // All samples move at the same speed
+static float waveTime = 0.0f;           // Total sample time in ms
 
 // Resources variables
-static Texture2D texBackground;
-static Texture2D texPlayer;
-static Texture2D texSampleSmall;
-static Texture2D texSampleMid;
-static Texture2D texSampleBig;
+static Texture2D texBackground = { 0 };
+static Texture2D texPlayer = { 0 };
+static Texture2D texSampleSmall = { 0 };
+static Texture2D texSampleMid = { 0 };
+static Texture2D texSampleBig = { 0 };
 
-static RenderTexture2D waveTarget;
+static RenderTexture2D waveTarget = { 0 };
 
-static Sound fxSampleOn;        // Collected sample sound
-static Sound fxSampleOff;       // Miss sample sound
-static Sound fxPause;           // Pause sound
-// Debug variables
+static Sound fxSampleOn = { 0 };        // Collected sample sound
+static Sound fxSampleOff = { 0 };       // Miss sample sound
+static Sound fxPause = { 0 };           // Pause sound
+
 
 //------------------------------------------------------------------------------------
 // Module Functions Declaration (local)

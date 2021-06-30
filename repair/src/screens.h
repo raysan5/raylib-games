@@ -51,11 +51,8 @@ typedef struct {
 } Character;
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition
+// Global Variables Declaration (shared by several modules)
 //----------------------------------------------------------------------------------
-extern const unsigned int headColors[6];
-extern const unsigned int hairColors[10];
-
 extern GameScreen currentScreen;
 extern Font font;
 extern Music music;
@@ -63,21 +60,29 @@ extern Sound fxCoin;
 extern Texture2D background;
 extern Texture2D texNPatch;
 extern NPatchInfo npInfo;
-extern Texture2D texHead, texHair, texNose, texMouth, texEyes, texComp;
+extern Texture2D texHead;
+extern Texture2D texHair;
+extern Texture2D texNose;
+extern Texture2D texMouth;
+extern Texture2D texEyes;
+extern Texture2D texComp;
 extern Texture2D texMakeup;
-
 extern Character player;
 extern Character playerBase;
 extern Character dating;
 extern Character datingBase;
+extern const unsigned int headColors[6];
+extern const unsigned int hairColors[10];
+
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions
 #endif
 
-// Gui Button
+//----------------------------------------------------------------------------------
+// Global Functions Declaration (shared by several modules)
+//----------------------------------------------------------------------------------
 bool GuiButton(Rectangle rec, const char *text, int forcedState);
-
 Character GenerateCharacter(void);
 void CustomizeCharacter(Character *character);
 void DrawCharacter(Character character, Vector2 position);

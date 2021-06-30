@@ -29,10 +29,8 @@
 #include <string.h>
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-
-// Logo screen global variables
 static int framesCounter;
 static int finishScreen;
 
@@ -52,7 +50,7 @@ int rightSideRecHeight = 16;
 
 char raylib[8] = "       \0";   // raylib text array, max 8 letters
 
-int logoScreenState = 0;        // Tracking animation states (State Machine)
+int logoScreenState = 0;        // Animation states
 bool msgLogoADone = false;
 bool msgLogoBDone = false;
 

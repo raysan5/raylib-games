@@ -26,6 +26,9 @@
 #include "raylib.h"
 #include "screens.h"
 
+//----------------------------------------------------------------------------------
+// Module Types Definition (local)
+//----------------------------------------------------------------------------------
 typedef struct {
     int hair;
     int colHair;
@@ -37,10 +40,8 @@ typedef struct {
 } CharLikes;
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-
-// Ending screen global variables
 static int framesCounter = 0;
 static int finishScreen = 0;
 

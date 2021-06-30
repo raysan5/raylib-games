@@ -12,14 +12,9 @@ Let's find your perfect match! Ready for dating? Do you need some face tweaks? C
 
 ### Controls
 
-Keyboard:
-
- - A-W-S-D -> Move the Roomba and clean the room.
- - SPACE -> Play Roomba sound.
- 
 Mouse:
- - Mouse move -> Control Cat movement, click on destination to go there.
- - Mouse right button -> Play Cat sound.
+ - Mouse move -> Select UI buttons.
+ - Mouse right button -> Press UI button.
 
 
 ### License

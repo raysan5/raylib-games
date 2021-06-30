@@ -29,26 +29,24 @@
 #define LOGO_RECS_SIDE  16
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int framesCounter = 0;
+static int finishScreen = 0;
 
-// Logo screen global variables
-static int framesCounter;
-static int finishScreen;
+static int logoPositionX = 0;
+static int logoPositionY = 0;
 
-static int logoPositionX;
-static int logoPositionY;
+static int lettersCount = 0;
 
-static int lettersCount;
+static int topSideRecWidth = 0;
+static int leftSideRecHeight = 0;
 
-static int topSideRecWidth;
-static int leftSideRecHeight;
+static int bottomSideRecWidth = 0;
+static int rightSideRecHeight = 0;
 
-static int bottomSideRecWidth;
-static int rightSideRecHeight;
-
-static int state;               // Tracking animation states (State Machine)
-static float alpha = 1.0f;      // Useful for fading
+static int state = 0;               // Animation states
+static float alpha = 1.0f;
 
 //----------------------------------------------------------------------------------
 // Logo Screen Functions Definition

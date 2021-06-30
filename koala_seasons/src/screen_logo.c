@@ -29,35 +29,33 @@
 #include <string.h>
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int framesCounter = 0;
+static int finishScreen = 0;
 
-// Logo screen global variables
-static int framesCounter;
-static int finishScreen;
+static const char msgLogoA[64] = "A simple and easy-to-use library";
+static const char msgLogoB[64] = "to enjoy videogames programming";
 
-const char msgLogoA[64] = "A simple and easy-to-use library";
-const char msgLogoB[64] = "to enjoy videogames programming";
+static int logoPositionX = 0;
+static int logoPositionY = 0;
 
-int logoPositionX;
-int logoPositionY;
+static int raylibLettersCount = 0;
 
-int raylibLettersCount = 0;
+static int topSideRecWidth = 16;
+static int leftSideRecHeight = 16;
 
-int topSideRecWidth = 16;
-int leftSideRecHeight = 16;
+static int bottomSideRecWidth = 16;
+static int rightSideRecHeight = 16;
 
-int bottomSideRecWidth = 16;
-int rightSideRecHeight = 16;
+static char raylib[8] = "       \0";   // raylib text array, max 8 letters
 
-char raylib[8] = "       \0";   // raylib text array, max 8 letters
+static int logoScreenState = 0;        // Animation states
+static bool msgLogoADone = false;
+static bool msgLogoBDone = false;
 
-int logoScreenState = 0;        // Tracking animation states (State Machine)
-bool msgLogoADone = false;
-bool msgLogoBDone = false;
-
-int lettersCounter = 0;
-char msgBuffer[128] = { ' ' };
+static int lettersCounter = 0;
+static char msgBuffer[128] = { 0 };
 
 //----------------------------------------------------------------------------------
 // Logo Screen Functions Definition
@@ -77,7 +75,6 @@ void InitLogoScreen(void)
 // Logo Screen Update logic
 void UpdateLogoScreen(void)
 {
-    // Update LOGO screen
     framesCounter++;    // Count frames
 
     // Update LOGO screen variables
@@ -170,7 +167,6 @@ void UpdateLogoScreen(void)
 // Logo Screen Draw logic
 void DrawLogoScreen(void)
 {
-    // Draw LOGO screen
     if (logoScreenState == 0)
     {
         if ((framesCounter/15)%2) DrawRectangle(logoPositionX, logoPositionY - 60, 16, 16, BLACK);
@@ -206,10 +202,7 @@ void DrawLogoScreen(void)
             DrawText(msgLogoA, GetScreenWidth()/2 - MeasureText(msgLogoA, 30)/2, logoPositionY + 230, 30, GRAY);
 
             if (!msgLogoBDone) DrawText(msgBuffer, GetScreenWidth()/2 - MeasureText(msgLogoB, 30)/2, logoPositionY + 280, 30, GRAY);
-            else
-            {
-                DrawText(msgLogoB, GetScreenWidth()/2 - MeasureText(msgLogoA, 30)/2, logoPositionY + 280, 30, GRAY);
-            }
+            else DrawText(msgLogoB, GetScreenWidth()/2 - MeasureText(msgLogoA, 30)/2, logoPositionY + 280, 30, GRAY);
         }
     }
 }

@@ -13,7 +13,6 @@ Ah! Home, sweet home! Time for some automatic cleaning... if the worst enemy of 
 ### Controls
 
 Keyboard:
-
  - A-W-S-D -> Move the Roomba and clean the room.
  - SPACE -> Play Roomba sound.
  

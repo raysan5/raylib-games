@@ -44,11 +44,10 @@ typedef struct Door {
 } Door;
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition
+// Global Variables Declaration  (shared by several modules)
 //----------------------------------------------------------------------------------
 extern GameScreen currentScreen;
 extern Font font;
-
 extern Texture2D doors;
 extern Sound sndDoor;
 extern Sound sndScream;

@@ -4,7 +4,7 @@
 
 ### Description
 
-Experimental puzzle game that lets the user try to find a logic solution to different shape-color-based situations.
+Experimental puzzle game! Try to find a logic solution to multiple illogic situations.
 
 ### Features
 
@@ -12,14 +12,9 @@ Experimental puzzle game that lets the user try to find a logic solution to diff
 
 ### Controls
 
-Keyboard:
-
- - A-W-S-D -> Move the Roomba and clean the room.
- - SPACE -> Play Roomba sound.
- 
 Mouse:
- - Mouse move -> Control Cat movement, click on destination to go there.
- - Mouse right button -> Play Cat sound.
+ - Mouse move -> Selec shapes to click on
+ - Mouse right button -> Click on shapes
 
 
 ### License

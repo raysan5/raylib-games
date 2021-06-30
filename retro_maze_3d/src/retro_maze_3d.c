@@ -10,10 +10,9 @@
 ********************************************************************************************/
 
 #include "raylib.h"
-
 #include "raymath.h"
 
-#include <math.h>
+#include <math.h>       // Required for:
 
 #if defined(PLATFORM_WEB)
     #include <emscripten/emscripten.h>
@@ -51,94 +50,94 @@
 typedef enum { LOGO = 0, TITLE, CREDITS, GAMEPLAY, ENDING } GameScreen;
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-const int screenWidth = 320;
-const int screenHeight = 240;
+static const int screenWidth = 320;
+static const int screenHeight = 240;
 
 // Game general variables
-int currentScreen = LOGO;
-int elementPositionY = -128;
-int framesCounter = 0; 
-int scrollingY = 0;    
-int score = 0;         
-int hiscore = 0;       
-int titleState = 0;
-int optionSelect = 0;       // Main menu option selection
+static int currentScreen = LOGO;
+static int elementPositionY = -128;
+static int framesCounter = 0; 
+static int scrollingY = 0;    
+static int score = 0;         
+static int hiscore = 0;       
+static int titleState = 0;
+static int optionSelect = 0;       // Main menu option selection
 
-Camera camera = { 0 };
+static Camera camera = { 0 };
 static float playerEyesPosition = 0.3f;                 // Player eyes position from ground (in meters)
 static Vector2 cameraAngle = { 0.0f, -8.0f*DEG2RAD };   // Camera rotation angle over its axis
 
-Vector3 mapPosition = { 0.0f, 0.0f, 0.0f };     // Set map position
-Vector3 playerPosition = { 0 };
+static Vector3 mapPosition = { 0.0f, 0.0f, 0.0f };      // Set map position
+static Vector3 playerPosition = { 0 };
 
-int exitCellX = 19;
-int exitCellY = 9;
+static int exitCellX = 19;
+static int exitCellY = 9;
 
-float currentGamepadAxisValue[8] = { 0 };
-float previousGamepadAxisValue[8] = { 0 };
+static float currentGamepadAxisValue[8] = { 0 };
+static float previousGamepadAxisValue[8] = { 0 };
 
-bool exitGame = false;
+static bool exitGame = false;
 
-int timeLevelSeconds = 300;
+static int timeLevelSeconds = 300;
 
-float creditsScrollingPosY = (float)screenHeight + 20.0f;
+static float creditsScrollingPosY = (float)screenHeight + 20.0f;
 
-bool playerMoving = false;
-int stepFrameCount = 0;
+static bool playerMoving = false;
+static int stepFrameCount = 0;
 
-bool showInGameMenu = false;
-bool showMinimapDebug = false;
+static bool showInGameMenu = false;
+static bool showMinimapDebug = false;
 
-Color *mapPixels = 0;
-int playerCellX = 0;
-int playerCellY = 0;
+static Color *mapPixels = 0;
+static int playerCellX = 0;
+static int playerCellY = 0;
 
-float staminaLevel = 100;
+static float staminaLevel = 100;
 
-int endingResult = 0;       // 0-Lose, 1-Win
+static int endingResult = 0;       // 0-Lose, 1-Win
 
-bool gpiCaseMode = false;
+static bool gpiCaseMode = false;
 
 // Game resources variables
-Texture2D texLogo = { 0 };
-Texture2D texTitle = { 0 };
-Texture2D texTitleShadow = { 0 };
-Texture2D texTitle3d = { 0 };
-Texture2D texTitle3dShadow = { 0 };
-Texture2D texTitleLogo = { 0 };
-Texture2D texMap = { 0 };
-Texture2D texMapAtlas = { 0 };
+static Texture2D texLogo = { 0 };
+static Texture2D texTitle = { 0 };
+static Texture2D texTitleShadow = { 0 };
+static Texture2D texTitle3d = { 0 };
+static Texture2D texTitle3dShadow = { 0 };
+static Texture2D texTitleLogo = { 0 };
+static Texture2D texMap = { 0 };
+static Texture2D texMapAtlas = { 0 };
 
-Texture2D texGpiCase = { 0 };
+static Texture2D texGpiCase = { 0 };
 
-Font font = { 0 };
+static Font font = { 0 };
 
-Sound fxLogo = { 0 };
-Sound fxMenuSelect = { 0 };
-Sound fxMenuMove = { 0 };
-Sound fxPause = { 0 };
-Sound fxTitleRocks = { 0 };
-Sound fxStep = { 0 };
-Sound fxEnding = { 0 };
+static Sound fxLogo = { 0 };
+static Sound fxMenuSelect = { 0 };
+static Sound fxMenuMove = { 0 };
+static Sound fxPause = { 0 };
+static Sound fxTitleRocks = { 0 };
+static Sound fxStep = { 0 };
+static Sound fxEnding = { 0 };
 
-Music musicTitle = { 0 };
-Music musicGameplay = { 0 };
-Music musicCredits = { 0 };
+static Music musicTitle = { 0 };
+static Music musicGameplay = { 0 };
+static Music musicCredits = { 0 };
 
-Sound fxVoice[4] = { 0 };
+static Sound fxVoice[4] = { 0 };
 
-Model model = { 0 };
+static Model model = { 0 };
 
 // Render texture to draw full screen, enables screen scaling
-RenderTexture2D screenTarget = { 0 };
+static RenderTexture2D screenTarget = { 0 };
 
 //----------------------------------------------------------------------------------
-// Local Functions Declaration
+// Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
-static void UpdateDrawFrame(void);          // Update and Draw one frame
-static void UpdateCameraCustom(Camera *camera);    // Update camera custom (first person)
+static void UpdateDrawFrame(void);              // Update and Draw one frame
+static void UpdateCameraCustom(Camera *camera); // Update camera custom (first person)
 
 static bool IsGamepadAxisAsButtonPressed(int gamepad, int axis, bool positiveAxis);
 
@@ -276,6 +275,9 @@ int main()
     return 0;
 }
 
+//----------------------------------------------------------------------------------
+// Module Functions Definition (local)
+//----------------------------------------------------------------------------------
 // Update and draw game frame
 static void UpdateDrawFrame(void)
 {
@@ -744,6 +746,7 @@ void UpdateCameraCustom(Camera *camera)
     camera->position.y = playerEyesPosition;
 }
 
+// Check if gamepad axis has been pressed
 static bool IsGamepadAxisAsButtonPressed(int gamepad, int axis, bool positiveAxis)
 {
     bool pressed = false;

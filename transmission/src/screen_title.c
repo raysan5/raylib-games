@@ -28,39 +28,41 @@
 #include <string.h>
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int framesCounter = 0;
+static int finishScreen = 0;
 
-// Title screen global variables
-static int framesCounter;
-static int finishScreen;
+static Texture2D texBackground = { 0 };
+static Font fontTitle = { 0 };
+static Sound fxTyping = { 0 };
 
-static Texture2D texBackground;
-static Font fontTitle;
-static Sound fxTyping;
-
-static float titleSize;
-static Vector2 transmissionPosition;
-static Vector2 missionPositon;
+static float titleSize = 0.0f;
+static Vector2 transmissionPosition = { 0 };
+static Vector2 missionPositon = { 0 };
 
 static const char textTitle[20] = "transmissionmission";
 
-static Color titleColor;
-static int speedText;
+static Color titleColor = { 0 };
+static int speedText = 0;
 
-static int transmissionLenght;
-static int missionLenght;
-static int transmissionMaxLenght;
-static int missionMaxLenght;
+static int transmissionLenght = 0;
+static int missionLenght = 0;
+static int transmissionMaxLenght = 0;
+static int missionMaxLenght = 0;
 
-static bool writeTransmission;
-static bool writeMission;
-static bool writeEnd;
+static bool writeTransmission = false;
+static bool writeMission = false;
+static bool writeEnd = false;
+
+//----------------------------------------------------------------------------------
+// Module Functions Definition (local)
+//----------------------------------------------------------------------------------
+static void MissionScreen(void);
 
 //----------------------------------------------------------------------------------
 // Title Screen Functions Definition
 //----------------------------------------------------------------------------------
-static void MissionScreen();
 
 // Title Screen Initialization logic
 void InitTitleScreen(void)
@@ -157,11 +159,15 @@ int FinishTitleScreen(void)
     return finishScreen;
 }
 
-static void MissionScreen()
+//----------------------------------------------------------------------------------
+// Module Functions Declaration (local)
+//----------------------------------------------------------------------------------
+static void MissionScreen(void)
 {
     transmissionLenght = transmissionMaxLenght;
     missionLenght = missionMaxLenght;
     writeEnd = true;
+    
     //finishScreen = 1;   // OPTIONS
     finishScreen = true;   // GAMEPLAY
     //PlaySound(fxCoin);

@@ -4,7 +4,7 @@
 
 ### Description
 
-Ah! Home, sweet home! Time for some automatic cleaning... if the worst enemy of Roomba allows it... be careful with Cat!
+As a small turtle you must be careful with big predators... until you become one of them!
 
 ### Features
 
@@ -13,14 +13,8 @@ Ah! Home, sweet home! Time for some automatic cleaning... if the worst enemy of 
 ### Controls
 
 Keyboard:
-
- - A-W-S-D -> Move the Roomba and clean the room.
- - SPACE -> Play Roomba sound.
- 
-Mouse:
- - Mouse move -> Control Cat movement, click on destination to go there.
- - Mouse right button -> Play Cat sound.
-
+ - ENTER -> Start the game.
+ - UP-DOWN -> Move the Turtle/Gamera between rows.
 
 ### License
 

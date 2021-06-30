@@ -12,15 +12,8 @@ The ultimate wave samples collector is here! Follow the wave and collect all the
 
 ### Controls
 
-Keyboard:
-
- - A-W-S-D -> Move the Roomba and clean the room.
- - SPACE -> Play Roomba sound.
- 
 Mouse:
- - Mouse move -> Control Cat movement, click on destination to go there.
- - Mouse right button -> Play Cat sound.
-
+ - Mouse move -> Control ear movement.
 
 ### License
 

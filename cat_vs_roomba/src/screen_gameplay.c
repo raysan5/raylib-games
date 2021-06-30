@@ -86,31 +86,29 @@ typedef struct {
 } Furniture;
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int framesCounter = 0;
+static int timeLevelSeconds = 0;
+static bool levelFinished = false;
+static int finishScreen = 0;
 
-// Gameplay screen global variables
-static int framesCounter;
-static int timeLevelSeconds;
-static bool levelFinished;
-static int finishScreen;
+static const Vector2 roomOffset = { 70, 70 };
 
-const Vector2 roomOffset = { 70, 70 };
-
-static Texture2D roomba;
-static Texture2D cat;
-static Texture2D dirtiles;
-static Texture2D furniture;
+static Texture2D roomba = { 0 };
+static Texture2D cat = { 0 };
+static Texture2D dirtiles = { 0 };
+static Texture2D furniture = { 0 };
 
 #if defined(TILE_VIEWER_MODE)
-static Texture2D tracemap;
-static Texture2D fursetid;
+static Texture2D tracemap = { 0 };
+static Texture2D fursetid = { 0 };
 #endif
 
-static Music catch;
+static Music catch = { 0 };
 
-static Sound fxCat[2];
-static Sound fxRoomba[3];
+static Sound fxCat[2] = { 0 };
+static Sound fxRoomba[3] = { 0 };
 
 static Vector2 roombaPosition = { 100, 100 };
 static Vector2 roombaSpeed = { 4, 4 };
@@ -157,7 +155,7 @@ static int furcolmap[MAX_TILES_X*MAX_TILES_Y] = {
 static bool showObjective = false;
     
 //----------------------------------------------------------------------------------
-// Module Functions Definition
+// Module Functions Definition (local)
 //----------------------------------------------------------------------------------
 static float GetTileCleanPercent(void);
 
@@ -623,7 +621,7 @@ int FinishGameplayScreen(void)
 }
 
 //----------------------------------------------------------------------------------
-// Module Functions Declaration
+// Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
 
 // Check how much cleaning we have done

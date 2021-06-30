@@ -27,25 +27,22 @@
 #include "screens.h"
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int finishScreen = 0;
+static int state = 0;
 
-// Title screen global variables
-static int framesCounter;
-static int finishScreen;
-static int state;
+static int scrollPositionX = 0;
 
-static int scrollPositionX;
+static int catPosX = 0;
+static int roombaPosX = 0;
 
-static int catPosX;
-static int roombaPosX;
+static float vsAlpha = 0.0f;
+static float vsScale = 0.0f;
 
-static float vsAlpha;
-static float vsScale;
-
-static Texture2D cat;
-static Texture2D vs;
-static Texture2D roomba;
+static Texture2D cat = { 0 };
+static Texture2D vs = { 0 };
+static Texture2D roomba = { 0 };
 
 //----------------------------------------------------------------------------------
 // Title Screen Functions Definition

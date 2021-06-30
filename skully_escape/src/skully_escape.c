@@ -12,40 +12,50 @@
 ********************************************************************************************/
 
 #include "raylib.h"
-#include "screens/screens.h"    // NOTE: Defines global variable: currentScreen
+#include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
 
-#include "player.h"
+#include "player.h"     // Player functionality
 
 #if defined(PLATFORM_WEB)
     #include <emscripten/emscripten.h>
 #endif
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Shared Variables Definition (global)
 //----------------------------------------------------------------------------------
-const int screenWidth = 1280;
-const int screenHeight = 720;
+GameScreen currentScreen = { 0 };
+Font font = { 0 };
+Texture2D doors = { 0 };
+Sound sndDoor = { 0 };
+Sound sndScream = { 0 };
+
+//----------------------------------------------------------------------------------
+// Module Variables Definition (local)
+//----------------------------------------------------------------------------------
+static const int screenWidth = 1280;
+static const int screenHeight = 720;
 
 // Required variables to manage screen transitions (fade-in, fade-out)
-float transAlpha = 0;
-bool onTransition = false;
-bool transFadeOut = false;
-int transFromScreen = -1;
-int transToScreen = -1;
+static float transAlpha = 0;
+static bool onTransition = false;
+static bool transFadeOut = false;
+static int transFromScreen = -1;
+static int transToScreen = -1;
 
 static int framesCounter = 0;
 
-Music music;
+Music music = { 0 };
     
 //----------------------------------------------------------------------------------
-// Local Functions Declaration
+// Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
-void TransitionToScreen(int screen);
-void ChangeToScreen(int screen);    // No transition effect
-void UpdateTransition(void);
-void DrawTransition(void);
-
-void UpdateDrawFrame(void);         // Update and Draw one frame
+static void ChangeToScreen(int screen);     // Change to screen, no transition effect
+                                            
+static void TransitionToScreen(int screen); // Request transition to next screen
+static void UpdateTransition(void);         // Update transition effect
+static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
+                                            
+static void UpdateDrawFrame(void);          // Update and draw one frame
 
 //----------------------------------------------------------------------------------
 // Main entry point
@@ -106,14 +116,11 @@ int main(void)
     return 0;
 }
 
-void TransitionToScreen(int screen)
-{
-    onTransition = true;
-    transFromScreen = currentScreen;
-    transToScreen = screen;
-}
-
-void ChangeToScreen(int screen)
+//----------------------------------------------------------------------------------
+// Module Functions Definition (local)
+//----------------------------------------------------------------------------------
+// Change to screen, no transition effect
+static void ChangeToScreen(int screen)
 {
     switch (currentScreen)
     {
@@ -150,7 +157,16 @@ void ChangeToScreen(int screen)
     currentScreen = screen;
 }
 
-void UpdateTransition(void)
+// Request transition to next screen
+static void TransitionToScreen(int screen)
+{
+    onTransition = true;
+    transFromScreen = currentScreen;
+    transToScreen = screen;
+}
+
+// Update transition effect
+static void UpdateTransition(void)
 {
     if (!transFadeOut)
     {
@@ -254,13 +270,14 @@ void UpdateTransition(void)
     }
 }
 
-void DrawTransition(void)
+// Draw transition effect (full-screen rectangle)
+static void DrawTransition(void)
 {
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, transAlpha));
 }
 
 // Update and draw game frame
-void UpdateDrawFrame(void)
+static void UpdateDrawFrame(void)
 {
     // Update
     //----------------------------------------------------------------------------------
@@ -405,4 +422,3 @@ void UpdateDrawFrame(void)
     EndDrawing();
     //----------------------------------------------------------------------------------
 }
-

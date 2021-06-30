@@ -29,10 +29,8 @@
 #define LOGO_RECS_SIDE  16
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-
-// Logo screen global variables
 static int framesCounter = 0;
 static int finishScreen = 0;
 
@@ -48,7 +46,7 @@ static int bottomSideRecWidth = 0;
 static int rightSideRecHeight = 0;
 
 static char raylib[8] = { 0 };          // raylib text array, max 8 letters
-static int state = 0;                   // Tracking animation states (State Machine)
+static int state = 0;                   // Animation states
 static float alpha = 1.0f;              // Useful for fading
 
 static Texture2D texLogoCW = { 0 };     // Cinamon Works texture

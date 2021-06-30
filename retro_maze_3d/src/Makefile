@@ -25,13 +25,13 @@
 
 # Define required raylib variables
 PROJECT_NAME       ?= retro_maze_3d
-RAYLIB_VERSION     ?= 3.5.0
+RAYLIB_VERSION     ?= 3.8.0
 RAYLIB_PATH        ?= C:/GitHub/raylib
 
 # Define default options
 
 # One of PLATFORM_DESKTOP, PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
-PLATFORM           ?= PLATFORM_RPI
+PLATFORM           ?= PLATFORM_DESKTOP
 
 # Locations of your newly installed library and associated headers. See ../src/Makefile
 # On Linux, if you have installed raylib but cannot compile the examples, check that
@@ -99,15 +99,6 @@ ifeq ($(PLATFORM),PLATFORM_DRM)
     UNAMEOS=$(shell uname)
     ifeq ($(UNAMEOS),Linux)
         PLATFORM_OS=LINUX
-    endif
-endif
-ifeq ($(PLATFORM),PLATFORM_ANDROID)
-    UNAMEOS=$(shell uname)
-    ifeq ($(UNAMEOS),Linux)
-        PLATFORM_OS=LINUX
-    endif
-    ifeq ($(UNAMEOS),Darwin)
-        PLATFORM_OS=OSX
     endif
 endif
 
@@ -194,6 +185,9 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
         MAKE = mingw32-make
     endif
 endif
+ifeq ($(PLATFORM),PLATFORM_ANDROID)
+    MAKE = mingw32-make
+endif
 
 # Define compiler flags:
 #  -O1                  defines optimization level
@@ -243,7 +237,7 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
     # -O2                        # optimization level 2, if used, also set --memory-init-file 0
     # -s USE_GLFW=3              # Use glfw3 library (context/input management)
     # -s ALLOW_MEMORY_GROWTH=1   # to allow memory resizing -> WARNING: Audio buffers could FAIL!
-    # -s TOTAL_MEMORY=16777216   # to specify heap memory size (default = 16MB)
+    # -s TOTAL_MEMORY=16777216   # to specify heap memory size (default = 16MB) (67108864 = 64MB)
     # -s USE_PTHREADS=1          # multithreading support
     # -s WASM=0                  # disable Web Assembly, emitted by default
     # -s ASYNCIFY                # lets synchronous C/C++ code interact with asynchronous JS
@@ -252,12 +246,8 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
     # --profiling                # include information for code profiling
     # --memory-init-file 0       # to avoid an external memory initialization code file (.mem)
     # --preload-file resources   # specify a resources folder for data compilation
-    CFLAGS += -s USE_GLFW=3 -s ASYNCIFY -s TOTAL_MEMORY=67108864 -s FORCE_FILESYSTEM=1 
-
-    # NOTE: Simple raylib examples are compiled to be interpreter with asyncify, that way,
-    # we can compile same code for ALL platforms with no change required, but, working on bigger
-    # projects, code needs to be refactored to avoid a blocking while() loop, moving Update and Draw
-    # logic to a self contained function: UpdateDrawFrame(), check core_basic_window_web.c for reference.
+    # --source-map-base          # allow debugging in browser with source map
+    CFLAGS += -s USE_GLFW=3 -s TOTAL_MEMORY=67108864 -s FORCE_FILESYSTEM=1 --preload-file resources
 
     # Define a custom shell .html and output extension
     CFLAGS += --shell-file $(RAYLIB_PATH)/src/shell.html
@@ -285,10 +275,7 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
         INCLUDE_PATHS += -I/usr/local/include
     endif
     ifeq ($(PLATFORM_OS),LINUX)
-        # Reset everything.
-        # Precedence: immediately local, installed version, raysan5 provided libs -I$(RAYLIB_H_INSTALL_PATH) -I$(RAYLIB_PATH)/release/include
-        #INCLUDE_PATHS = -I$(RAYLIB_H_INSTALL_PATH) -isystem. -isystem$(RAYLIB_PATH)/src -isystem$(RAYLIB_PATH)/release/include -isystem$(RAYLIB_PATH)/src/external
-        INCLUDE_PATHS = -I$(RAYLIB_H_INSTALL_PATH) -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/release/include -I$(RAYLIB_PATH)/src/external
+        INCLUDE_PATHS = -I$(RAYLIB_H_INSTALL_PATH) -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external
     endif
 endif
 
@@ -317,10 +304,6 @@ endif
 
 ifeq ($(PLATFORM),PLATFORM_RPI)
     LDFLAGS += -L/opt/vc/lib
-endif
-
-ifeq ($(PLATFORM),PLATFORM_DRM)
-    LDFLAGS += -lGLESv2 -lEGL -ldrm -lgbm
 endif
 
 # Define any libraries required on linking

@@ -26,6 +26,9 @@
 #include "raylib.h"
 #include "screens.h"
 
+//----------------------------------------------------------------------------------
+// Module Functions Definition (local)
+//----------------------------------------------------------------------------------
 static bool doHairCut = false;
 static bool doHairTint = false;
 static bool doEyeLiner = false;
@@ -33,14 +36,6 @@ static bool doLipStick = false;
 static bool doNose = false;
 static bool doGlasses = false;
 
-//----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
-//----------------------------------------------------------------------------------
-
-const unsigned int headColors[6] = { 0xffe29bff, 0xfed5a8ff, 0xad8962ff, 0xfff1b8ff, 0xffd6c4ff, 0xd49c8dff };
-const unsigned int hairColors[10] = { 0xf5bf60ff, 0xaa754aff, 0x974e14ff, 0xf36347ff, 0x87f347ff, 0xfc48d0ff, 0x3b435dff, 0x5f5e60ff, 0xe7e7e7ff, 0xfb386bff };
-
-// Gameplay screen global variables
 static int framesCounter = 0;
 static int finishScreen = 0;
 

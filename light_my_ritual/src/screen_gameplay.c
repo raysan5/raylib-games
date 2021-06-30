@@ -79,64 +79,61 @@ typedef struct LightSpot {
 typedef enum { LEVEL_I, LEVEL_II, LEVEL_III, LEVEL_FINISHED } LightedLevel;
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int framesCounter = 0;
+static int finishScreen = 0;
+static bool pause = false;
 
-// Gameplay screen global variables
-static int framesCounter;
-static int finishScreen;
+static Player player = { 0 };
 
-//static Texture2D background;
+static LightSpot lightsI[MAX_LIGHTS_I] = { 0 };
+static LightSpot lightsII[MAX_LIGHTS_II] = { 0 };
+static LightSpot lightsIII[MAX_LIGHTS_III] = { 0 };
 
-static bool pause;
+static Enemy enemies[MAX_ENEMIES] = { 0 };
 
-static Player player;
+static int ritualLevel = 0;
+static int previousLightedLevel = 0;
+static int currentLightedLevel = 0;
 
-static LightSpot lightsI[MAX_LIGHTS_I];
-static LightSpot lightsII[MAX_LIGHTS_II];
-static LightSpot lightsIII[MAX_LIGHTS_III];
+static Vector2 lighterPosition = { 0 };
 
-static Enemy enemies[MAX_ENEMIES];
+static int maxLightEnergy = 0;
+static int currentLightEnergy = 0;
 
-static int ritualLevel;
-static int previousLightedLevel;
-static int currentLightedLevel;
+static float ritualTime = 0.0f;
+static bool startRitual = false;
+static float alphaRitual = 0.0f;
 
-static Vector2 lighterPosition;
+static bool timeOver = false;
+static int nextStarsAlignment = 0;
 
-static int maxLightEnergy;
-static int currentLightEnergy;
+static Texture2D background = { 0 };
+static Texture2D foregroundI = { 0 };
+static Texture2D foregroundII = { 0 };
+static Texture2D foregroundIII = { 0 };
+static Texture2D texPlayer = { 0 };
+static Texture2D texEnemy = { 0 };
+static Texture2D texLight = { 0 };
+static Texture2D lightGlow = { 0 };
+static Texture2D lightRay = { 0 };
+static Texture2D book = { 0 };
+static Texture2D texRitual = { 0 };
+static Texture2D texTimeOver = { 0 };
+static Texture2D circleIoff = { 0 };
+static Texture2D circleIIoff = { 0 };
+static Texture2D circleIIIoff = { 0 };
+static Texture2D circleIon = { 0 };
+static Texture2D circleIIon = { 0 };
+static Texture2D circleIIIon = { 0 };
+static Rectangle lightOff = { 0 };
+static Texture2D lightOn = { 0 };
+static Sound fxLightOn = { 0 };
+static Texture2D fxLightOff = { 0 };
+static Music music = { 0 };
 
-static float ritualTime;
-static bool startRitual;
-static float alphaRitual;
-
-static bool timeOver;
-static int nextStarsAlignment;
-
-static Texture2D background;
-static Texture2D foregroundI;
-static Texture2D foregroundII;
-static Texture2D foregroundIII;
-static Texture2D texPlayer;
-static Texture2D texEnemy;
-static Texture2D texLight;
-static Texture2D lightGlow;
-static Texture2D lightRay;
-static Texture2D book;
-static Texture2D texRitual;
-static Texture2D texTimeOver;
-static Texture2D circleIoff, circleIIoff, circleIIIoff;
-static Texture2D circleIon, circleIIon, circleIIIon;
-
-static Rectangle lightOff, lightOn;
-
-static Sound fxLightOn, fxLightOff;
-
-static Music music;
-
-// Debug variables
-static bool enemiesStopped;
+static bool enemiesStopped = false;
 
 //------------------------------------------------------------------------------------
 // Module Functions Declaration (local)

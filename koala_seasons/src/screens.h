@@ -37,16 +37,13 @@
 typedef enum GameScreen { LOGO, TITLE, OPTIONS, GAMEPLAY, ENDING } GameScreen;
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition
+// Global Variables Declaration (shared by several modules)
 //----------------------------------------------------------------------------------
 extern GameScreen currentScreen;
-
-// NOTE: This is all the data used in the game
 extern Font font;
 extern Shader colorBlend;
 extern Texture2D atlas01;
 extern Texture2D atlas02;
-
 extern Sound fxJump; 
 extern Sound fxDash; 
 extern Sound fxEatLeaves;
@@ -55,8 +52,6 @@ extern Sound fxDieDingo;
 extern Sound fxDieOwl;
 extern Sound fxHitResin;
 extern Sound fxWind;
-
-// Global Variables (required by ending screen and gameplay screen)
 extern int score;
 extern int hiscore;
 extern int killHistory[MAX_KILLS];
@@ -68,6 +63,7 @@ extern int currentSeason;
 extern int initSeason;
 extern int initYears;
 extern int rainChance;
+
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions

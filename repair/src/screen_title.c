@@ -27,10 +27,8 @@
 #include "screens.h"
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-
-// Title screen global variables
 static int framesCounter = 0;
 static int finishScreen = 0;
 

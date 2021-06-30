@@ -55,16 +55,11 @@ typedef struct Mission {
 } Mission;
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition
+// Global Variables Declaration  (shared by several modules)
 //----------------------------------------------------------------------------------
 extern GameScreen currentScreen;
-
 extern Music music;
 extern Sound fxButton;
-
-//Mission *missions;
-
-// UI BUTTON
 extern Rectangle recButton;
 extern float fadeButton;
 extern Color colorButton;
@@ -72,20 +67,18 @@ extern Texture2D texButton;
 extern Vector2 textPositionButton;
 extern int fontSizeButton;
 extern Color textColorButton;
-
 extern int currentMission;
 extern int totalMissions;
-
 extern Font fontMission;
-
 extern Word messageWords[MAX_MISSION_WORDS];
+
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions
 #endif
 
 //----------------------------------------------------------------------------------
-// Transmission Functions Declaration
+// Global Functions Declaration (shared by several modules)
 //----------------------------------------------------------------------------------
 bool IsButtonPressed();
 void DrawButton(const char *text);

@@ -29,16 +29,13 @@
 #define LOGO_RECS_SIDE  16
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-
-// Logo screen global variables
 static int framesCounter = 0;
-static int finishScreen;
+static int finishScreen = 0;
 
-static int logoPositionX;
-static int logoPositionY;
-
+static int logoPositionX = 0;
+static int logoPositionY = 0;
 static int lettersCount = 0;
 
 static int topSideRecWidth = LOGO_RECS_SIDE;
@@ -47,8 +44,8 @@ static int leftSideRecHeight = LOGO_RECS_SIDE;
 static int bottomSideRecWidth = LOGO_RECS_SIDE;
 static int rightSideRecHeight = LOGO_RECS_SIDE;
 
-static char raylib[8];          // raylib text array, max 8 letters
-static int state = 0;           // Tracking animation states (State Machine)
+static char raylib[8] = { 0 };  // raylib text array, max 8 letters
+static int state = 0;           // Animation states
 static float alpha = 1.0f;      // Useful for fading
 
 //----------------------------------------------------------------------------------

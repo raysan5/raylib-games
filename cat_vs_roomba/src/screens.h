@@ -34,16 +34,16 @@
 typedef enum GameScreen { LOGO = 0, TITLE, OPTIONS, GAMEPLAY, ENDING } GameScreen;
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition
+// Global Variables Declaration (shared by several modules)
 //----------------------------------------------------------------------------------
 extern GameScreen currentScreen;
 extern Font font;
 extern Font font2;
 extern Music music;
 extern Sound fxCoin;
-
 extern int score;
 extern int result;      // 0-Loose, 1-Win
+
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions

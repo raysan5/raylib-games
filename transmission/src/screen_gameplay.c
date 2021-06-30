@@ -26,29 +26,13 @@
 #include "raylib.h"
 #include "screens.h"
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <string.h>     // Required for:
+#include <stdlib.h>     // Required for:
+#include <stdio.h>      // Required for:
 
 //#define MAX_CODING_WORDS    12
 //#define MAX_MISSION_WORDS    8
-#define MAX_LINE_CHAR  30
-
-/*
-// NOTE: Coding words are generic and the same words
-// are used for all missions,
-typedef enum CodingWords {
-    POLLO = 0,
-    CONEJO,
-    HUEVO,
-    NIDO,
-    AIRE,
-    ARMARIO,
-    AGUJERO,
-    COSA,
-    WORD,
-} CodingWords;
-*/
+#define MAX_LINE_CHAR         30
 
 static char *codingWords[MAX_CODING_WORDS] = {
     "pollo\0",
@@ -65,51 +49,24 @@ static char *codingWords[MAX_CODING_WORDS] = {
     "melon\0"
 };
 
-// Words to be coded or coding words
-/*typedef struct Word {
-    int id;
-    Rectangle rec;
-    Rectangle iniRec;
-    bool hover;
-    bool picked;
-    char text[32];          // text
-} Word;*/
-
-/*
-// Mission information
-typedef struct Mission {
-    int id;
-    char brief[512];        // Mission briefing
-    char key[32];           // Mission keyword
-    char msg[256];          // Message to be coded
-    int wordsCount;         // Number of words to coded
-    int sols[8];            // Solution code, depends on wordsCount
-} Mission;
-*/
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int framesCounter = 0;
+static int finishScreen = 0;
 
-// Gameplay screen global variables
-static int framesCounter;
-static int finishScreen;
+static Texture2D texBackground = { 0 };
+static Font fontMessage = { 0 };
+static Texture2D texWordsAtlas = { 0 };
+static Texture2D texVignette = { 0 };
 
-static Texture2D texBackground;
-static Font fontMessage;
-static Texture2D texWordsAtlas;
-static Texture2D texVignette;
+static Sound fxGrab = { 0 };
+static Sound fxPlace = { 0 };
+static Sound fxLeave = { 0 };
 
-static Sound fxGrab;
-static Sound fxPlace;
-static Sound fxLeave;
-
-static Music musSpy;
+static Music musSpy = { 0 };
 
 static Word words[MAX_CODING_WORDS] = { 0 };
-
-// Hay que hacerlo global, para poder consultar el resultado desde la endingscreen
-//static Word messageWords[MAX_MISSION_WORDS] = { 0 };
-
 static Mission *missions = NULL;
 
 static bool canSend = false;

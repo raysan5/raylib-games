@@ -27,16 +27,13 @@
 #include "screens.h"
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-
-// Logo screen global variables
 static int framesCounter = 0;
-static int finishScreen;
+static int finishScreen = 0;
 
-static Texture2D logo;
+static Texture2D logo = { 0 };
 static float logoAlpha = 0;
-
 static int state = 0;
 
 //----------------------------------------------------------------------------------

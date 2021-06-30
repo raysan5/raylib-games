@@ -13,14 +13,42 @@
 ********************************************************************************************/
 
 #include "raylib.h"
-#include "screens/screens.h"    // NOTE: Defines global variable: currentScreen
+#include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
 
 #if defined(PLATFORM_WEB)
     #include <emscripten/emscripten.h>
 #endif
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Shared Variables Definition (global)
+//----------------------------------------------------------------------------------
+GameScreen currentScreen = LOGO;
+Font font = { 0 };
+Shader colorBlend = { 0 };
+Texture2D atlas01 = { 0 };
+Texture2D atlas02 = { 0 };
+Sound fxJump = { 0 };
+Sound fxDash = { 0 };
+Sound fxEatLeaves = { 0 };
+Sound fxDieSnake = { 0 };
+Sound fxDieDingo = { 0 };
+Sound fxDieOwl = { 0 };
+Sound fxHitResin = { 0 };
+Sound fxWind = { 0 };
+int score = 0;
+int hiscore = 0;
+int killHistory[MAX_KILLS] = { 0 };
+int killer = 0;
+int seasons = 0;
+int years = 0;
+int currentLeaves = 0;
+int currentSeason = 0;
+int initSeason = 0;
+int initYears = 0;
+int rainChance = 0;
+
+//----------------------------------------------------------------------------------
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
 static const int screenWidth = 1280;
 static const int screenHeight = 720;
@@ -35,13 +63,15 @@ static int framesCounter = 0;
 static Music music;
 
 //----------------------------------------------------------------------------------
-// Local Functions Declaration
+// Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
-void TransitionToScreen(int screen);
-void UpdateTransition(void);
-void DrawTransition(void);
-
-void UpdateDrawFrame(void);     // Update and Draw one frame
+static void ChangeToScreen(int screen);     // Change to screen, no transition effect
+                                            
+static void TransitionToScreen(int screen); // Request transition to next screen
+static void UpdateTransition(void);         // Update transition effect
+static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
+                                            
+static void UpdateDrawFrame(void);          // Update and draw one frame
 
 //----------------------------------------------------------------------------------
 // Main entry point
@@ -127,14 +157,41 @@ int main(void)
     return 0;
 }
 
-void TransitionToScreen(int screen)
+//----------------------------------------------------------------------------------
+// Module Functions Definition (local)
+//----------------------------------------------------------------------------------
+// Change to screen, no transition effect
+static void ChangeToScreen(int screen)
+{
+    switch (currentScreen)
+    {
+        case LOGO: rlUnloadLogoScreen(); break;
+        case TITLE: UnloadTitleScreen(); break;
+        case GAMEPLAY: UnloadGameplayScreen(); break;
+        default: break;
+    }
+    
+    switch (screen)
+    {
+        case LOGO: rlInitLogoScreen(); break;
+        case TITLE: InitTitleScreen(); break;
+        case GAMEPLAY: InitGameplayScreen(); break;
+        default: break;
+    }
+    
+    currentScreen = screen;
+}
+
+// Request transition to next screen
+static void TransitionToScreen(int screen)
 {
     onTransition = true;
     transFromScreen = currentScreen;
     transToScreen = screen;
 }
 
-void UpdateTransition(void)
+// Update transition effect
+static void UpdateTransition(void)
 {
     if (!transFadeOut)
     {
@@ -163,12 +220,13 @@ void UpdateTransition(void)
     }
 }
 
-void DrawTransition(void)
+// Draw transition effect (full-screen rectangle)
+static void DrawTransition(void)
 {
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, transAlpha));
 }
 
-// Update and Draw one frame
+// Update and draw one frame
 void UpdateDrawFrame(void)
 {
     // Update

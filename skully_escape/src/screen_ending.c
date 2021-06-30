@@ -27,13 +27,10 @@
 #include "screens.h"
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-
-// Ending screen global variables
-static int framesCounter;
-static int finishScreen;
-
+static int framesCounter = 0;
+static int finishScreen = 0;
 static float alpha = 0.0f;
 
 //----------------------------------------------------------------------------------

@@ -31,6 +31,9 @@
 #include "atlas01.h"
 #include "atlas02.h"
 
+//----------------------------------------------------------------------------------
+// Module Types Definition (local)
+//----------------------------------------------------------------------------------
 typedef enum { DELAY, SEASONS, LEAVES, KILLS, REPLAY } EndingCounter;
 
 typedef struct {
@@ -44,65 +47,62 @@ typedef struct {
 } Particle;
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int framesCounter = 0;
+static int finishScreen = 0;
 
-// Ending screen global variables
-static EndingCounter endingCounter;
+// Endign text strings
+static const char textOwl01[32] = "Turned into a pretty";
+static const char textOwl02[32] = "owl pellet";
+static const char textDingo01[32] = "A dingo took your life";
+static const char textFire01[32] = "Kissed by fire";
+static const char textSnake01[32] = "Digested alive by a";
+static const char textSnake02[32] = "big snake";
+static const char textNaturalDeath01[32] = "LIFE KILLED YOU";
+static const char textBee01[32] = "You turn out to be";
+static const char textBee02[32] = "allergic to bee sting";
+static const char textEagle[32] = "KOALA IS DEAD :(";
 
-static int framesCounter;
-static int finishScreen;
-static int framesKillsCounter;
+static int framesKillsCounter = 0;
+static EndingCounter endingCounter = { 0 };
 
-static Rectangle playButton; 
-static Rectangle shopButton; 
-static Rectangle trophyButton; 
-static Rectangle shareButton; 
+static Rectangle playButton = { 0 };
+static Rectangle shopButton = { 0 };
+static Rectangle trophyButton = { 0 };
+static Rectangle shareButton = { 0 };
 
-static Color buttonPlayColor;
-static Color buttonShopColor;
-static Color buttonTrophyColor;
-static Color buttonShareColor;
-static Color backgroundColor;
+static Color buttonPlayColor = { 0 };
+static Color buttonShopColor = { 0 };
+static Color buttonTrophyColor = { 0 };
+static Color buttonShareColor = { 0 };
+static Color backgroundColor = { 0 };
 
-static int currentScore;
-static int seasonsCounter;
-static int currentLeavesEnding;
-static int finalYears;
-static int replayTimer;
-static int yearsElapsed;
-static int initRotation;
+static int currentScore = 0;
+static int seasonsCounter = 0;
+static int currentLeavesEnding = 0;
+static int finalYears = 0;
+static int replayTimer = 0;
+static int yearsElapsed = 0;
+static int initRotation = 0;
 
-static float clockRotation;
-static float finalRotation;
+static float clockRotation = 0.0f;
+static float finalRotation = 0.0f;
 
-static bool replaying;
-static bool active[MAX_KILLS];
+static bool replaying = false;
+static bool active[MAX_KILLS] = { 0 };
 
-static char initMonthText[32];
-static char finalMonthText[32];
+static char initMonthText[32] = { 0 };
+static char finalMonthText[32] = { 0 };
 
-static Particle leafParticles[20];
+static Particle leafParticles[20] = { 0 };
 
-static int drawTimer;
-
-// Death texts
-const char textOwl01[32] = "Turned into a pretty";
-const char textOwl02[32] = "owl pellet";
-const char textDingo01[32] = "A dingo took your life";
-const char textFire01[32] = "Kissed by fire";
-const char textSnake01[32] = "Digested alive by a";
-const char textSnake02[32] = "big snake";
-const char textNaturalDeath01[32] = "LIFE KILLED YOU";
-const char textBee01[32] = "You turn out to be";
-const char textBee02[32] = "allergic to bee sting";
-const char textEagle[32] = "KOALA IS DEAD :(";
-
-static float LinearEaseIn(float t, float b, float c, float d) { return c*t/d + b; }
+static int drawTimer = 0;
 
 //----------------------------------------------------------------------------------
 // Ending Screen Functions Definition
 //----------------------------------------------------------------------------------
+static float LinearEaseIn(float t, float b, float c, float d) { return c*t/d + b; }
 
 // Ending Screen Initialization logic
 void InitEndingScreen(void)

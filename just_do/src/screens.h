@@ -32,10 +32,11 @@
 typedef enum GameScreen { LOGO, LEVEL00, LEVEL01, LEVEL02, LEVEL03, LEVEL04, LEVEL05, LEVEL06, LEVEL07, LEVEL08, LEVEL09 } GameScreen;
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition
+// Global Variables Declaration (shared by several modules)
 //----------------------------------------------------------------------------------
 extern GameScreen currentScreen;
 extern Sound levelWin;
+
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions
@@ -139,7 +140,6 @@ void UpdateLevel09Screen(void);
 void DrawLevel09Screen(void);
 void UnloadLevel09Screen(void);
 int FinishLevel09Screen(void);
-
 
 void DrawRectangleBordersRec(Rectangle rec, int offsetX, int offsetY, int borderSize, Color col);
 

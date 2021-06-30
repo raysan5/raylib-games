@@ -27,14 +27,12 @@
 #include "screens.h"
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int framesCounter = 0;
+static int finishScreen = 0;
 
-// Title screen global variables
-static int framesCounter;
-static int finishScreen;
-
-static Texture2D title;
+static Texture2D title = { 0 };
 static float titleAlpha = 0.0f;
 
 //----------------------------------------------------------------------------------

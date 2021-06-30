@@ -13,7 +13,7 @@
 ********************************************************************************************/
 
 #include "raylib.h"
-#include "screens/screens.h"    // NOTE: Defines global variable: currentScreen
+#include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -23,10 +23,28 @@
 #endif
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Shared Variables Definition (global)
 //----------------------------------------------------------------------------------
-const int screenWidth = 1280;
-const int screenHeight = 720;
+GameScreen currentScreen = LOGO;
+Music music = { 0 };
+Sound fxButton = { 0 };
+Rectangle recButton = { 0 };
+float fadeButton = 0.0f;
+Color colorButton = { 0 };
+Texture2D texButton = { 0 };
+Vector2 textPositionButton = { 0 };
+int fontSizeButton = 0.0f;
+Color textColorButton = { 0 };
+int currentMission = 0;
+int totalMissions = 0;
+Font fontMission = { 0 };
+Word messageWords[MAX_MISSION_WORDS] = { 0 };
+
+//----------------------------------------------------------------------------------
+// Module Variables Definition (local)
+//----------------------------------------------------------------------------------
+static const int screenWidth = 1280;
+static const int screenHeight = 720;
 
 // Required variables to manage screen transitions (fade-in, fade-out)
 static float transAlpha = 0.0f;
@@ -34,20 +52,17 @@ static bool onTransition = false;
 static bool transFadeOut = false;
 static int transFromScreen = -1;
 static int transToScreen = -1;
-
-// NOTE: Some global variables that require to be visible for all screens,
-// are defined in screens.h (i.e. currentScreen)
     
 //----------------------------------------------------------------------------------
-// Local Functions Declaration
+// Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
-static void ChangeToScreen(int screen);     // No transition effect
-
-static void TransitionToScreen(int screen);
-static void UpdateTransition(void);
-static void DrawTransition(void);
-
-static void UpdateDrawFrame(void);          // Update and Draw one frame
+static void ChangeToScreen(int screen);     // Change to screen, no transition effect
+                                            
+static void TransitionToScreen(int screen); // Request transition to next screen
+static void UpdateTransition(void);         // Update transition effect
+static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
+                                            
+static void UpdateDrawFrame(void);          // Update and draw one frame
 
 //----------------------------------------------------------------------------------
 // Main entry point
@@ -131,9 +146,8 @@ int main(void)
 }
 
 //----------------------------------------------------------------------------------
-// Module specific Functions Definition
+// Module Functions Definition (local)
 //----------------------------------------------------------------------------------
-
 // Change to next screen, no transition
 static void ChangeToScreen(int screen)
 {
@@ -162,7 +176,7 @@ static void ChangeToScreen(int screen)
     currentScreen = screen;
 }
 
-// Define transition to next screen
+// Request transition to next screen
 static void TransitionToScreen(int screen)
 {
     onTransition = true;
@@ -328,6 +342,9 @@ static void UpdateDrawFrame(void)
     //----------------------------------------------------------------------------------
 }
 
+//----------------------------------------------------------------------------------
+// Global Functions Definition (used by several modules)
+//----------------------------------------------------------------------------------
 // Load missions from text file
 Mission *LoadMissions(const char *fileName)
 {
@@ -425,7 +442,8 @@ Mission *LoadMissions(const char *fileName)
     return missions;
 }
 
-bool IsButtonPressed()
+// Check if button is pressed
+bool IsButtonPressed(void)
 {
     if (CheckCollisionPointRec(GetMousePosition(), recButton))
     {
@@ -442,6 +460,7 @@ bool IsButtonPressed()
     return false;
 }
 
+// Draw button
 void DrawButton(const char *text)
 {
     //DrawRectangleRec(recButton, Fade(colorButton, fadeButton));

@@ -15,22 +15,30 @@
 ********************************************************************************************/
 
 #include "raylib.h"
-#include "screens/screens.h"    // NOTE: Defines global variable: currentScreen
+#include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
 
-#include <stdlib.h>
-
-#include <stdio.h>              // Required for: printf()
-#include <string.h>             // Required for: strcpy()
+#include <stdlib.h>     // Required for:
+#include <stdio.h>      // Required for: printf()
+#include <string.h>     // Required for: strcpy(), NULL
 
 #if defined(PLATFORM_WEB)
     #include <emscripten/emscripten.h>
 #endif
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Shared Variables Definition (global)
 //----------------------------------------------------------------------------------
-const int screenWidth = 1280;
-const int screenHeight = 720;
+GameScreen currentScreen = LOGO;
+Font font = { 0 };
+Music music = { 0 };
+int endingStatus = 0;           // 1 - Win, 2 - Lose
+char *sampleFilename = NULL;    // Required for custom music file
+
+//----------------------------------------------------------------------------------
+// Module Variables Definition (local)
+//----------------------------------------------------------------------------------
+static const int screenWidth = 1280;
+static const int screenHeight = 720;
 
 // Required variables to manage screen transitions (fade-in, fade-out)
 static float transAlpha = 0.0f;
@@ -38,20 +46,17 @@ static bool onTransition = false;
 static bool transFadeOut = false;
 static int transFromScreen = -1;
 static int transToScreen = -1;
-
-// NOTE: Some global variables that require to be visible for all screens,
-// are defined in screens.h (i.e. currentScreen)
     
 //----------------------------------------------------------------------------------
-// Local Functions Declaration
+// Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
-static void ChangeToScreen(int screen);     // No transition effect
+static void ChangeToScreen(int screen);     // Change to screen, no transition effect
 
-static void TransitionToScreen(int screen);
-static void UpdateTransition(void);
-static void DrawTransition(void);
+static void TransitionToScreen(int screen); // Request transition to next screen
+static void UpdateTransition(void);         // Update transition effect
+static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
 
-static void UpdateDrawFrame(void);          // Update and Draw one frame
+static void UpdateDrawFrame(void);          // Update and draw one frame
 
 //----------------------------------------------------------------------------------
 // Main entry point
@@ -139,10 +144,9 @@ int main(int argc, char *argv[])
 }
 
 //----------------------------------------------------------------------------------
-// Module specific Functions Definition
+// Module Functions Definition (local)
 //----------------------------------------------------------------------------------
-
-// Change to next screen, no transition
+// Change to screen, no transition effect
 static void ChangeToScreen(int screen)
 {
     // Unload current screen
@@ -168,7 +172,7 @@ static void ChangeToScreen(int screen)
     currentScreen = screen;
 }
 
-// Define transition to next screen
+// Request transition to next screen
 static void TransitionToScreen(int screen)
 {
     onTransition = true;

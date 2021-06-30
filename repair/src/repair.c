@@ -13,12 +13,15 @@
 ********************************************************************************************/
 
 #include "raylib.h"
-#include "screens/screens.h"    // NOTE: Defines global variable: currentScreen
+#include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
 
 #if defined(PLATFORM_WEB)
     #include <emscripten/emscripten.h>
 #endif
 
+//----------------------------------------------------------------------------------
+// Shared Variables Definition (global)
+//----------------------------------------------------------------------------------
 GameScreen currentScreen = 0;
 Font font = { 0 };
 Music music = { 0 };
@@ -26,20 +29,25 @@ Sound fxCoin = { 0 };
 Texture2D background = { 0 };
 Texture2D texNPatch = { 0 };
 NPatchInfo npInfo = { 0 };
-
-Texture2D texHead, texHair, texNose, texMouth, texEyes, texComp;
-
-Character playerBase = { 0 };
-Character datingBase = { 0 };
-
+Texture2D texHead = { 0 };
+Texture2D texHair = { 0 };
+Texture2D texNose = { 0 };
+Texture2D texMouth = { 0 };
+Texture2D texEyes = { 0 };
+Texture2D texComp = { 0 };
+Texture2D texMakeup = { 0 };
 Character player = { 0 };
+Character playerBase = { 0 };
 Character dating = { 0 };
+Character datingBase = { 0 };
+const unsigned int headColors[6] = { 0xffe29bff, 0xfed5a8ff, 0xad8962ff, 0xfff1b8ff, 0xffd6c4ff, 0xd49c8dff };
+const unsigned int hairColors[10] = { 0xf5bf60ff, 0xaa754aff, 0x974e14ff, 0xf36347ff, 0x87f347ff, 0xfc48d0ff, 0x3b435dff, 0x5f5e60ff, 0xe7e7e7ff, 0xfb386bff };
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-const int screenWidth = 1280;
-const int screenHeight = 720;
+static const int screenWidth = 1280;
+static const int screenHeight = 720;
 
 // Required variables to manage screen transitions (fade-in, fade-out)
 static float transAlpha = 0.0f;
@@ -52,15 +60,15 @@ static int transToScreen = -1;
 // are defined in screens.h (i.e. currentScreen)
     
 //----------------------------------------------------------------------------------
-// Local Functions Declaration
+// Module Functions Declaration (local)
 //----------------------------------------------------------------------------------
-static void ChangeToScreen(int screen);     // No transition effect
-
-static void TransitionToScreen(int screen);
-static void UpdateTransition(void);
-static void DrawTransition(void);
-
-static void UpdateDrawFrame(void);          // Update and Draw one frame
+static void ChangeToScreen(int screen);     // Change to screen, no transition effect
+                                            
+static void TransitionToScreen(int screen); // Request transition to next screen
+static void UpdateTransition(void);         // Update transition effect
+static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
+                                            
+static void UpdateDrawFrame(void);          // Update and draw one frame
 
 //----------------------------------------------------------------------------------
 // Main entry point
@@ -153,9 +161,9 @@ int main(void)
 }
 
 //----------------------------------------------------------------------------------
-// Public Functions Definition
+// Global Functions Definition (used by several modules)
 //----------------------------------------------------------------------------------
-
+// Generate random character
 Character GenerateCharacter(void)
 {
     Character character = { 0 };
@@ -174,6 +182,7 @@ Character GenerateCharacter(void)
     return character;
 }
 
+// Customize character
 void CustomizeCharacter(Character *character)
 {
     if (GetRandomValue(0, 1)) character->hair = GetRandomValue(0, texHair.width/BASE_HAIR_WIDTH - 1);
@@ -183,6 +192,7 @@ void CustomizeCharacter(Character *character)
     if (GetRandomValue(0, 1)) character->mouth = GetRandomValue(0, texMouth.width/BASE_MOUTH_WIDTH - 1);
 }
 
+// Draw character
 void DrawCharacter(Character character, Vector2 position)
 {
     DrawTextureRec(texHair, (Rectangle){ BASE_HAIR_WIDTH*character.hair, 240, BASE_HAIR_WIDTH, texHair.height - 240 }, (Vector2){ position.x + (250 - BASE_HAIR_WIDTH)/2, position.y + 240 }, GetColor(character.colHair));
@@ -193,7 +203,7 @@ void DrawCharacter(Character character, Vector2 position)
     DrawTextureRec(texMouth, (Rectangle){ BASE_MOUTH_WIDTH*character.mouth, 0, BASE_MOUTH_WIDTH, texMouth.height }, (Vector2){ position.x + (250 - BASE_MOUTH_WIDTH)/2, position.y + 370 }, GetColor(character.colHead));
 }
 
-// Gui Button
+// Gui button (immediate mode, update and draw)
 bool GuiButton(Rectangle bounds, const char *text, int forcedState)
 {
     static const int textColor[4] = { 0xeff6ffff, 0x78e782ff, 0xb04d5fff, 0xd6d6d6ff };
@@ -238,10 +248,9 @@ bool GuiButton(Rectangle bounds, const char *text, int forcedState)
 }
 
 //----------------------------------------------------------------------------------
-// Module specific Functions Definition
+// Module Functions Definition (local)
 //----------------------------------------------------------------------------------
-
-// Change to next screen, no transition
+// Change to screen, no transition
 static void ChangeToScreen(int screen)
 {
     // Unload current screen
@@ -267,7 +276,7 @@ static void ChangeToScreen(int screen)
     currentScreen = screen;
 }
 
-// Define transition to next screen
+// Request transition to next screen
 static void TransitionToScreen(int screen)
 {
     onTransition = true;

@@ -35,9 +35,8 @@
 #define MAX_particle 128
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Module Types Definition (local)
 //----------------------------------------------------------------------------------
-
 typedef struct {
     Vector2 position;
     Vector2 speed;
@@ -58,7 +57,7 @@ typedef struct {
     bool active;        // NOTE: Use it to activate/deactive particle
     bool fading;
     float delayCounter;
-} RayParticleTitle;
+} RayParticle;
 
 typedef struct {
     Vector2 position;
@@ -66,7 +65,7 @@ typedef struct {
     int spawnTime;
     int maxTime;
     Particle particle[1024];
-} Stormparticleystem;
+} StormParticleSystem;
 
 typedef struct {
     Vector2 position;
@@ -74,72 +73,77 @@ typedef struct {
     int spawnTime;
     int maxTime;
     Particle particle[MAX_particle];
-} particleystemTitle;
+} TitleParticleSystem;
 
 typedef struct {
     Vector2 position;
     bool active;
     int spawnTime;
     int maxTime;
-    RayParticleTitle particle[20];
-} RayparticleystemTitle;
+    RayParticle particle[20];
+} TitleRayParticleSystem;
 
-// Title screen global variables
-static int framesCounter;
-static int finishScreen;
-static int globalFrameCounter;
-static int currentFrame;
-static int thisFrame;
-static int parallaxBackOffset;
-static int parallaxFrontOffset;
+//----------------------------------------------------------------------------------
+// Module Variables Definition (local)
+//----------------------------------------------------------------------------------
+static int framesCounter = 0;
+static int finishScreen = 0;
+static int globalFrameCounter = 0;
+static int currentFrame = 0;
+static int thisFrame = 0;
+static int parallaxBackOffset = 0;
+static int parallaxFrontOffset = 0;
 
-static float currentValue1;
-static float currentValue2;
-static float initValue1;
-static float initValue2;
-static float finishValue1;
-static float finishValue2;
-static float duration;
+static float currentValue1 = 0.0f;
+static float currentValue2 = 0.0f;
+static float initValue1 = 0.0f;
+static float initValue2 = 0.0f;
+static float finishValue1 = 0.0f;
+static float finishValue2 = 0.0f;
+static float duration = 0.0f;
 
-static Vector2 fontSize;
+static Vector2 fontSize = { 0 };
 
-static bool soundActive;
-static bool musicActive;
+static bool soundActive = false;
+static bool musicActive = false;
 
-static Rectangle koalaMenu;
-
-static Rectangle bamboo[5];
-static Rectangle player = {0, 0, 0, 0};
-static Rectangle soundButton;
-static Rectangle speakerButton;
+static Rectangle koalaMenu = { 0 };
+static Rectangle bamboo[5] = { 0 };
+static Rectangle player = { 0 };
+static Rectangle soundButton = { 0 };
+static Rectangle speakerButton = { 0 };
 
 static Color color00, color01, color02, color03;
 
-static particleystemTitle snowParticle;
-static particleystemTitle backSnowParticle;
-static particleystemTitle dandelionParticle;
-static particleystemTitle dandelionBackParticle;
-static particleystemTitle planetreeParticle;
-static particleystemTitle backPlanetreeParticle;
-static particleystemTitle flowerParticle;
-static particleystemTitle backFlowerParticle;
-static particleystemTitle rainParticle;
-static particleystemTitle backRainParticle;
-static RayparticleystemTitle rayparticle;
-static RayparticleystemTitle backRayparticle;
-static Stormparticleystem rainStormParticle;
-static Stormparticleystem snowStormParticle;
+static TitleParticleSystem snowParticle = { 0 };
+static TitleParticleSystem backSnowParticle = { 0 };
+static TitleParticleSystem dandelionParticle = { 0 };
+static TitleParticleSystem dandelionBackParticle = { 0 };
+static TitleParticleSystem planetreeParticle = { 0 };
+static TitleParticleSystem backPlanetreeParticle = { 0 };
+static TitleParticleSystem flowerParticle = { 0 };
+static TitleParticleSystem backFlowerParticle = { 0 };
+static TitleParticleSystem rainParticle = { 0 };
+static TitleParticleSystem backRainParticle = { 0 };
+static TitleRayParticleSystem rayparticle = { 0 };
+static TitleRayParticleSystem backRayparticle = { 0 };
+static StormParticleSystem rainStormParticle = { 0 };
+static StormParticleSystem snowStormParticle = { 0 };
 
-const char pressToPlay[16] = "Press to play";
+static const char pressToPlay[16] = "Press to play";
 
 //----------------------------------------------------------------------------------
-// Title Screen Functions Definition
+// Module Functions Definition (local)
 //----------------------------------------------------------------------------------
 static void DrawParallaxFront(void);
 static void DrawParallaxMiddle(void);
 static void DrawParallaxBack(void);
 
 static float BounceEaseOut(float t,float b , float c, float d);
+
+//----------------------------------------------------------------------------------
+// Title Screen Functions Definition
+//----------------------------------------------------------------------------------
 
 // Title Screen Initialization logic
 void InitTitleScreen(void)
@@ -998,6 +1002,9 @@ int FinishTitleScreen(void)
     return finishScreen;
 }
 
+//----------------------------------------------------------------------------------
+// Module Functions Declaration(local)
+//----------------------------------------------------------------------------------
 static void DrawParallaxFront(void)
 {
     Rectangle ground01 = gameplay_back_ground01;
@@ -1051,16 +1058,20 @@ static void DrawParallaxBack(void)
 
 static float BounceEaseOut(float t,float b , float c, float d)
 {
-	if ((t/=d) < (1/2.75f)) {
-		return c*(7.5625f*t*t) + b;
-	} else if (t < (2/2.75f)) {
-		float postFix = t-=(1.5f/2.75f);
-		return c*(7.5625f*(postFix)*t + .75f) + b;
-	} else if (t < (2.5/2.75)) {
-			float postFix = t-=(2.25f/2.75f);
-		return c*(7.5625f*(postFix)*t + .9375f) + b;
-	} else {
-		float postFix = t-=(2.625f/2.75f);
-		return c*(7.5625f*(postFix)*t + .984375f) + b;
-	}
+    if ((t/=d) < (1/2.75f)) return c*(7.5625f*t*t) + b;
+    else if (t < (2/2.75f))
+    {
+        float postFix = t-=(1.5f/2.75f);
+        return c*(7.5625f*(postFix)*t + 0.75f) + b;
+    }
+    else if (t < (2.5/2.75))
+    {
+        float postFix = t-=(2.25f/2.75f);
+        return c*(7.5625f*(postFix)*t + 0.9375f) + b;
+    } 
+    else
+    {
+        float postFix = t-=(2.625f/2.75f);
+        return c*(7.5625f*(postFix)*t + 0.984375f) + b;
+    }
 }

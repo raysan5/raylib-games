@@ -33,8 +33,24 @@
 #define MAX_SUBTITLE_CHAR 256
 
 //----------------------------------------------------------------------------------
-// Global Variables Definition (local to this module)
+// Local Variables Definition (local)
 //----------------------------------------------------------------------------------
+static int framesCounter = 0;
+static int finishScreen = 0;
+
+static Texture2D texBackground = { 0 };
+static Texture2D texNewspaper = { 0 };
+static Texture2D texVignette = { 0 };
+static Sound fxNews = { 0 };
+static Font fontNews = { 0 };
+
+static float rotation = 0.1f;
+static float scale = 0.05f;
+static int state = 0;
+
+static Mission *missions = NULL;
+static char headline[MAX_TITLE_CHAR] = "\0";
+
 static char *codingWords[MAX_CODING_WORDS] = {
     "pollo\0",
     "conejo\0",
@@ -49,29 +65,6 @@ static char *codingWords[MAX_CODING_WORDS] = {
     "raton\0",
     "melon\0",
 };
-
-// Ending screen global variables
-static int framesCounter;
-static int finishScreen;
-
-static Texture2D texBackground;
-static Texture2D texNewspaper;
-static Texture2D texVignette;
-
-static Sound fxNews;
-
-static float rotation = 0.1f;
-static float scale = 0.05f;
-static int state = 0;
-
-static Mission *missions = NULL;
-
-static char headline[MAX_TITLE_CHAR] = "\0";
-
-Font fontNews;
-
-// String (const char *) replacement function
-static char *StringReplace(char *orig, char *rep, char *with);
 
 //----------------------------------------------------------------------------------
 // Ending Screen Functions Definition
@@ -109,7 +102,7 @@ void InitEndingScreen(void)
         if (messageWords[i].id != missions[currentMission].sols[i])
         {
             // WARNING: It fails if the last sentence word has a '.' after space
-            char *title = StringReplace(headline, messageWords[i].text, codingWords[messageWords[i].id]);
+            char *title = TextReplace(headline, messageWords[i].text, codingWords[messageWords[i].id]);
 
             if (title != NULL)
             {
@@ -196,55 +189,4 @@ void UnloadEndingScreen(void)
 int FinishEndingScreen(void)
 {
     return finishScreen;
-}
-
-// String (const char *) replacement function
-// NOTE: Internally allocated memory must be freed by the user (if return != NULL)
-// https://stackoverflow.com/questions/779875/what-is-the-function-to-replace-string-in-c
-static char *StringReplace(char *orig, char *rep, char *with)
-{
-    char *result;   // the return string
-    char *ins;      // the next insert point
-    char *tmp;      // varies
-    int len_rep;    // length of rep (the string to remove)
-    int len_with;   // length of with (the string to replace rep with)
-    int len_front;  // distance between rep and end of last rep
-    int count;      // number of replacements
-
-    // Sanity checks and initialization
-    if (!orig || !rep) return NULL;
-
-    len_rep = strlen(rep);
-    if (len_rep == 0) return NULL;  // Empty rep causes infinite loop during count
-
-    if (!with) with = "";           // Replace with nothing if not provided
-    len_with = strlen(with);
-
-    // Count the number of replacements needed
-    ins = orig;
-    for (count = 0; (tmp = strstr(ins, rep)); ++count)
-    {
-        ins = tmp + len_rep;
-    }
-
-    tmp = result = malloc(strlen(orig) + (len_with - len_rep)*count + 1);
-
-    if (!result) return NULL;   // Memory could not be allocated
-
-    // First time through the loop, all the variable are set correctly from here on,
-    //    tmp points to the end of the result string
-    //    ins points to the next occurrence of rep in orig
-    //    orig points to the remainder of orig after "end of rep"
-    while (count--)
-    {
-        ins = strstr(orig, rep);
-        len_front = ins - orig;
-        tmp = strncpy(tmp, orig, len_front) + len_front;
-        tmp = strcpy(tmp, with) + len_with;
-        orig += len_front + len_rep; // move to next "end of rep"
-    }
-
-    strcpy(tmp, orig);
-
-    return result;
 }
