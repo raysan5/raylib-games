@@ -371,7 +371,7 @@ endif
 # Define all source files required
 PROJECT_SOURCE_FILES ?= \
     light_my_ritual.c \
-    screen_logo_raylib.c \
+    screen_logo.c \
     screen_title.c \
     screen_gameplay.c
 

@@ -87,7 +87,7 @@ int main(void)
     SetMusicVolume(music, 1.0f);
 
     // Setup and Init first screen
-    currentScreen = LOGO_RL;
+    currentScreen = LOGO;
     //InitTitleScreen();
     //InitGameplayScreen();
     rlInitLogoScreen();
@@ -109,7 +109,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     switch (currentScreen)
     {
-        case LOGO_RL: rlUnloadLogoScreen(); break;
+        case LOGO_RL: UnloadLogoScreen(); break;
         case TITLE: UnloadTitleScreen(); break;
         case GAMEPLAY: UnloadGameplayScreen(); break;
         default: break;
@@ -117,10 +117,7 @@ int main(void)
 
     // Unload all global loaded data (i.e. fonts) here!
     UnloadFont(font);
-    //UnloadSound(sndDoor);
-
     UnloadMusicStream(music);
-
     UnloadImageColors(lightsMap);
 
     CloseAudioDevice();
@@ -139,7 +136,7 @@ static void ChangeToScreen(int screen)
 {
     switch (currentScreen)
     {
-        case LOGO_RL: rlUnloadLogoScreen(); break;
+        case LOGO: UnloadLogoScreen(); break;
         case TITLE: UnloadTitleScreen(); break;
         case GAMEPLAY: UnloadGameplayScreen(); break;
         default: break;
@@ -147,7 +144,7 @@ static void ChangeToScreen(int screen)
 
     switch (screen)
     {
-        case LOGO_RL: rlInitLogoScreen(); break;
+        case LOGO_RL: InitLogoScreen(); break;
         case TITLE: InitTitleScreen(); break;
         case GAMEPLAY: InitGameplayScreen(); break;
         default: break;
@@ -177,7 +174,7 @@ static void UpdateTransition(void)
 
             switch (transFromScreen)
             {
-                case LOGO_RL: rlUnloadLogoScreen(); break;
+                case LOGO: UnloadLogoScreen(); break;
                 case TITLE: UnloadTitleScreen(); break;
                 case GAMEPLAY: UnloadGameplayScreen(); break;
                 default: break;
@@ -185,9 +182,9 @@ static void UpdateTransition(void)
 
             switch (transToScreen)
             {
-                case LOGO_RL:
+                case LOGO:
                 {
-                    rlInitLogoScreen();
+                    InitLogoScreen();
                     currentScreen = LOGO_RL;
                 } break;
                 case TITLE:
@@ -236,11 +233,11 @@ static void UpdateDrawFrame(void)
     {
         switch(currentScreen)
         {
-            case LOGO_RL:
+            case LOGO:
             {
-                rlUpdateLogoScreen();
+                UpdateLogoScreen();
 
-                if (rlFinishLogoScreen()) TransitionToScreen(TITLE);
+                if (FinishLogoScreen()) TransitionToScreen(TITLE);
 
             } break;
             case TITLE:
@@ -258,7 +255,7 @@ static void UpdateDrawFrame(void)
             {
                 UpdateGameplayScreen();
 
-                if (FinishGameplayScreen() == 1) ChangeToScreen(LOGO_RL);
+                if (FinishGameplayScreen() == 1) ChangeToScreen(LOGO);
                 else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
             } break;
@@ -282,7 +279,7 @@ static void UpdateDrawFrame(void)
 
         switch(currentScreen)
         {
-            case LOGO_RL: rlDrawLogoScreen(); break;
+            case LOGO: DrawLogoScreen(); break;
             case TITLE: DrawTitleScreen(); break;
             case GAMEPLAY: DrawGameplayScreen(); break;
             default: break;

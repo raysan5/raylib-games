@@ -29,7 +29,7 @@
 //----------------------------------------------------------------------------------
 // Types and Structures Definition
 //----------------------------------------------------------------------------------
-typedef enum GameScreen { LOGO_RL = 0, TITLE, GAMEPLAY } GameScreen;
+typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY } GameScreen;
 
 //----------------------------------------------------------------------------------
 // Global Variables Declaration (shared by several modules)
@@ -48,11 +48,11 @@ extern "C" {            // Prevents name mangling of functions
 //----------------------------------------------------------------------------------
 // raylib Logo Screen Functions Declaration
 //----------------------------------------------------------------------------------
-void rlInitLogoScreen(void);
-void rlUpdateLogoScreen(void);
-void rlDrawLogoScreen(void);
-void rlUnloadLogoScreen(void);
-int rlFinishLogoScreen(void);
+void InitLogoScreen(void);
+void UpdateLogoScreen(void);
+void DrawLogoScreen(void);
+void UnloadLogoScreen(void);
+int FinishLogoScreen(void);
 
 //----------------------------------------------------------------------------------
 // Title Screen Functions Declaration

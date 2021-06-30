@@ -54,7 +54,7 @@ static float alpha = 1.0f;      // Useful for fading
 //----------------------------------------------------------------------------------
 
 // Logo Screen Initialization logic
-void rlInitLogoScreen(void)
+void InitLogoScreen(void)
 {
     // Initialize LOGO screen variables here!
     finishScreen = 0;
@@ -76,7 +76,7 @@ void rlInitLogoScreen(void)
 }
 
 // Logo Screen Update logic
-void rlUpdateLogoScreen(void)
+void UpdateLogoScreen(void)
 {
     // Update LOGO screen variables here!
     if (state == 0)                 // State 0: Small box blinking
@@ -149,7 +149,7 @@ void rlUpdateLogoScreen(void)
 }
 
 // Logo Screen Draw logic
-void rlDrawLogoScreen(void)
+void DrawLogoScreen(void)
 {
     if (state == 0)
     {
@@ -197,13 +197,13 @@ void rlDrawLogoScreen(void)
 }
 
 // Logo Screen Unload logic
-void rlUnloadLogoScreen(void)
+void UnloadLogoScreen(void)
 {
     // Unload LOGO screen variables here!
 }
 
 // Logo Screen should finish?
-int rlFinishLogoScreen(void)
+int FinishLogoScreen(void)
 {
     return finishScreen;
 }
