@@ -1,8 +1,6 @@
 # raylib games
 
-This is my collection of games made with raylib. Most of the games in this repo have been done Global Game Jam since 2015.
-
-![game name](screenshots/screenshot000.png "Game Name")
+This is my collection of games made with raylib. Most of the games in this repo have been done in Global Game Jams.
 
 Games included:
 
@@ -32,7 +30,7 @@ Classics directory includes some classic games:
  - Space Invaders
  - Tetris
 
-All games are usually updated to latest version of raylib. Feel free to send a PR if some games requires an update!
+All games are usually updated to latest version of raylib. Feel free to send a PR if some games do not work properly!
 
 license
 -------
