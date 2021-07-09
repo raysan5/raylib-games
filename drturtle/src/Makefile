@@ -23,17 +23,17 @@
 
 .PHONY: all clean
 
-# Define required raylib variables
+# Define required variables
 PROJECT_NAME       ?= drturtle
 RAYLIB_VERSION     ?= 3.8.0
-RAYLIB_PATH        ?= C:\GitHub\raylib
+RAYLIB_PATH        ?= C:/GitHub/raylib
 
 # Define default options
 
 # One of PLATFORM_DESKTOP, PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
 PLATFORM           ?= PLATFORM_DESKTOP
 
-# Locations of your newly installed library and associated headers. See ../src/Makefile
+# Locations of your newly installed library and associated headers.
 # On Linux, if you have installed raylib but cannot compile the examples, check that
 # the *_INSTALL_PATH values here are the same as those in src/Makefile or point to known locations.
 # To enable system-wide compile-time and runtime linking to libraylib.so, run ../src/$ sudo make install RAYLIB_LIBTYPE_SHARED.
@@ -41,10 +41,12 @@ PLATFORM           ?= PLATFORM_DESKTOP
 # To enable runtime linking to a special version of libraylib.so, see EXAMPLE_RUNTIME_PATH below.
 # If there is a libraylib in both EXAMPLE_RUNTIME_PATH and RAYLIB_INSTALL_PATH, at runtime,
 # the library at EXAMPLE_RUNTIME_PATH, if present, will take precedence over the one at RAYLIB_INSTALL_PATH.
-# RAYLIB_INSTALL_PATH should be the desired full path to libraylib. No relative paths.
-DESTDIR ?= /usr/local
-RAYLIB_INSTALL_PATH ?= $(DESTDIR)/lib
-# RAYLIB_H_INSTALL_PATH locates the installed raylib header and associated source files.
+
+# Desired full path to libraylib. No relative paths.
+DESTDIR               ?= /usr/local
+RAYLIB_INSTALL_PATH   ?= $(DESTDIR)/lib
+
+# raylib header and associated source files
 RAYLIB_H_INSTALL_PATH ?= $(DESTDIR)/include
 
 # Library type used for raylib: STATIC (.a) or SHARED (.so/.dll)
@@ -178,7 +180,7 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
 endif
 
 # Define default make program
-MAKE = make
+MAKE    ?= make
 
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),WINDOWS)
