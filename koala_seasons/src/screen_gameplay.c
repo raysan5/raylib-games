@@ -334,10 +334,11 @@ static bool transBackAnim = false;
 static bool fog = false;
 static bool leafGUIglow = false;
 
-static Rectangle player = { 0 };
-static Rectangle leftButton = { 0 };
-static Rectangle rightButton = { 0 };
-static Rectangle powerButton = { 0 };
+static Rectangle playerBounds = { 0 };
+static Rectangle leftButtonRec = { 0 };
+static Rectangle rightButtonRec = { 0 };
+static Rectangle powerButtonRec = { 0 };
+
 static Rectangle fire[MAX_FIRE] = { 0 };
 static Rectangle ice[MAX_ICE] = { 0 };
 static Rectangle resin[MAX_RESIN] = { 0 };
@@ -689,15 +690,15 @@ void UpdateGameplayScreen(void)
             clockRotation += clockSpeedRotation;
         }
 
-        player.y += gravity;
+        playerBounds.y += gravity;
         bambooTimer += (speedMod*TIME_FACTOR);
         speed = SPEED*speedMod;
 
-        if (player.x >= GetScreenWidth()*0.6 && state != FINALFORM)
+        if (playerBounds.x >= GetScreenWidth()*0.6 && state != FINALFORM)
         {
-            speedIncrease = (player.x - GetScreenWidth()*0.6f)/GetScreenWidth();
+            speedIncrease = (playerBounds.x - GetScreenWidth()*0.6f)/GetScreenWidth();
         }
-        else if (player.x < GetScreenWidth()*0.6 && state != FINALFORM)
+        else if (playerBounds.x < GetScreenWidth()*0.6 && state != FINALFORM)
         {
             speedIncrease = 0;
         }
@@ -735,7 +736,7 @@ void UpdateGameplayScreen(void)
         if (clockSpeedRotation <= (SEASONCHANGE)) clockRotation = (float)LinearEaseIn((float)clockSpeedRotation, clockInitRotation, 90.0f, (float)(SEASONCHANGE));
         else clockRotation = clockFinalRotation;
 
-        if (CheckCollisionCircleRec(clockPosition, gameplay_gui_seasonsclock_disc.width, player))
+        if (CheckCollisionCircleRec(clockPosition, gameplay_gui_seasonsclock_disc.width, playerBounds))
         {
            if (UIfade > 0.4f) UIfade -= 0.01f*TIME_FACTOR;
         }
@@ -877,7 +878,7 @@ void UpdateGameplayScreen(void)
             {
                 eagle.x -= 10*speed*TIME_FACTOR;
 
-                if (CheckCollisionRecs(eagle, player) && (state != FINALFORM) && (state != KICK))
+                if (CheckCollisionRecs(eagle, playerBounds) && (state != FINALFORM) && (state != KICK))
                 {
                     velocity = 8;
                     jumpSpeed = 2;
@@ -885,7 +886,7 @@ void UpdateGameplayScreen(void)
                     playerActive = false;
                     killer = 6;
                 }
-                else if (CheckCollisionRecs(eagle, player) && (state == FINALFORM) && (state != KICK))
+                else if (CheckCollisionRecs(eagle, playerBounds) && (state == FINALFORM) && (state != KICK))
                 {
                     isHitEagle = true;
                     beeVelocity = 8;
@@ -941,7 +942,7 @@ void UpdateGameplayScreen(void)
                 beeMov = sin(2*PI/400*bee.x) * 5;
                 bee.y += beeMov*TIME_FACTOR;
 
-                if (CheckCollisionRecs(bee, player) && (state != FINALFORM) && (state != KICK))
+                if (CheckCollisionRecs(bee, playerBounds) && (state != FINALFORM) && (state != KICK))
                 {
                     velocity = 8;
                     jumpSpeed = 2;
@@ -949,7 +950,7 @@ void UpdateGameplayScreen(void)
                     playerActive = false;
                     killer = 5;
                 }
-                else if (CheckCollisionRecs(bee, player) && (state == FINALFORM))
+                else if (CheckCollisionRecs(bee, playerBounds) && (state == FINALFORM))
                 {
                     isHitBee = true;
                     beeVelocity = 8;
@@ -1012,8 +1013,7 @@ void UpdateGameplayScreen(void)
                 leafGUIpulseScale = 1;
             }
 
-#if (defined(PLATFORM_ANDROID) || defined(PLATFORM_WEB))
-            if ((IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetTouchPosition(0), powerButton)) && (state != FINALFORM))
+            if ((IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetTouchPosition(0), powerButtonRec)) && (state != FINALFORM))
             {
                 state = FINALFORM;
                 transforming = true;
@@ -1023,9 +1023,8 @@ void UpdateGameplayScreen(void)
                 thisFrameKoala = 0;
                 superKoalaCounter++;
             }
-#elif (defined(PLATFORM_DESKTOP) || defined(PLATFORM_WEB))
 
-            if ((IsKeyPressed(KEY_ENTER) || (CheckCollisionPointRec(GetMousePosition(), powerButton) && IsMouseButtonPressed(0))) && (state != FINALFORM))
+            if ((IsKeyPressed(KEY_ENTER) || (CheckCollisionPointRec(GetMousePosition(), powerButtonRec) && IsMouseButtonPressed(0))) && (state != FINALFORM))
             {
                 state = FINALFORM;
                 transforming = true;
@@ -1035,7 +1034,6 @@ void UpdateGameplayScreen(void)
                 thisFrameKoala = 0;
                 superKoalaCounter++;
             }
-#endif
         }
 #if defined(DEBUG)
         if ((currentLeaves < LEAVESTOTRANSFORM) && (IsKeyPressed(KEY_ENTER))) currentLeaves += LEAVESTOTRANSFORM;
@@ -1064,7 +1062,7 @@ void UpdateGameplayScreen(void)
 
             if (ice[i].x <= - ice[i].width) iceActive[i] = false;
 
-            if (CheckCollisionRecs(ice[i], player) && (state == GRABED)) onIce = true;
+            if (CheckCollisionRecs(ice[i], playerBounds) && (state == GRABED)) onIce = true;
         }
 
         // Resin logic
@@ -1074,7 +1072,7 @@ void UpdateGameplayScreen(void)
 
             if (resin[i].x <= -resin[i].width) resinActive[i] = false;
 
-            if (CheckCollisionRecs(resin[i], player) && resinCount >= 30*TIME_FACTOR && state != FINALFORM)
+            if (CheckCollisionRecs(resin[i], playerBounds) && resinCount >= 30*TIME_FACTOR && state != FINALFORM)
             {
                 if (!onResin)
                 {
@@ -1099,7 +1097,7 @@ void UpdateGameplayScreen(void)
 
             if (wind[i].x <= - wind[i].width) windActive[i] = false;
 
-            if (CheckCollisionRecs(wind[i], player) && state != ONWIND && (windCounter >= 35) && state != FINALFORM)
+            if (CheckCollisionRecs(wind[i], playerBounds) && state != ONWIND && (windCounter >= 35) && state != FINALFORM)
             {
                 state = ONWIND;
                 windCounter = 0;
@@ -1122,7 +1120,7 @@ void UpdateGameplayScreen(void)
 
             if (fireActive[i] == false) fire[i].x = -200;
 
-            if (fire[i].x <= (player.x + player.width) && !onFire[i])
+            if (fire[i].x <= (playerBounds.x + playerBounds.width) && !onFire[i])
             {
                 onFire[i] = true;
             }
@@ -1141,7 +1139,7 @@ void UpdateGameplayScreen(void)
                 onFire[i] = false;
             }
 
-            if (CheckCollisionRecs(player, fire[i]))
+            if (CheckCollisionRecs(playerBounds, fire[i]))
             {
                 if (state != FINALFORM)
                 {
@@ -1170,16 +1168,16 @@ void UpdateGameplayScreen(void)
             {
                 bamboo[i].x -= speed;
 
-                if ((CheckCollisionRecs(player, bamboo[i])) && (state != FINALFORM))
+                if ((CheckCollisionRecs(playerBounds, bamboo[i])) && (state != FINALFORM))
                 {
                     if (grabCounter >= 10)
                     {
-                        player.x = bamboo[i].x - 25;
+                        playerBounds.x = bamboo[i].x - 25;
                         state = GRABED;
                     }
                 }
 
-                if ((CheckCollisionRecs(player, bamboo[i])) && (state == FINALFORM))
+                if ((CheckCollisionRecs(playerBounds, bamboo[i])) && (state == FINALFORM))
                 {
                     if (power <= 1)
                     {
@@ -1250,7 +1248,7 @@ void UpdateGameplayScreen(void)
             if (!dingoActive[k]) dingo[k].x = -500;
             if (!owlActive[k]) owl[k].x = -500;
 
-            if (CheckCollisionRecs(player, snake[k]) && (state != KICK) && !isHitSnake[k])
+            if (CheckCollisionRecs(playerBounds, snake[k]) && (state != KICK) && !isHitSnake[k])
             {
                 if (state != FINALFORM)
                 {
@@ -1290,7 +1288,7 @@ void UpdateGameplayScreen(void)
                 }
             }
 
-            if (CheckCollisionRecs(player, dingo[k]) && (state != KICK) && !isHitDingo[k])
+            if (CheckCollisionRecs(playerBounds, dingo[k]) && (state != KICK) && !isHitDingo[k])
             {
                 if (state != FINALFORM)
                 {
@@ -1328,7 +1326,7 @@ void UpdateGameplayScreen(void)
                 }
             }
 
-            if (CheckCollisionRecs(player, owl[k]) && (state != KICK) && !isHitOwl[k])
+            if (CheckCollisionRecs(playerBounds, owl[k]) && (state != KICK) && !isHitOwl[k])
             {
                 if (state != FINALFORM)
                 {
@@ -1416,7 +1414,7 @@ void UpdateGameplayScreen(void)
 
             if (leaf[j].x <= -leaf[j].width) leafActive[j] = false;
 
-            if (CheckCollisionRecs(player, leaf[j]) && leafActive[j])
+            if (CheckCollisionRecs(playerBounds, leaf[j]) && leafActive[j])
             {
                 popupLeaves[j].position = (Vector2){ leaf[j].x, leaf[j].y };
                 popupLeaves[j].scale = 1.0f;
@@ -2036,8 +2034,7 @@ void UpdateGameplayScreen(void)
 
                 if (!onResin)
                 {
-#if (defined(PLATFORM_ANDROID) || defined(PLATFORM_WEB))
-                    if (((IsGestureDetected(GESTURE_TAP) || (GetGestureDetected() == GESTURE_DOUBLETAP)) && CheckCollisionPointRec(GetTouchPosition(0), rightButton)))
+                    if (((IsGestureDetected(GESTURE_TAP) || (GetGestureDetected() == GESTURE_DOUBLETAP)) && CheckCollisionPointRec(GetTouchPosition(0), rightButtonRec)))
                     {
                         state = JUMPING;
                         velocity = JUMP;
@@ -2052,7 +2049,7 @@ void UpdateGameplayScreen(void)
                         jumpCounter++;
                     }
 
-                    if (((IsGestureDetected(GESTURE_TAP) || (GetGestureDetected() == GESTURE_DOUBLETAP)) && CheckCollisionPointRec(GetTouchPosition(0), leftButton)))
+                    if (((IsGestureDetected(GESTURE_TAP) || (GetGestureDetected() == GESTURE_DOUBLETAP)) && CheckCollisionPointRec(GetTouchPosition(0), leftButtonRec)))
                     {
                         if (!onIce)gravity = KICKSPEED;
                         else gravity = ICEGRAVITY;
@@ -2071,9 +2068,8 @@ void UpdateGameplayScreen(void)
                         else gravity = ICEGRAVITY;
                         //thisFrameKoala = 0;
                     }
-#elif (defined(PLATFORM_DESKTOP) || defined(PLATFORM_WEB))
 
-                    if (IsKeyPressed(KEY_SPACE) || (CheckCollisionPointRec(GetMousePosition(), rightButton) && IsMouseButtonPressed(0)))
+                    if (IsKeyPressed(KEY_SPACE) || (CheckCollisionPointRec(GetMousePosition(), rightButtonRec) && IsMouseButtonPressed(0)))
                     {
                         state = JUMPING;
                         velocity = JUMP;
@@ -2087,7 +2083,7 @@ void UpdateGameplayScreen(void)
                         jumpCounter++;
                     }
 
-                    if (IsKeyPressed(KEY_DOWN) || (CheckCollisionPointRec(GetMousePosition(), leftButton) && IsMouseButtonPressed(0)))
+                    if (IsKeyPressed(KEY_DOWN) || (CheckCollisionPointRec(GetMousePosition(), leftButtonRec) && IsMouseButtonPressed(0)))
                     {
                         if (!onIce)gravity = KICKSPEED;
                         else gravity = ICEGRAVITY;
@@ -2106,12 +2102,10 @@ void UpdateGameplayScreen(void)
                         else gravity = ICEGRAVITY;
                         //thisFrameKoala = 0;
                     }
-#endif
                 }
                 else
                 {
-#if (defined(PLATFORM_ANDROID) || defined(PLATFORM_WEB))
-                    if (((IsGestureDetected(GESTURE_TAP) || (GetGestureDetected() == GESTURE_DOUBLETAP)) && CheckCollisionPointRec(GetTouchPosition(0), rightButton)))
+                    if (((IsGestureDetected(GESTURE_TAP) || (GetGestureDetected() == GESTURE_DOUBLETAP)) && CheckCollisionPointRec(GetTouchPosition(0), rightButtonRec)))
                     {
                         resinCountjump++;
 
@@ -2133,7 +2127,7 @@ void UpdateGameplayScreen(void)
                         }
                     }
 
-                    if (((IsGestureDetected(GESTURE_TAP) || (GetGestureDetected() == GESTURE_DOUBLETAP)) && CheckCollisionPointRec(GetTouchPosition(0), leftButton)))
+                    if (((IsGestureDetected(GESTURE_TAP) || (GetGestureDetected() == GESTURE_DOUBLETAP)) && CheckCollisionPointRec(GetTouchPosition(0), leftButtonRec)))
                     {
                         resinCountdrag ++;
 
@@ -2155,8 +2149,8 @@ void UpdateGameplayScreen(void)
                     {
                         gravity = 0;
                     }
-#elif (defined(PLATFORM_DESKTOP) || defined(PLATFORM_WEB))
-                    if (IsKeyPressed(KEY_SPACE) || (CheckCollisionPointRec(GetMousePosition(), rightButton) && IsMouseButtonPressed(0)))
+
+                    if (IsKeyPressed(KEY_SPACE) || (CheckCollisionPointRec(GetMousePosition(), rightButtonRec) && IsMouseButtonPressed(0)))
                     {
                         resinCountjump++;
 
@@ -2178,7 +2172,7 @@ void UpdateGameplayScreen(void)
                         }
                     }
 
-                    if (IsKeyPressed(KEY_DOWN) || (CheckCollisionPointRec(GetMousePosition(), leftButton) && IsMouseButtonPressed(0)))
+                    if (IsKeyPressed(KEY_DOWN) || (CheckCollisionPointRec(GetMousePosition(), leftButtonRec) && IsMouseButtonPressed(0)))
                     {
                         resinCountdrag ++;
 
@@ -2196,18 +2190,14 @@ void UpdateGameplayScreen(void)
                             dashCounter++;
                         }
                     }
-                    else
-                    {
-                        gravity = 0;
-                    }
-#endif
+                    else gravity = 0;
                 }
             } break;
             case JUMPING:
             {
-                player.x += jumpSpeed*TIME_FACTOR;
+                playerBounds.x += jumpSpeed*TIME_FACTOR;
                 velocity -= 1*TIME_FACTOR*TIME_FACTOR;
-                player.y -= velocity;
+                playerBounds.y -= velocity;
                 framesCounter += 1*TIME_FACTOR;
                 grabCounter+= 1*TIME_FACTOR;
 
@@ -2215,13 +2205,13 @@ void UpdateGameplayScreen(void)
             case KICK:
             {
                 gravity += 1*TIME_FACTOR*TIME_FACTOR;
-                player.y += gravity;
-                player.x -= speed;
+                playerBounds.y += gravity;
+                playerBounds.x -= speed;
                 grabCounter += 1*TIME_FACTOR;
 
                 for (int i = 0; i < MAX_ENEMIES; i++)
                 {
-                    if (CheckCollisionRecs(player, snake[i]) && !isHitSnake[i] && snakeActive[i])
+                    if (CheckCollisionRecs(playerBounds, snake[i]) && !isHitSnake[i] && snakeActive[i])
                     {
                         state = JUMPING;
                         velocity = JUMP;
@@ -2252,7 +2242,7 @@ void UpdateGameplayScreen(void)
                         popupScore[i].active = true;
                     }
 
-                    if (CheckCollisionRecs(player, dingo[i]) && !isHitDingo[i] && dingoActive[i])
+                    if (CheckCollisionRecs(playerBounds, dingo[i]) && !isHitDingo[i] && dingoActive[i])
                     {
                         state = JUMPING;
                         velocity = JUMP;
@@ -2282,7 +2272,7 @@ void UpdateGameplayScreen(void)
                         popupScore[i].active = true;
                     }
 
-                    if (CheckCollisionRecs(player, owl[i]) && !isHitOwl[i] && owlActive[i])
+                    if (CheckCollisionRecs(playerBounds, owl[i]) && !isHitOwl[i] && owlActive[i])
                     {
                         state = JUMPING;
                         velocity = JUMP;
@@ -2313,7 +2303,7 @@ void UpdateGameplayScreen(void)
                     }
                 }
 
-                if (CheckCollisionRecs(player, bee) && !isHitBee && beeActive)
+                if (CheckCollisionRecs(playerBounds, bee) && !isHitBee && beeActive)
                 {
                     state = JUMPING;
                     velocity = JUMP;
@@ -2335,7 +2325,7 @@ void UpdateGameplayScreen(void)
                     popupBee.active = true;
                 }
 
-                if (CheckCollisionRecs(player, eagle) && !isHitEagle && eagleActive)
+                if (CheckCollisionRecs(playerBounds, eagle) && !isHitEagle && eagleActive)
                 {
                     state = JUMPING;
                     velocity = JUMP;
@@ -2421,8 +2411,8 @@ void UpdateGameplayScreen(void)
 
                     if (curFrameKoala > 1) curFrameKoala = 0;
                     if (curFrameKoala <= 1) koalaAnimationFly.x = gameplay_koala_fly.x + koalaAnimationFly.width*curFrameKoala;
-                    if (player.x > GetScreenWidth()/3) player.x -= 2;
-                    if (player.x < GetScreenWidth()/3) player.x++;
+                    if (playerBounds.x > GetScreenWidth()/3) playerBounds.x -= 2;
+                    if (playerBounds.x < GetScreenWidth()/3) playerBounds.x++;
 
                     if (power <= maxPower/5)
                     {
@@ -2445,13 +2435,11 @@ void UpdateGameplayScreen(void)
                     }
                     else finalColor = WHITE;
 
-#if (defined(PLATFORM_ANDROID) || defined(PLATFORM_WEB))
-                    if ((IsGestureDetected(GESTURE_HOLD) || (GetGestureDetected() == GESTURE_DRAG)) && CheckCollisionPointRec(GetTouchPosition(0), leftButton)) player.y += FLYINGMOV;
-                    if ((IsGestureDetected(GESTURE_HOLD) || (GetGestureDetected() == GESTURE_DRAG)) && CheckCollisionPointRec(GetTouchPosition(0), rightButton)) player.y -= FLYINGMOV;
-#elif (defined(PLATFORM_DESKTOP) || defined(PLATFORM_WEB))
-                    if (IsKeyDown(KEY_DOWN) || (CheckCollisionPointRec(GetMousePosition(), leftButton) && IsMouseButtonDown(0))) player.y += FLYINGMOV;
-                    if (IsKeyDown(KEY_UP) || (CheckCollisionPointRec(GetMousePosition(), rightButton) && IsMouseButtonDown(0))) player.y -= FLYINGMOV;
-#endif
+                    if ((IsGestureDetected(GESTURE_HOLD) || (IsGestureDetected(GESTURE_DRAG))) && CheckCollisionPointRec(GetTouchPosition(0), leftButtonRec)) playerBounds.y += FLYINGMOV;
+                    if ((IsGestureDetected(GESTURE_HOLD) || (IsGestureDetected(GESTURE_DRAG))) && CheckCollisionPointRec(GetTouchPosition(0), rightButtonRec)) playerBounds.y -= FLYINGMOV;
+
+                    if (IsKeyDown(KEY_DOWN) || (CheckCollisionPointRec(GetMousePosition(), leftButtonRec) && IsMouseButtonDown(0))) playerBounds.y += FLYINGMOV;
+                    if (IsKeyDown(KEY_UP) || (CheckCollisionPointRec(GetMousePosition(), rightButtonRec) && IsMouseButtonDown(0))) playerBounds.y -= FLYINGMOV;
                 }
 
                 gravity = 0;
@@ -2460,9 +2448,9 @@ void UpdateGameplayScreen(void)
             } break;
             case ONWIND:
             {
-                player.x -= jumpSpeed*TIME_FACTOR;
+                playerBounds.x -= jumpSpeed*TIME_FACTOR;
                 velocity -= 2*TIME_FACTOR;
-                player.y -= velocity;
+                playerBounds.y -= velocity;
                 framesCounter += 1*TIME_FACTOR;
                 grabCounter += 1*TIME_FACTOR;
 
@@ -2470,16 +2458,16 @@ void UpdateGameplayScreen(void)
             default: break;
          }
 
-        if (player.x <= (-player.width))
+        if (playerBounds.x <= (-playerBounds.width))
         {
             play = false;
             playerActive = false;
             killer = 4;
         }
 
-        if ((player.y + player.height) >= GetScreenHeight())
+        if ((playerBounds.y + playerBounds.height) >= GetScreenHeight())
         {
-            if (state == FINALFORM) player.y = GetScreenHeight() - player.height;
+            if (state == FINALFORM) playerBounds.y = GetScreenHeight() - playerBounds.height;
             else
             {
                 play = false;
@@ -2488,9 +2476,9 @@ void UpdateGameplayScreen(void)
             }
         }
 
-        if ((player.y) <= 0 && state == FINALFORM) player.y = 0;
-        if (player.x >= (GetScreenWidth() - player.width)) player.x = (GetScreenWidth() - player.width);
-        if (player.y <= -32) player.y = -32;
+        if ((playerBounds.y) <= 0 && state == FINALFORM) playerBounds.y = 0;
+        if (playerBounds.x >= (GetScreenWidth() - playerBounds.width)) playerBounds.x = (GetScreenWidth() - playerBounds.width);
+        if (playerBounds.y <= -32) playerBounds.y = -32;
 
         if (bambooTimer > bambooSpawnTime)
         {
@@ -2533,11 +2521,11 @@ void UpdateGameplayScreen(void)
     {
         if (score > hiscore) hiscore = score;
 
-        player.x -= jumpSpeed;
+        playerBounds.x -= jumpSpeed;
         velocity -= 1*TIME_FACTOR;
-        player.y -= velocity;
+        playerBounds.y -= velocity;
 
-        if (player.y >= GetScreenHeight())
+        if (playerBounds.y >= GetScreenHeight())
         {
             deathsCounter++;
             finishScreen = 1;
@@ -2739,14 +2727,14 @@ void DrawGameplayScreen(void)
         for (int i = 0; i < 8; i++)
         {
             DrawTexturePro(atlas02, background_transformation,
-                (Rectangle){player.x + player.width/2 , player.y + player.height/2, background_transformation.width*4, background_transformation.height*4},
+                (Rectangle){playerBounds.x + playerBounds.width/2 , playerBounds.y + playerBounds.height/2, background_transformation.width*4, background_transformation.height*4},
                 (Vector2){0, background_transformation.height*2}, 45*i, Fade(finalColor, 0.7f));
         }
 
         for (int i = 0; i < 8; i++)
         {
             DrawTexturePro(atlas02, background_transformation,
-                (Rectangle){player.x + player.width/2 , player.y + player.height/2, background_transformation.width*4, background_transformation.height},
+                (Rectangle){playerBounds.x + playerBounds.width/2 , playerBounds.y + playerBounds.height/2, background_transformation.width*4, background_transformation.height},
                 (Vector2){0, background_transformation.height/2}, 22.5 + 45*i, Fade(finalColor2, 0.7f));
         }
     }
@@ -2755,21 +2743,21 @@ void DrawGameplayScreen(void)
     {
         switch(state)
         {
-            case GRABED: DrawTextureRec(atlas01, koalaAnimationIddle, (Vector2){player.x - player.width, player.y - gameplay_koala_idle.height/4}, WHITE); break;
-            case JUMPING: DrawTexturePro(atlas01, gameplay_koala_jump, (Rectangle){player.x - player.width, player.y - gameplay_koala_jump.height/4, gameplay_koala_jump.width, gameplay_koala_jump.height}, (Vector2){0, 0}, 0, WHITE); break;
-            case KICK:DrawTexturePro(atlas01, gameplay_koala_dash, (Rectangle){player.x - player.width, player.y - gameplay_koala_jump.height/4, gameplay_koala_dash.width, gameplay_koala_dash.height}, (Vector2){0, 0}, 0, WHITE);  break;
+            case GRABED: DrawTextureRec(atlas01, koalaAnimationIddle, (Vector2){playerBounds.x - playerBounds.width, playerBounds.y - gameplay_koala_idle.height/4}, WHITE); break;
+            case JUMPING: DrawTexturePro(atlas01, gameplay_koala_jump, (Rectangle){playerBounds.x - playerBounds.width, playerBounds.y - gameplay_koala_jump.height/4, gameplay_koala_jump.width, gameplay_koala_jump.height}, (Vector2){0, 0}, 0, WHITE); break;
+            case KICK:DrawTexturePro(atlas01, gameplay_koala_dash, (Rectangle){playerBounds.x - playerBounds.width, playerBounds.y - gameplay_koala_jump.height/4, gameplay_koala_dash.width, gameplay_koala_dash.height}, (Vector2){0, 0}, 0, WHITE);  break;
             case FINALFORM:
             {
-                if (transforming)DrawTexturePro(atlas01, koalaAnimationTransform, (Rectangle){player.x - player.width, player.y - gameplay_koala_transform.height/4, gameplay_koala_transform.width/2, gameplay_koala_transform.height}, (Vector2){0, 0}, 0, finalColor);
-                else DrawTexturePro(atlas01, koalaAnimationFly, (Rectangle){player.x - gameplay_koala_fly.width/3, player.y - gameplay_koala_fly.height/4, gameplay_koala_fly.width/2, gameplay_koala_fly.height}, (Vector2){0, 0}, 0, finalColor);//DrawTextureRec((koalaFly), (Rectangle){0, 0, 128, 128}, (Vector2){player.x - 50, player.y - 40}, WHITE);
+                if (transforming)DrawTexturePro(atlas01, koalaAnimationTransform, (Rectangle){playerBounds.x - playerBounds.width, playerBounds.y - gameplay_koala_transform.height/4, gameplay_koala_transform.width/2, gameplay_koala_transform.height}, (Vector2){0, 0}, 0, finalColor);
+                else DrawTexturePro(atlas01, koalaAnimationFly, (Rectangle){playerBounds.x - gameplay_koala_fly.width/3, playerBounds.y - gameplay_koala_fly.height/4, gameplay_koala_fly.width/2, gameplay_koala_fly.height}, (Vector2){0, 0}, 0, finalColor);//DrawTextureRec((koalaFly), (Rectangle){0, 0, 128, 128}, (Vector2){playerBounds.x - 50, playerBounds.y - 40}, WHITE);
 
             } break;
-            case ONWIND: DrawTexturePro(atlas01, gameplay_koala_jump, (Rectangle){player.x - player.width, player.y - gameplay_koala_jump.height/4, gameplay_koala_jump.width, gameplay_koala_jump.height}, (Vector2) { 0, 0}, 0, WHITE); break;
+            case ONWIND: DrawTexturePro(atlas01, gameplay_koala_jump, (Rectangle){playerBounds.x - playerBounds.width, playerBounds.y - gameplay_koala_jump.height/4, gameplay_koala_jump.width, gameplay_koala_jump.height}, (Vector2) { 0, 0}, 0, WHITE); break;
             default: break;
         }
     }
-    else if (play == false && playerActive) DrawTextureRec(atlas01, (Rectangle){gameplay_koala_idle.x, gameplay_koala_idle.y, gameplay_koala_idle.width/3, gameplay_koala_idle.height}, (Vector2){player.x - player.width, player.y - gameplay_koala_idle.height/4}, WHITE);
-    else DrawTexturePro(atlas01, gameplay_koala_die, (Rectangle){player.x - player.width, player.y - gameplay_koala_die.height/4, gameplay_koala_die.width, gameplay_koala_die.height}, (Vector2) { 0, 0}, 0, WHITE);
+    else if (play == false && playerActive) DrawTextureRec(atlas01, (Rectangle){gameplay_koala_idle.x, gameplay_koala_idle.y, gameplay_koala_idle.width/3, gameplay_koala_idle.height}, (Vector2){playerBounds.x - playerBounds.width, playerBounds.y - gameplay_koala_idle.height/4}, WHITE);
+    else DrawTexturePro(atlas01, gameplay_koala_die, (Rectangle){playerBounds.x - playerBounds.width, playerBounds.y - gameplay_koala_die.height/4, gameplay_koala_die.width, gameplay_koala_die.height}, (Vector2) { 0, 0}, 0, WHITE);
 
     for (int i = 0; i < MAX_WIND; i++)
     {
@@ -2932,7 +2920,7 @@ void DrawGameplayScreen(void)
     }
 
 #if defined(DEBUG)
-    DrawRectangle(player.x, player.y, player.width, player.height, Fade(WHITE, 0.5));
+    DrawRectangle(playerBounds.x, playerBounds.y, playerBounds.width, playerBounds.height, Fade(WHITE, 0.5));
 
     for (int i = 0; i < MAX_WIND; i++)
     {
@@ -3257,7 +3245,7 @@ static void EagleSpawn(int chance)
     {
         eagleDelay = 0;
         eagle.x = GetScreenWidth();
-        eagle.y = player.y;
+        eagle.y = playerBounds.y;
         alertRectangle = (Rectangle){GetScreenWidth(), eagle.y + gameplay_enemy_eagle.height/2, 0, 0};
         eagleActive = false;
         eagleAlert = true;
@@ -3517,20 +3505,20 @@ static void Reset(void)
 
     currentMonth = initMonth;
 
-    leftButton.x = 0;
-    leftButton.y = 200;
-    leftButton.width = GetScreenWidth()/2;
-    leftButton.height = GetScreenHeight();
+    leftButtonRec.x = 0;
+    leftButtonRec.y = 200;
+    leftButtonRec.width = GetScreenWidth()/2;
+    leftButtonRec.height = GetScreenHeight();
 
-    rightButton.x = GetScreenWidth()/2;
-    rightButton.y = 200;
-    rightButton.width = GetScreenWidth()/2;
-    rightButton.height = GetScreenHeight();
+    rightButtonRec.x = GetScreenWidth()/2;
+    rightButtonRec.y = 200;
+    rightButtonRec.width = GetScreenWidth()/2;
+    rightButtonRec.height = GetScreenHeight();
 
-    powerButton.x = 0;
-    powerButton.y = 0;
-    powerButton.width = GetScreenWidth()/2;
-    powerButton.height = 200;
+    powerButtonRec.x = 0;
+    powerButtonRec.y = 0;
+    powerButtonRec.width = GetScreenWidth()/2;
+    powerButtonRec.height = 200;
 
     finalColor.r = GetRandomValue(0, 255);
     finalColor.g = GetRandomValue(0, 255);
@@ -3874,10 +3862,10 @@ static void Reset(void)
         }
     }
 
-    player.x = GetScreenWidth()*0.26f;
-    player.y = 100;
-    player.width = 35;
-    player.height = 60;
+    playerBounds.x = GetScreenWidth()*0.26f;
+    playerBounds.y = 100;
+    playerBounds.width = 35;
+    playerBounds.height = 60;
 
     bee.x = -200;
     bee.y = 0;
