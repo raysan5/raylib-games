@@ -330,7 +330,8 @@ void DrawAisle01Screen(void)
 {
     DrawTexture(background, -scroll, 0, WHITE);
 
-    // Draw monsters    DrawMonster(lamp, scroll);
+    // Draw monsters
+    DrawMonster(lamp, scroll);
     DrawMonster(picture, scroll);
 
     // Draw door

@@ -366,7 +366,8 @@ void DrawAisle02Screen(void)
 {
     DrawTexture(background, -scroll, 0, WHITE);
 
-    // Draw monsters    DrawMonster(lamp, scroll);
+    // Draw monsters
+    DrawMonster(lamp, scroll);
     DrawMonster(arc, scroll);
     DrawMonster(picture, scroll);
     DrawMonster(chair, scroll);

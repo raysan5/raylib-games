@@ -50,3 +50,9 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# WebAssembly generated files
+*.data
+*.js
+*.html
+*.wasm

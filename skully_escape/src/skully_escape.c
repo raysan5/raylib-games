@@ -126,7 +126,6 @@ static void ChangeToScreen(int screen)
     switch (currentScreen)
     {
         case LOGO: UnloadLogoScreen(); break;
-        case LOGO_RL: rlUnloadLogoScreen(); break;
         case TITLE: UnloadTitleScreen(); break;
         case ATTIC: UnloadAtticScreen(); break;
         case AISLE01: UnloadAisle01Screen();break;
@@ -142,7 +141,6 @@ static void ChangeToScreen(int screen)
     switch (screen)
     {
         case LOGO: InitLogoScreen(); break;
-        case LOGO_RL: rlInitLogoScreen(); break;
         case TITLE: InitTitleScreen(); break;
         case ATTIC: InitAtticScreen(); break;
         case AISLE01: InitAisle01Screen();break;
@@ -180,7 +178,6 @@ static void UpdateTransition(void)
             switch (transFromScreen)
             {
                 case LOGO: UnloadLogoScreen(); break;
-                case LOGO_RL: rlUnloadLogoScreen(); break;
                 case TITLE: UnloadTitleScreen(); break;
                 case ATTIC: UnloadAtticScreen(); break;
                 case AISLE01: UnloadAisle01Screen();break;
@@ -199,11 +196,6 @@ static void UpdateTransition(void)
                 {
                     InitLogoScreen();
                     currentScreen = LOGO;
-                } break;
-                case LOGO_RL:
-                {
-                    rlInitLogoScreen();
-                    currentScreen = LOGO_RL;
                 } break;
                 case TITLE:
                 {
@@ -304,14 +296,7 @@ static void UpdateDrawFrame(void)
             {
                 UpdateLogoScreen();
 
-                if (FinishLogoScreen()) ChangeToScreen(LOGO_RL);
-
-            } break;
-            case LOGO_RL:
-            {
-                rlUpdateLogoScreen();
-
-                if (rlFinishLogoScreen()) TransitionToScreen(TITLE);
+                if (FinishLogoScreen()) ChangeToScreen(TITLE);
 
             } break;
             case TITLE:
@@ -403,7 +388,6 @@ static void UpdateDrawFrame(void)
         switch(currentScreen)
         {
             case LOGO: DrawLogoScreen(); break;
-            case LOGO_RL: rlDrawLogoScreen(); break;
             case TITLE: DrawTitleScreen(); break;
             case ATTIC: DrawAtticScreen(); break;
             case AISLE01: DrawAisle01Screen();break;

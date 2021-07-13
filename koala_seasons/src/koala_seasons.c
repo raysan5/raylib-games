@@ -112,8 +112,8 @@ int main(void)
 
     // Define and init first screen
     // NOTE: currentScreen is defined in screens.h as a global variable
-    currentScreen = TITLE;
-    InitTitleScreen();
+    currentScreen = LOGO;
+    InitLogoScreen();
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
@@ -239,7 +239,7 @@ void UpdateDrawFrame(void)
             {
                 UpdateLogoScreen();
 
-                if (FinishLogoScreen()) TransitionToScreen(TITLE);
+                if (FinishLogoScreen()) ChangeToScreen(TITLE);
 
             } break;
             case TITLE:

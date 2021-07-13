@@ -310,7 +310,8 @@ void DrawBathroomScreen(void)
 {
     DrawTexture(background, 0, 0, WHITE);
 
-    // Draw monsters    DrawMonster(lamp, 0);
+    // Draw monsters    
+    DrawMonster(lamp, 0);
     DrawMonster(mirror, 0);
     DrawMonster(chair, 0);
 

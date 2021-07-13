@@ -262,7 +262,8 @@ void DrawAtticScreen(void)
 {
     DrawTexture(background, 0, 0, WHITE);
 
-    // Draw monsters    DrawMonster(lamp, 0);
+    // Draw monsters    
+    DrawMonster(lamp, 0);
     DrawMonster(arc, 0);
 
     // Draw door

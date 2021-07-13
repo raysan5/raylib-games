@@ -327,7 +327,8 @@ void DrawLivingroomScreen(void)
 {
     DrawTexture(background, 0, 0, WHITE);
 
-    // Draw monsters    DrawMonster(picture, 0);
+    // Draw monsters    
+    DrawMonster(picture, 0);
     DrawMonster(candle, 0);
     DrawMonster(phone, 0);
 

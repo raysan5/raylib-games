@@ -37,52 +37,52 @@
 //----------------------------------------------------------------------------------
 
 // Mission screen global variables
-static int framesCounter;
-static int finishScreen;
+static int framesCounter = 0;
+static int finishScreen = 0;
 
-static Texture2D texBackground;
+static Texture2D texBackground = { 0 };
 
-static Texture2D texBackline; //mission_backline
-static Rectangle sourceRecBackLine;
-static Rectangle destRecBackLine;
-static float fadeBackLine;
+static Texture2D texBackline = { 0 };
+static Rectangle sourceRecBackLine = { 0 };
+static Rectangle destRecBackLine = { 0 };
+static float fadeBackLine = 0.0f;
 
-static Vector2 numberPosition;
-static Color numberColor;
+static Vector2 numberPosition = { 0 };
+static Color numberColor = { 0 };
 
 //static char textMission[MISSION_MAX_LENGTH];
-static Vector2 missionPosition;
-static int missionSize;
-static Color missionColor;
-static int missionLenght;
-static bool missionMaxLength;
-static int missionSpeed;
+static Vector2 missionPosition = { 0 };
+static int missionSize = 0;
+static Color missionColor = { 0 };
+static int missionLenght = 0;
+static int missionMaxLength = 0;
+static int missionSpeed = 0;
 
 //static char textKeyword[KEYWORD_MAX_LENGTH];
-static Vector2 keywordPosition;
-static Color keywordColor;
+static Vector2 keywordPosition = { 0 };
+static Color keywordColor = { 0 };
 
-static int showMissionWaitFrames;
-static int showNumberWaitFrames;
-static int showKeywordWaitFrames;
+static int showMissionWaitFrames = 0;
+static int showNumberWaitFrames = 0;
+static int showKeywordWaitFrames = 0;
 
-static bool startWritting;
-static bool writeMission;
-static bool writeNumber;
-static bool writeKeyword;
-static bool writeEnd;
+static bool startWritting = false;
+static bool writeMission = false;
+static bool writeNumber = false;
+static bool writeKeyword = false;
+static bool writeEnd = false;
 
-static bool writtingMission;
+static bool writtingMission = false;
 
-static int blinkFrames;
+static int blinkFrames = 0;
 static bool blinkKeyWord = true;
 
 static bool showButton = false;
 
 static Mission *missions = NULL;
 
-static Sound fxTransmit;
-static Music musMission;
+static Sound fxTransmit = { 0 };
+static Music musMission = { 0 };
 
 //----------------------------------------------------------------------------------
 // Mission Screen Functions Definition
@@ -114,11 +114,13 @@ void InitMissionScreen(void)
     missions = LoadMissions("resources/missions.txt");
 
     missionMaxLength = strlen(missions[currentMission].brief);
+    
+    printf("Current mission %i: %s (length: %i)\n", currentMission, missions[currentMission].brief, missionMaxLength);
 
     // Insert line breaks every MAX_LINE_CHAR
     int currentLine = 1;
-    int i = currentLine * MAX_LINE_CHAR;
-
+    int i = currentLine*MAX_LINE_CHAR;
+    
     while (i < missionMaxLength)
     {
         if (missions[currentMission].brief[i] == ' ')

@@ -328,7 +328,8 @@ void DrawKitchenScreen(void)
     DrawTexture(background, 0, 0, WHITE);
 
     // Draw monsters
-    DrawMonster(closet, 0);    DrawMonster(chair, 0);
+    DrawMonster(closet, 0);
+    DrawMonster(chair, 0);
     DrawMonster(window, 0);
 
     // Draw door

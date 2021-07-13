@@ -376,7 +376,6 @@ PROJECT_SOURCE_FILES ?= \
     player.c \
     monster.c \
     screen_logo.c \
-    screen_logo_raylib.c \
     screen_title.c \
     screen_attic.c \
     screen_aisle01.c \

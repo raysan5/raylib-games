@@ -32,7 +32,7 @@
 //----------------------------------------------------------------------------------
 // Types and Structures Definition
 //----------------------------------------------------------------------------------
-typedef enum GameScreen { LOGO = 0, LOGO_RL, TITLE, ATTIC, AISLE01, AISLE02, BATHROOM, LIVINGROOM, KITCHEN, ARMORY, ENDING } GameScreen;
+typedef enum GameScreen { LOGO = 0, TITLE, ATTIC, AISLE01, AISLE02, BATHROOM, LIVINGROOM, KITCHEN, ARMORY, ENDING } GameScreen;
 
 typedef struct Door {
     Vector2 position;
