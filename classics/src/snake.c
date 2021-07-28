@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   raylib - sample game: snake
+*   raylib - classic game: snake
 *
 *   Sample game developed by Ian Eito, Albert Martos and Ramon Santamaria
 *
@@ -73,7 +73,7 @@ int main(void)
 {
     // Initialization (Note windowTitle is unused on Android)
     //---------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "sample game: snake");
+    InitWindow(screenWidth, screenHeight, "classic game: snake");
 
     InitGame();
 

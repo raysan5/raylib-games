@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   raylib - sample game: gold fever
+*   raylib - classic game: gold fever
 *
 *   Sample game developed by Ian Eito, Albert Martos and Ramon Santamaria
 *
@@ -81,7 +81,7 @@ int main(void)
 {
     // Initialization (Note windowTitle is unused on Android)
     //---------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "sample game: gold fever");
+    InitWindow(screenWidth, screenHeight, "classic game: gold fever");
 
     InitGame();
 

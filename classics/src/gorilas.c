@@ -1,8 +1,8 @@
 /*******************************************************************************************
 *
-*   raylib - sample game: gorilas
+*   raylib - classic game: gorilas
 *
-*   Sample game Marc Palau and Ramon Santamaria
+*   Sample game developed by Marc Palau and Ramon Santamaria
 *
 *   This game has been created using raylib v1.3 (www.raylib.com)
 *   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
@@ -120,7 +120,7 @@ int main(void)
 {
     // Initialization (Note windowTitle is unused on Android)
     //---------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "sample game: gorilas");
+    InitWindow(screenWidth, screenHeight, "classic game: gorilas");
 
     InitGame();
 

@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   raylib - sample game: space invaders
+*   raylib - classic game: space invaders
 *
 *   Sample game developed by Ian Eito, Albert Martos and Ramon Santamaria
 *
@@ -90,7 +90,7 @@ int main(void)
 {
     // Initialization (Note windowTitle is unused on Android)
     //---------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "sample game: space invaders");
+    InitWindow(screenWidth, screenHeight, "classic game: space invaders");
 
     InitGame();
 

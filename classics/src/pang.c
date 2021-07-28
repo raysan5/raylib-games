@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   raylib - sample game: pang
+*   raylib - classic game: pang
 *
 *   Sample game developed by Ian Eito and Albert Martos and Ramon Santamaria
 *
@@ -109,7 +109,7 @@ int main(void)
 {
     // Initialization (Note windowTitle is unused on Android)
     //---------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "sample game: pang");
+    InitWindow(screenWidth, screenHeight, "classic game: pang");
 
     InitGame();
 

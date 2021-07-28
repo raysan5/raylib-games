@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   raylib - sample game: floppy
+*   raylib - classic game: floppy
 *
 *   Sample game developed by Ian Eito, Albert Martos and Ramon Santamaria
 *
@@ -72,7 +72,7 @@ int main(void)
 {
     // Initialization
     //---------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "sample game: floppy");
+    InitWindow(screenWidth, screenHeight, "classic game: floppy");
 
     InitGame();
 
