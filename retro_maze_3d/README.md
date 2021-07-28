@@ -29,7 +29,11 @@ On GPi CASE:
  - START for game pause
  - SELECT to show minimap
  - X button for lost voice message
+ 
+### Developers
 
+ - Ramon Santamaria (@raysan5) - Programming, Art and Game Design
+ - German Sartori - Music composer and Sound fx
 
 ### License
 

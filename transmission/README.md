@@ -15,7 +15,12 @@ You are a freelance jornalist with lots of contacts and you deal everyday with s
 Mouse:
  - Mouse move -> Select element and move into text.
  - Mouse right button -> Press down to drag elements.
+ 
+### Developers
 
+ - Ramon Santamaria (@raysan5) - Programming and Game Design
+ - Daniel Gomez - Art (photo-montage) and Game Design
+ - Sergio Martinez - Programming
 
 ### License
 

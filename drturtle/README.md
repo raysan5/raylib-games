@@ -15,6 +15,12 @@ As a small turtle you must be careful with big predators... until you become one
 Keyboard:
  - ENTER -> Start the game.
  - UP-DOWN -> Move the Turtle/Gamera between rows.
+ 
+### Developers
+
+ - Ramon Santamaria (@raysan5) - Programming and Game Design
+ - Javier Urios - Art (Characters and Backgrounds)
+ - Pedro Fuentes - Game Design
 
 ### License
 

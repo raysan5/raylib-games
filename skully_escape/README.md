@@ -6,6 +6,8 @@
 
 Ah! Home, sweet home! Time for some automatic cleaning... if the worst enemy of Roomba allows it... be careful with Cat!
 
+This game was originally developed for the King Game Jam in Barcelona in 2014.
+
 ### Features
 
  - TODO.
@@ -15,7 +17,13 @@ Ah! Home, sweet home! Time for some automatic cleaning... if the worst enemy of 
 Mouse:
  - Mouse move -> Select place to move character.
  - Mouse right button -> Execute action on the selected element.
+ 
+### Developers
 
+ - Ramon Santamaria (@raysan5) - Programming and Game Design
+ - Irina Buonasena - Art (Characters and Backgrounds)
+ - Javier Olivares Vergara - Programming
+ - David Sánchez Carmona - Game Design
 
 ### License
 
