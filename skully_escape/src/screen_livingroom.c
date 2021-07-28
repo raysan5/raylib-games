@@ -175,7 +175,7 @@ void UpdateLivingroomScreen(void)
 
     if (msgState > 2)
     {
-        UpdatePlayer();        	// Monsters logic
+        UpdatePlayer();            // Monsters logic
         UpdateMonster(&candle);
         UpdateMonster(&picture);
         UpdateMonster(&phone);

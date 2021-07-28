@@ -4,7 +4,7 @@
 *
 *   Logo Screen Functions Definitions (Init, Update, Draw, Unload)
 *
-*   Copyright (c) 2014 Ramon Santamaria (@raysan5)
+*   Copyright (c) 2014-2021 Ramon Santamaria (@raysan5)
 *
 *   This software is provided "as-is", without any express or implied warranty. In no event
 *   will the authors be held liable for any damages arising from the use of this software.
@@ -26,8 +26,6 @@
 #include "raylib.h"
 #include "screens.h"
 
-#define LOGO_RECS_SIDE  16
-
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
@@ -45,8 +43,8 @@ static int leftSideRecHeight = 0;
 static int bottomSideRecWidth = 0;
 static int rightSideRecHeight = 0;
 
-static int state = 0;               // Animation states
-static float alpha = 1.0f;
+static int state = 0;              // Logo animation states
+static float alpha = 1.0f;         // Useful for fading
 
 //----------------------------------------------------------------------------------
 // Logo Screen Functions Definition
@@ -55,7 +53,6 @@ static float alpha = 1.0f;
 // Logo Screen Initialization logic
 void InitLogoScreen(void)
 {
-    // Initialize LOGO screen variables here!
     finishScreen = 0;
     framesCounter = 0;
     lettersCount = 0;
@@ -63,10 +60,10 @@ void InitLogoScreen(void)
     logoPositionX = GetScreenWidth()/2 - 128;
     logoPositionY = GetScreenHeight()/2 - 128;
 
-    topSideRecWidth = LOGO_RECS_SIDE;
-    leftSideRecHeight = LOGO_RECS_SIDE;
-    bottomSideRecWidth = LOGO_RECS_SIDE;
-    rightSideRecHeight = LOGO_RECS_SIDE;
+    topSideRecWidth = 16;
+    leftSideRecHeight = 16;
+    bottomSideRecWidth = 16;
+    rightSideRecHeight = 16;
 
     state = 0;
     alpha = 1.0f;
@@ -75,8 +72,7 @@ void InitLogoScreen(void)
 // Logo Screen Update logic
 void UpdateLogoScreen(void)
 {
-    // Update LOGO screen variables here!
-    if (state == 0)                 // State 0: Small box blinking
+    if (state == 0)                 // State 0: Top-left square corner blink logic
     {
         framesCounter++;
 
@@ -88,27 +84,27 @@ void UpdateLogoScreen(void)
             PlayMusicStream(music); // Start playing music... ;)
         }
     }
-    else if (state == 1)            // State 1: Top and left bars growing
+    else if (state == 1)            // State 1: Bars animation logic: top and left
     {
         topSideRecWidth += 8;
         leftSideRecHeight += 8;
 
         if (topSideRecWidth == 256) state = 2;
     }
-    else if (state == 2)            // State 2: Bottom and right bars growing
+    else if (state == 2)            // State 2: Bars animation logic: bottom and right
     {
         bottomSideRecWidth += 8;
         rightSideRecHeight += 8;
 
         if (bottomSideRecWidth == 256) state = 3;
     }
-    else if (state == 3)            // State 3: Letters appearing (one by one)
+    else if (state == 3)            // State 3: "raylib" text-write animation logic
     {
         framesCounter++;
 
         if (lettersCount < 10)
         {
-            if (framesCounter/15)   // Every 12 frames, one more letter!
+            if (framesCounter/12)   // Every 12 frames, one more letter!
             {
                 lettersCount++;
                 framesCounter = 0;
@@ -123,7 +119,7 @@ void UpdateLogoScreen(void)
                 if (alpha <= 0.0f)
                 {
                     alpha = 0.0f;
-                    finishScreen = 1;
+                    finishScreen = 1;   // Jump to next screen
                 }
             }
         }
@@ -133,16 +129,16 @@ void UpdateLogoScreen(void)
 // Logo Screen Draw logic
 void DrawLogoScreen(void)
 {
-    if (state == 0)
+    if (state == 0)         // Draw blinking top-left square corner
     {
         if ((framesCounter/10)%2) DrawRectangle(logoPositionX, logoPositionY, 16, 16, BLACK);
     }
-    else if (state == 1)
+    else if (state == 1)    // Draw bars animation: top and left
     {
         DrawRectangle(logoPositionX, logoPositionY, topSideRecWidth, 16, BLACK);
         DrawRectangle(logoPositionX, logoPositionY, 16, leftSideRecHeight, BLACK);
     }
-    else if (state == 2)
+    else if (state == 2)    // Draw bars animation: bottom and right
     {
         DrawRectangle(logoPositionX, logoPositionY, topSideRecWidth, 16, BLACK);
         DrawRectangle(logoPositionX, logoPositionY, 16, leftSideRecHeight, BLACK);
@@ -150,7 +146,7 @@ void DrawLogoScreen(void)
         DrawRectangle(logoPositionX + 240, logoPositionY, 16, rightSideRecHeight, BLACK);
         DrawRectangle(logoPositionX, logoPositionY + 240, bottomSideRecWidth, 16, BLACK);
     }
-    else if (state == 3)
+    else if (state == 3)    // Draw "raylib" text-write animation + "powered by"
     {
         DrawRectangle(logoPositionX, logoPositionY, topSideRecWidth, 16, Fade(BLACK, alpha));
         DrawRectangle(logoPositionX, logoPositionY + 16, 16, leftSideRecHeight - 32, Fade(BLACK, alpha));

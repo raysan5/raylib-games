@@ -136,7 +136,7 @@ void UpdateAtticScreen(void)
 
     if (msgState > 2)
     {
-        UpdatePlayer();        	// Monsters logic
+        UpdatePlayer();            // Monsters logic
         UpdateMonster(&lamp);
         UpdateMonster(&arc);
     }    

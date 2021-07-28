@@ -198,7 +198,7 @@ void UpdateAisle01Screen(void)
 
     if (msgState > 2)
     {
-        UpdatePlayer();        	// Monsters logic
+        UpdatePlayer();            // Monsters logic
         UpdateMonster(&lamp);
         UpdateMonster(&picture);
     }

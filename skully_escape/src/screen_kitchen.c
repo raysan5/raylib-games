@@ -176,7 +176,7 @@ void UpdateKitchenScreen(void)
 
     if (msgState > 2)
     {
-        UpdatePlayer();        	// Monsters logic
+        UpdatePlayer();            // Monsters logic
         UpdateMonster(&closet);
         UpdateMonster(&chair);
         UpdateMonster(&window);

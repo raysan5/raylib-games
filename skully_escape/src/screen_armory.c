@@ -176,7 +176,7 @@ void UpdateArmoryScreen(void)
 
     if (msgState > 2)
     {
-        UpdatePlayer();        	// Monsters logic
+        UpdatePlayer();            // Monsters logic
         UpdateMonster(&blazon01);
         UpdateMonster(&blazon02);
         UpdateMonster(&blazon03);
