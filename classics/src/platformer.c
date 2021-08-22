@@ -10,9 +10,9 @@
 *   Copyright (c) 2021 Agnis "NeZvers" Aldins (@nezvers) and Ramon Santamaria (@raysan5)
 
 Example showcases:
-    * Use of 1D array for a tile map and using it for collision;
-    * Simple movement for platformer (WASD + space) and top-down (TAB to switch between)
-    * Rectangle based collision for movement and collectables
+    * Use of 1D array for a tilemap and using it for collision;
+    * Simple movement for a platformer (WASD + space) and top-down (TAB to switch between)
+    * Rectangle based collision for movement and collectibles
     * Integer scaling with resizable window
     * Programmer/ procedural art using only built-in shape drawing
 
