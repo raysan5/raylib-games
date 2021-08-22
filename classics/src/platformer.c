@@ -141,7 +141,7 @@ int main(void){
 
 void GameInit() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(screenWidth, screenHeight, "raylib [models] example - geometric shapes");
+    InitWindow(screenWidth, screenHeight, "classic game: platformer");
     viewport = LoadRenderTexture(gameWidth, gameHeight);
     map.x = 0.0f;
     map.y = 0.0f;
