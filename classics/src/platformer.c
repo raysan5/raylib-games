@@ -2,710 +2,476 @@
 *
 *   raylib - classic game: platformer
 *
-*   Sample game developed by Agnis "NeZvers" Aldiòð (@nezvers)
+*   Sample game developed by Agnis "NeZvers" Aldins (@nezvers)
 *
-*   This game has been created using raylib v3.0 (www.raylib.com)
+*   This game has been created using raylib v3.7 (www.raylib.com)
 *   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
 *
-*   Copyright (c) 2020 Agnis "NeZvers" Aldiòð (@nezvers) and Ramon Santamaria (@raysan5)
-*
+*   Copyright (c) 2021 Agnis "NeZvers" Aldins (@nezvers) and Ramon Santamaria (@raysan5)
+
+Example showcases:
+    * Use of 1D array for a tile map and using it for collision;
+    * Simple movement for platformer (WASD + space) and top-down (TAB to switch between)
+    * Rectangle based collision for movement and collectables
+    * Integer scaling with resizable window
+    * Programmer/ procedural art using only built-in shape drawing
+
+Main()
+    * GameInit()
+        * Reset()
+    * GameLoop()
+        * GameUpdate()
+            * UpdateScreen();
+            * UpdatePlayer();
+                * RectangleCollisionUpdate(Rectangle *rect, Vector2 *velocity)
+                * RectangleResize(Rectangle *rect, Vector2 *size)
+                * RectangleListFromTiles(Rectangle *rect, Grid *grid)
+                * RectangleTileCollision(Rectangle *rect, Vector2 *velocity, RectList *list)
+            * UpdateCoin();
+
+        * GameDraw()
+            * DrawTileGrid()
+            * DrawTileMap()
+            * DrawCoins()
+            * DrawPlayer()
+            * DrawScoreText()
+
 ********************************************************************************************/
 
 #include "raylib.h"
+#include "math.h"
 
+//#define PLATFORM_WEB
 #if defined(PLATFORM_WEB)
     #include <emscripten/emscripten.h>
 #endif
 
-//----------------------------------------------------------------------------------
-// Some Defines
-//----------------------------------------------------------------------------------
-// Tile collision types
-#define EMPTY   -1
-#define BLOCK    0     // Start from zero, slopes can be added
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
 
-// Defined map size
-#define TILE_MAP_WIDTH  20
-#define TILE_MAP_HEIGHT 12
+bool PLATFORMER = true; // toggle to top-down movement with TAB
 
-#define MAX_COINS       10
+//tile collision types
+#define EMPTY 0
+#define BLOCK 1
+typedef struct{
+    float x;
+    float y;
+    int w;      // width
+    int h;      // height
+    int s;      // cell size (square cells)
+    int *cell;  // array of tiles
+}Grid;
 
-//----------------------------------------------------------------------------------
-// Types and Structures Definition
-//----------------------------------------------------------------------------------
-// Object storing inputs for Entity
-typedef struct {
-    float right;
-    float left;
-    float up;
-    float down;
-    bool jump;
-} Input;
+// List of Rectangles to check for a collision.
+typedef struct{
+    Rectangle *rect;
+    int size;
+}RectList;
 
-// Physics body moving around
-typedef struct {
-    int width;
-    int height;
+void GameInit();
+void GameUpdate();
+void GameDraw();
+void GameLoop(){GameUpdate(); GameDraw();}
+void Reset();
 
-    Vector2 position;
-    float direction;
-    float maxSpd;
-    float acc;
-    float dcc;
-    float gravity;
-    float jumpImpulse;
-    float jumpRelease;
-    Vector2 velocity;
-    // Carry stored subpixel values
-    float hsp;
-    float vsp;
+void DrawTileGrid();
+void DrawTileMap();
+void DrawCoins();
+void DrawPlayer();
+void DrawScoreText();
 
-    bool isGrounded;
-    bool isJumping;
-    // Flags for detecting collision
-    bool hitOnFloor;
-    bool hitOnCeiling;
-    bool hitOnWall;
+void UpdateScreen();
+void UpdatePlayer();
+void UpdateCoin();
 
-    Input *control;
-} Entity;
+void        RectangleCollisionUpdate(Rectangle *rect, Vector2 *velocity);
+Rectangle   RectangleResize(Rectangle *rect, Vector2 *size);
+RectList*   RectangleListFromTiles(Rectangle *rect, Grid *grid);
+void        RectangleTileCollision(Rectangle *rect, Vector2 *velocity, RectList *list);
 
-// Coin object
-typedef struct {
-    Vector2 position;
-    bool visible;
-} Coin;
+#define MAP_W 20
+#define MAP_H 12
+int screenWidth = 32*MAP_W;
+int screenHeight = 32*MAP_H;
+const int gameWidth = 32*MAP_W;
+const int gameHeight = 32*MAP_H;
+RenderTexture viewport;
+int scale = 1;
+Vector2 vpOffset = (Vector2){0.0f, 0.0f};
 
-//------------------------------------------------------------------------------------
-// Global Variables Declaration
-//------------------------------------------------------------------------------------
-const int TILE_SIZE = 16;
-const int TILE_SHIFT = 4;   // Used in bitshift  | bit of TILE_SIZE
-const int TILE_ROUND = 15;  // Used in bitwise operation | TILE_SIZE - 1
+Rectangle player = {32.0f * 2, 32.0f * 8, 32.0f, 32.0f};
 
-float screenScale;
-int screenWidth;
-static int screenHeight;
+#define COIN_COUNT 10
+Rectangle coins[COIN_COUNT] = {0};
+bool visible[COIN_COUNT] = {0};
+int points = 0;
+int time = 0;       // For animation
 
-static float delta;
-static bool win = false;
-static int score = 0;
-
-static int tiles [TILE_MAP_WIDTH*TILE_MAP_HEIGHT];
-static Entity player = { 0 };
-static Input input = {false, false, false, false, false};
-static Camera2D camera = {0};
-
-// Create coin instances
-static Coin coins[MAX_COINS] = {
-    {(Vector2){1*16+6,7*16+6}, true},
-    {(Vector2){3*16+6,5*16+6}, true},
-    {(Vector2){4*16+6,5*16+6}, true},
-    {(Vector2){5*16+6,5*16+6}, true},
-    {(Vector2){8*16+6,3*16+6}, true},
-    {(Vector2){9*16+6,3*16+6}, true},
-    {(Vector2){10*16+6,3*16+6}, true},
-    {(Vector2){13*16+6,4*16+6}, true},
-    {(Vector2){14*16+6,4*16+6}, true},
-    {(Vector2){15*16+6,4*16+6}, true},
+Grid map;
+int tiles[] = {
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 };
 
-//------------------------------------------------------------------------------------
-// Module Functions Declaration (local)
-//------------------------------------------------------------------------------------
-static void InitGame(void);         // Initialize game
-static void UpdateGame(void);       // Update game (one frame)
-static void DrawGame(void);         // Draw game (one frame)
-static void UnloadGame(void);       // Unload game
-static void UpdateDrawFrame(void);  // Update and Draw (one frame)
-
-//------------------------------------------------------------------------------------
-// Movement Functions Declaration (local)
-//------------------------------------------------------------------------------------
-static void EntityMoveUpdate(Entity *intance);
-static void GetDirection(Entity *instance);
-static void GroundCheck(Entity *instance);
-static void MoveCalc(Entity *instance);
-static void GravityCalc(Entity *instance);
-static void CollisionCheck(Entity *instance);
-static void CollisionHorizontalBlocks(Entity *instance);
-static void CollisionVerticalBlocks(Entity *instance);
-
-//------------------------------------------------------------------------------------
-// Tile Functions Declaration (local)
-//------------------------------------------------------------------------------------
-static int MapGetTile(int x, int y);
-static int MapGetTileWorld(int x, int y);
-static int TileHeight(int x, int y, int tile);
-
-static void MapInit(void);
-static void MapDraw(void);
-static void PlayerInit(void);
-static void InputUpdate(void);
-static void PlayerUpdate(void);
-static void PlayerDraw(void);
-static void CoinInit(void);
-static void CoinUpdate(void);
-static void CoinDraw(void);
-
-//------------------------------------------------------------------------------------
-// Utility Functions Declaration (local)
-//------------------------------------------------------------------------------------
-int ttc_sign(float x);
-float ttc_abs(float x);
-float ttc_clamp(float value, float min, float max);
-
-//------------------------------------------------------------------------------------
-// Program main entry point
-//------------------------------------------------------------------------------------
-int main(void)
-{
-    // Initialization (Note windowTitle is unused on Android)
-    //---------------------------------------------------------
-    screenScale = 2.0;
-    screenWidth = TILE_SIZE*TILE_MAP_WIDTH*(int)screenScale;
-    screenHeight = TILE_SIZE*TILE_MAP_HEIGHT*(int)screenScale;
-
-    SetConfigFlags(FLAG_VSYNC_HINT);
-    InitWindow(screenWidth, screenHeight, "classic game: platformer");
-    
-    InitGame();
-
-#if defined(PLATFORM_WEB)
-    emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
-#else
+int main(void){
+    GameInit();
+    #if defined(PLATFORM_WEB)
+        emscripten_set_main_loop(GameLoop, 0, 1);
+    #else
     SetTargetFPS(60);
-    //--------------------------------------------------------------------------------------
-
-    // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
-    {
-        // Update and Draw
-        //----------------------------------------------------------------------------------
-        UpdateDrawFrame();
-        //----------------------------------------------------------------------------------
+    while (!WindowShouldClose()){
+        GameLoop();
     }
-#endif
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    UnloadGame();         // Unload loaded data (textures, sounds, models...)
-
-    CloseWindow();        // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
-
+    UnloadRenderTexture(viewport);
+    #endif
+    CloseWindow();
     return 0;
 }
 
-//------------------------------------------------------------------------------------
-// Module Functions Definitions (local)
-//------------------------------------------------------------------------------------
-// Initialize game variables
-void InitGame(void)
-{
-    win = false;
-    score = 0;
-    
-    camera.offset = (Vector2){0.0, 0.0};
-    camera.target = (Vector2){0.0, 0.0};
-    camera.rotation = 0.0f;
-    camera.zoom = screenScale;
-    
-    MapInit();
-    PlayerInit();
-    CoinInit();
+void GameInit() {
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(screenWidth, screenHeight, "raylib [models] example - geometric shapes");
+    viewport = LoadRenderTexture(gameWidth, gameHeight);
+    map.x = 0.0f;
+    map.y = 0.0f;
+    map.w = MAP_W;
+    map.h = MAP_H;
+    map.s = 32;
+    map.cell = tiles;
+    Reset();
 }
 
-// Update game (one frame)
-void UpdateGame(void)
-{
-    // Get time since last frame
-    delta = GetFrameTime();
+void Reset(){
+    const float s = 32.0f;
+    player = (Rectangle){s * 2, s * 8, s, s};
+    points = 0;
+    time = 0;
+    
+    coins[0] = (Rectangle){s * 1.5f, s * 8, 10.0f, 10.0f};
+    coins[1] = (Rectangle){s * 3.5f, s * 6, 10.0f, 10.0f};
+    coins[2] = (Rectangle){s * 4.5f, s * 6, 10.0f, 10.0f};
+    coins[3] = (Rectangle){s * 5.5f, s * 6, 10.0f, 10.0f};
+    coins[4] = (Rectangle){s * 8.5f, s * 3, 10.0f, 10.0f};
+    coins[5] = (Rectangle){s * 9.5f, s * 3, 10.0f, 10.0f};
+    coins[6] = (Rectangle){s * 10.5f, s * 3, 10.0f, 10.0f};
+    coins[7] = (Rectangle){s * 14.5f, s * 4, 10.0f, 10.0f};
+    coins[8] = (Rectangle){s * 15.5f, s * 4, 10.0f, 10.0f};
+    coins[9] = (Rectangle){s * 17.5f, s * 2, 10.0f, 10.0f};
+    
+    for (int i = 0; i < COIN_COUNT; i++){visible[i] = true;}
+}
 
-    PlayerUpdate();
-    CoinUpdate();
+void GameUpdate(){
+    
+    UpdateScreen();// Adapt to resolution
+    UpdatePlayer();
+    UpdateCoin();
+}
 
-    // If all coins are collected
-    if (win)
-    {
-        if (IsKeyPressed(KEY_ENTER))
-        {
-            InitGame();
-        }
+void UpdateScreen(){
+    // Adapt to resolution
+    if (IsWindowResized()){
+        screenWidth = GetScreenWidth();
+        screenHeight = GetScreenHeight();
+        scale = MAX(1, MIN((screenWidth/gameWidth), (screenHeight/gameHeight)));
+        vpOffset.x = (screenWidth - (gameWidth * scale)) / 2;
+        vpOffset.y = (screenHeight - (gameHeight * scale)) / 2;
     }
 }
 
-// Draw game (every frame)
-void DrawGame(void)
-{
-    BeginDrawing();
+void UpdatePlayer(){
+    const float maxSpd = 6.0f;
+    const float acc = 0.1f;
+    const float grav = 0.5f;
+    const float jmpImpulse = -10.0f;
+    const int jmpBufferTime = 30;
+    static bool isGrounded = false;
+    static int jmpBuffer = 0;
+    static int dirX = 0;
+    static int dirY = 0;
+    static Vector2 vel = {0};
+    static Vector2 prevVel = {0};
     
-        BeginMode2D(camera);
-            ClearBackground(RAYWHITE);
+    // INPUT
+    dirX = (float)(IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
+    dirY = (float)(IsKeyDown(KEY_S) - IsKeyDown(KEY_W));
+    if(IsKeyPressed(KEY_TAB)){PLATFORMER = !PLATFORMER;}
+    
+    // HORIZONTAL SPEED
+    vel.x += (dirX * maxSpd - vel.x) * acc;
+    if (vel.x < -maxSpd){
+        vel.x = -maxSpd;
+    }
+    else if (vel.x > maxSpd){
+        vel.x = maxSpd;
+    }
+    
+    // VERTICAL SPEED
+    if (PLATFORMER){
+        if (isGrounded && jmpBuffer != jmpBufferTime){
+            jmpBuffer = jmpBufferTime;
+        }
+        if (isGrounded && IsKeyPressed(KEY_SPACE)){
+            vel.y = jmpImpulse;
+            jmpBuffer = 0;
+        }
+        else if (jmpBuffer > 0 && IsKeyPressed(KEY_SPACE)){
+            vel.y = jmpImpulse;
+            jmpBuffer = 0;
+        }
+        else{
+            if (!IsKeyDown(KEY_SPACE) && vel.y < jmpImpulse * 0.2){
+                vel.y = jmpImpulse * 0.2;
+            }
+            else{
+                vel.y += grav;
+                if (vel.y > -jmpImpulse){
+                    vel.y = -jmpImpulse;
+                }
+                if (jmpBuffer > 0){
+                    jmpBuffer -= 1;
+                }
+            }
+        }
+        prevVel = vel;   // for ground check
+    }
+    else{
+        // TOP-DOWN
+        vel.y += (dirY * maxSpd - vel.y) * acc;
+        if (vel.y < -maxSpd){
+            vel.y = -maxSpd;
+        }
+        else if (vel.y > maxSpd){
+            vel.y = maxSpd;
+        }
+    }
+    
+    
+    RectangleCollisionUpdate(&player, &vel);
+    isGrounded = prevVel.y > 0.0f && vel.y <= 0.0001f;  // naive way to check grounded state
+    player.x += vel.x;
+    player.y += vel.y;
+}
 
-            // Draw game
-            MapDraw();
-            CoinDraw();
-            PlayerDraw();
+void UpdateCoin(){
+    for (int i = 0; i < COIN_COUNT; i++){
+        if (visible[i]){
+            if (CheckCollisionRecs(coins[i], player)){
+                visible[i] = false;
+                points += 1;
+            }
+        }
+    }
+    
+    if (points == COIN_COUNT && IsKeyPressed(KEY_ENTER)){
+        Reset();
+    }
+}
 
-
-        EndMode2D();
-        
-        DrawText(TextFormat("SCORE: %i", score), GetScreenWidth()/2 - MeasureText(TextFormat("SCORE: %i", score), 40)/2, 50, 40, BLACK);
-
-        if (win) DrawText("PRESS [ENTER] TO PLAY AGAIN", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] TO PLAY AGAIN", 20)/2, GetScreenHeight()/2 - 50, 20, GRAY);
-
+void GameDraw(){
+    // Viewport scaling
+    const Vector2 origin = (Vector2){0.0f, 0.0f};
+    const Rectangle vp_r = (Rectangle){0.0f,gameHeight,gameWidth, -gameHeight}; // flip vertically: position = left-bottom
+    Rectangle out_r = (Rectangle){vpOffset.x, vpOffset.y, gameWidth * scale, gameHeight * scale};
+    
+    // Render game's viewport
+    BeginTextureMode(viewport);
+        DrawRectangle(0, 0, gameWidth, gameHeight, SKYBLUE); // Background
+        DrawTileMap();
+        DrawTileGrid();
+        DrawScoreText();
+        DrawCoins();
+        DrawPlayer();
+    EndTextureMode();
+    
+    // Draw the viewport
+    BeginDrawing();
+        ClearBackground(BLACK);
+        DrawTexturePro(viewport.texture, vp_r, out_r, origin, 0.0f, WHITE);
     EndDrawing();
 }
 
-// Unload game variables
-void UnloadGame(void)
-{
-    // TODO: Unload required assets here
-}
-
-void MapInit(void)
-{
-    // Set tiles as borders
-    for (int y = 0; y < TILE_MAP_HEIGHT; y++)
-    {
-        for (int x = 0; x < TILE_MAP_WIDTH; x++)
-        {
-            // Solid tiles
-            if (y == 0 || x == 0 || y == TILE_MAP_HEIGHT-1 || x == TILE_MAP_WIDTH-1)
-            {
-                tiles[x+y*TILE_MAP_WIDTH] = BLOCK;
-            }
-            else    // Empty tiles
-            {
-                tiles[x+y*TILE_MAP_WIDTH] = EMPTY;
-            }
-        }
-    }
-
-    // Manual cell population for platforms
-    tiles[3 + 8*TILE_MAP_WIDTH] = BLOCK;
-    tiles[4 + 8*TILE_MAP_WIDTH] = BLOCK;
-    tiles[5 + 8*TILE_MAP_WIDTH] = BLOCK;
-
-    tiles[8 + 6*TILE_MAP_WIDTH] = BLOCK;
-    tiles[9 + 6*TILE_MAP_WIDTH] = BLOCK;
-    tiles[10 + 6*TILE_MAP_WIDTH] = BLOCK;
-
-    tiles[13 + 7*TILE_MAP_WIDTH] = BLOCK;
-    tiles[14 + 7*TILE_MAP_WIDTH] = BLOCK;
-    tiles[15 + 7*TILE_MAP_WIDTH] = BLOCK;
-
-    tiles[1 + 10*TILE_MAP_WIDTH] = BLOCK;
-}
-
-void MapDraw(void)
-{
-    // Parse through tile map and draw rectangles to visualize it
-    for (int y = 0; y < TILE_MAP_HEIGHT; y++)
-    {
-        for (int x = 0; x < TILE_MAP_WIDTH; x++)
-        {
-            // Draw tiles
-            if ( tiles[x+y*TILE_MAP_WIDTH] > EMPTY)
-            {
-                DrawRectangle(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE, GRAY);
-            }
-        }
-    }
-}
-
-// Function to get tile index using world coordinates
-int MapGetTileWorld(int x, int y)
-{
-    // Returns tile ID using world position
-    x /= TILE_SIZE;
-    y /= TILE_SIZE;
-    
-    if (x < 0 || x > TILE_MAP_WIDTH || y < 0 || y > TILE_MAP_HEIGHT) return EMPTY;
-
-    return tiles[x+y*TILE_MAP_WIDTH];
-}
-
-// Function to get tile index using tile map coordinates
-int MapGetTile(int x, int y)
-{
-    // Returns tile ID using tile position withing tile map
-    if (x < 0 || x > TILE_MAP_WIDTH || y < 0 || y > TILE_MAP_HEIGHT) return EMPTY;
-
-    return tiles[x+y*TILE_MAP_WIDTH];
-}
-
-// Returns one pixel above the tile in world coordinates
-int TileHeight(int x, int y, int tile)
-{
-    // Returns one pixel above solid. Extendable for slopes.
-    switch(tile)
-    {
-        case EMPTY: break;
-        case BLOCK: y = (y & ~TILE_ROUND) -1; break;
-    }
-    
-    return y;
-}
-
-// Update player controlled Input instance
-void InputUpdate(void)
-{
-    input.right = (float)(IsKeyDown('D') || IsKeyDown(KEY_RIGHT));
-    input.left = (float)(IsKeyDown('A') || IsKeyDown(KEY_LEFT));
-    input.up = (float)(IsKeyDown('W') || IsKeyDown(KEY_UP));
-    input.down = (float)(IsKeyDown('S') || IsKeyDown(KEY_DOWN));
-
-    // For jumping button needs to be toggled - allows pre-jump buffered (if held, jumps as soon as lands)
-    if (IsKeyPressed(KEY_SPACE)) input.jump = true;
-    else if (IsKeyReleased(KEY_SPACE)) input.jump = false;
-}
-
-// Init player controlled instance
-void PlayerInit(void)
-{
-    player.position.x = (float)(TILE_SIZE*TILE_MAP_WIDTH)*0.5;
-    player.position.y = TILE_MAP_HEIGHT*TILE_SIZE - 16.0 -1;
-    player.direction = 1.0;
-
-    player.maxSpd = 1.5625f*60;
-    player.acc = 0.118164f*60*60;
-    player.dcc =  0.113281f*60*60;
-    player.gravity = 0.363281f*60*60;
-    player.jumpImpulse = -6.5625f*60;
-    player.jumpRelease = player.jumpImpulse*0.2f;
-    player.velocity = (Vector2){ 0.0, 0.0 };
-    player.hsp = 0;
-    player.vsp = 0;
-
-    player.width = 8;
-    player.height = 16;
-
-    player.isGrounded = false;
-    player.isJumping = false;
-
-    // Assign Input instance used by player
-    player.control = &input;
-}
-
-// Draw player representing rectangle so the position is at bottom middle
-void PlayerDraw(void)
-{
-    DrawRectangle(player.position.x - player.width*0.5, player.position.y-player.height +1, player.width, player.height, RED);
-}
-
-// Player's instance update
-void PlayerUpdate(void)
-{
-    InputUpdate();
-    EntityMoveUpdate(&player);
-}
-
-// Reset coin visibility
-void CoinInit(void)
-{
-    for (int i=0; i<MAX_COINS; i++) coins[i].visible = true;
-}
-
-// Draw each coin
-void CoinDraw(void)
-{
-    for (int i=0; i<MAX_COINS; i++)
-    {
-        if (coins[i].visible) DrawRectangle((int)coins[i].position.x, (int)coins[i].position.y, 4.0, 4.0, GOLD);
-    }
-}
-
-// Collision check each coin
-void CoinUpdate(void)
-{
-    Rectangle playerRect = (Rectangle){ player.position.x - player.width*0.5, player.position.y-player.height +1, player.width, player.height };
-    
-    for (int i = 0; i < MAX_COINS; i++)
-    {
-        if (coins[i].visible)
-        {
-            Rectangle coinRect = (Rectangle){ coins[i].position.x, coins[i].position.y, 4.0, 4.0 };
-            
-            if (CheckCollisionRecs(playerRect, coinRect))
-            {
-                coins[i].visible = false;
-                score += 1;
-            }
-        }
-    }
-    
-    win = score == MAX_COINS;
-}
-
-//------------------------------------------------
-// Physics functions
-//------------------------------------------------
-
-// Main Entity movement calculation
-void EntityMoveUpdate(Entity *instance)
-{
-    GroundCheck(instance);
-    GetDirection(instance);
-    MoveCalc(instance);
-    GravityCalc(instance);
-    CollisionCheck(instance);
-
-    // Horizontal velocity together including last frame sub-pixel value
-    float xVel = instance->velocity.x*delta + instance->hsp;
-    // Horizontal velocity in pixel values
-    int xsp = (int)ttc_abs(xVel)*ttc_sign(xVel);
-    // Save horizontal velocity sub-pixel value for next frame
-    instance->hsp = instance->velocity.x*delta - xsp;
-
-    // Vertical velocity together including last frame sub-pixel value
-    float yVel = instance->velocity.y*delta + instance->vsp;
-    // Vertical velocity in pixel values
-    int ysp = (int)ttc_abs(yVel)*ttc_sign(yVel);
-    // Save Vertical velocity sub-pixel value for next frame
-    instance->vsp = instance->velocity.y*delta - ysp;
-
-    // Add pixel value velocity to the position
-    instance->position.x += xsp;
-    instance->position.y += ysp;
-
-    // Prototyping Safety net - keep in view
-    instance->position.x = ttc_clamp(instance->position.x, 0.0, TILE_MAP_WIDTH*(float)TILE_SIZE);
-    instance->position.y = ttc_clamp(instance->position.y, 0.0, TILE_MAP_HEIGHT*(float)TILE_SIZE);
-}
-
-// Read Input for horizontal movement direction
-void GetDirection(Entity *instance)
-{
-    instance->direction = (instance->control->right - instance->control->left);
-}
-
-// Check pixel bellow to determine if Entity is grounded
-void GroundCheck(Entity *instance)
-{
-    int x = (int)instance->position.x;
-    int y = (int)instance->position.y + 1;
-    instance->isGrounded = false;
-
-    // Center point check
-    int c = MapGetTile(x >> TILE_SHIFT, y >> TILE_SHIFT);
-    
-    if (c != EMPTY)
-    {
-        int h = TileHeight(x, y, c);
-        instance->isGrounded = (y >= h);
-    }
-    
-    if (!instance->isGrounded)
-    {
-        // Left bottom corner check
-        int xl = (x - instance->width / 2);
-        int l = MapGetTile(xl >> TILE_SHIFT, y >> TILE_SHIFT);
-        
-        if (l != EMPTY)
-        {
-            int h = TileHeight(xl, y, l);
-            instance->isGrounded = (y >= h);
-        }
-        
-        if (!instance->isGrounded)
-        {
-            // Right bottom corner check
-            int xr = (x + instance->width / 2 - 1);
-            int r = MapGetTile(xr >> TILE_SHIFT, y >> TILE_SHIFT);
-            if (r != EMPTY)
-            {
-                int h = TileHeight(xr, y, r);
-                instance->isGrounded = (y >= h);
-            }
-        }
-    }
-}
-
-// Simplified horizontal acceleration / deacceleration logic
-void MoveCalc(Entity *instance)
-{
-    // Check if direction value is above dead zone - direction is held
-    float deadZone = 0.0;
-    if (ttc_abs(instance->direction) > deadZone)
-    {
-        instance->velocity.x += instance->direction*instance->acc*delta;
-        instance->velocity.x = ttc_clamp(instance->velocity.x, -instance->maxSpd, instance->maxSpd);
-    }
-    else
-    {
-        // No direction means deacceleration
-        float xsp = instance->velocity.x;
-        if (ttc_abs(0 - xsp) < instance->dcc*delta) instance->velocity.x = 0;
-        else if (xsp > 0) instance->velocity.x -= instance->dcc*delta;
-        else instance->velocity.x += instance->dcc*delta;
-    }
-}
-
-// Set values when jump is activated
-void Jump(Entity *instance)
-{
-    instance->velocity.y = instance->jumpImpulse;
-    instance->isJumping = true;
-    instance->isGrounded = false;
-}
-
-// Gravity calculation and Jump detection
-void GravityCalc(Entity *instance)
-{
-    if (instance->isGrounded)
-    {
-        if (instance->isJumping)
-        {
-            instance->isJumping = false;
-            instance->control->jump = false;    // Cancel input button
-        }
-        else if (!instance->isJumping && instance->control->jump)
-        {
-            Jump(instance);
-        }
-    }
-    else
-    {
-        if (instance->isJumping)
-        {
-            if (!instance->control->jump)
-            {
-                instance->isJumping = false;
-                
-                if (instance->velocity.y < instance->jumpRelease)
-                {
-                    instance->velocity.y = instance->jumpRelease;
+void DrawTileMap(){
+    for (int y = 0; y < map.h; y++){
+        for (int x = 0; x < map.w; x++){
+            int i = x + y * map.w;
+            int tile = map.cell[i];
+            if (tile){
+                float cellX = (map.x + map.s * x);
+                float cellY = (map.y + map.s * y);
+                DrawRectangle((int)cellX, (int)cellY, map.s, map.s, LIME);
+                // check tile above
+                if (i - map.w >= 0 && !map.cell[i - map.w]){
+                    DrawLineEx((Vector2){cellX, cellY + 3}, (Vector2){cellX + map.s, cellY + 3}, 6.0f, GREEN);
                 }
             }
         }
     }
+}
+
+void DrawTileGrid(){
+    Color c = (Color){255,255,255,25};
     
-    // Add gravity
-    instance->velocity.y += instance->gravity*delta;
-    
-    // Limit falling to negative jump value
-    if (instance->velocity.y > -instance->jumpImpulse)
-    {
-        instance->velocity.y = -instance->jumpImpulse;
+    for (int y = 0; y < map.h + 1; y++){
+        int x1 = map.x;
+        int x2 = map.x + map.w * map.s;
+        int Y = map.y + map.s * y;
+        DrawLine(x1, Y, x2, Y, c);
+    }
+    for (int x = 0; x < map.w + 1; x++){
+        int y1 = map.y;
+        int y2 = map.y + map.h * map.s;
+        int X = map.x + map.s * x;
+        DrawLine(X, y1, X, y2, c);
     }
 }
 
-// Main collision check function
-void CollisionCheck(Entity *instance)
-{
-    CollisionHorizontalBlocks(instance);
-    CollisionVerticalBlocks(instance);
+void DrawPlayer(){
+    DrawRectangle((int)player.x, (int)player.y, (int)player.width, (int)player.height, WHITE);
+    DrawRectangleLinesEx(player, 2, BLACK);
+    
+    // Artistic touch
+    static int dirX = 0;
+    dirX = (float)(IsKeyDown(KEY_D) - IsKeyDown(KEY_A)) * 4;
+    Vector2 L1 = (Vector2){player.x + 12 + dirX, player.y + 4};
+    Vector2 R1 = (Vector2){player.x + 20 + dirX, player.y + 4};
+    Vector2 L2 = L1;
+    L2.y += 8;
+    Vector2 R2 = R1;
+    R2.y += 8;
+    DrawLineEx(L1, L2, 2.0f, BLACK);
+    DrawLineEx(R1, R2, 2.0f, BLACK);
 }
 
-// Detect and solve horizontal collision with block tiles
-void CollisionHorizontalBlocks(Entity *instance)
-{
-    // Get horizontal speed in pixels
-    float xVel = instance->velocity.x*delta + instance->hsp;
-    int xsp = (int)ttc_abs(xVel)*ttc_sign(xVel);
-
-    instance->hitOnWall = false;
-
-    // Get bounding box side offset
-    int side;
-    if (xsp > 0) side = instance->width / 2 - 1;
-    else if (xsp < 0) side = -instance->width / 2;
-    else return;
-
-    int x = (int)instance->position.x;
-    int y = (int)instance->position.y;
-    int mid = -instance->height / 2;
-    int top = -instance->height + 1;
-
-    // 3 point check
-    int b = MapGetTile((x + side + xsp) >> TILE_SHIFT, y >> TILE_SHIFT) > EMPTY;
-    int m = MapGetTile((x + side + xsp) >> TILE_SHIFT, (y + mid) >> TILE_SHIFT) > EMPTY;
-    int t = MapGetTile((x + side + xsp) >> TILE_SHIFT, (y + top) >> TILE_SHIFT) > EMPTY;
+void DrawCoins(){
+    time += 1;
     
-    // If implementing slopes it's better to disable b and m, if (x,y) is in the slope tile
-    if (b || m || t)
-    {
-        if (xsp > 0) x = ((x + side + xsp) & ~TILE_ROUND) - 1 - side;
-        else x = ((x + side + xsp) & ~TILE_ROUND) + TILE_SIZE - side;
-
-        instance->position.x = (float)x;
-        instance->velocity.x = 0.0;
-        instance->hsp = 0.0;
-
-        instance->hitOnWall = true;
-    }
-}
-
-// Detect and solve vertical collision with block tiles
-void CollisionVerticalBlocks(Entity *instance)
-{
-    // Get vertical speed in pixels
-    float yVel = instance->velocity.y*delta + instance->vsp;
-    int ysp = (int)ttc_abs(yVel)*ttc_sign(yVel);
-    instance->hitOnCeiling = false;
-    instance->hitOnFloor = false;
-
-    // Get bounding box side offset
-    int side = 0;
-    if (ysp > 0) side = 0;
-    else if (ysp < 0) side = -instance->height + 1;
-    else return;
-
-    int x = (int)instance->position.x;
-    int y = (int)instance->position.y;
-    int xl = -instance->width/2;
-    int xr = instance->width/2 - 1;
-
-    int c = MapGetTile(x >> TILE_SHIFT, (y + side + ysp) >> TILE_SHIFT) > EMPTY;
-    int l = MapGetTile((x + xl) >> TILE_SHIFT, (y + side + ysp) >> TILE_SHIFT) > EMPTY;
-    int r = MapGetTile((x + xr) >> TILE_SHIFT, (y + side + ysp) >> TILE_SHIFT) > EMPTY;
-    
-    if (c || l || r)
-    {
-        if (ysp > 0)
-        {
-            y = ((y + side + ysp) & ~TILE_ROUND) - 1 - side;
-            instance->hitOnFloor = true;
+    for (int i = 0; i < COIN_COUNT; i++){
+        if (visible[i]){
+            Rectangle c = coins[i];
+            float y = (float)sin(2 * PI * (time / 60.0f * 0.5) + (c.x * 5)) * 4; // pseudo random offset floating
+            float x = (float)sin(2 * PI * (time / 60.0f * 2)) * 4;
+            DrawRectangle((int)(c.x + 4 + x * 0.5), (int)(c.y + y), (int)(c.width - 4 - x), (int)c.height, GOLD);
         }
-        else
-        {
-            y = ((y + side + ysp) & ~TILE_ROUND) + TILE_SIZE - side;
-            instance->hitOnCeiling = true;
-        }
-        
-        instance->position.y = (float)y;
-        instance->velocity.y = 0.0;
-        instance->vsp = 0.0;
     }
 }
 
-// Return sign of the floal as int (-1, 0, 1)
-int ttc_sign(float x)
-{
-    if (x < 0) return -1;
-    else if (x < 0.0001) return 0;
-    else return 1;
+void DrawScoreText(){
+    const char *text;
+    if (points == COIN_COUNT){
+        text = TextFormat("Pres 'ENTER' to restart!");
+    }
+    else{
+        text = TextFormat("Score: %d", points);
+    }
+    
+    const int size = 24;
+    int x = gameWidth /2 - MeasureText(text, size) / 2;
+    int y = 48;
+    
+    DrawText(text, x, y+1, size, BLACK);
+    DrawText(text, x, y, size, WHITE);
+    
 }
 
-// Return absolute value of float
-float ttc_abs(float x)
-{
-    if (x < 0.0) x *= -1.0;
-    return x;
+void RectangleCollisionUpdate(Rectangle *rect, Vector2 *velocity){
+    Rectangle colArea = RectangleResize(rect, velocity);
+    RectList *tiles = RectangleListFromTiles(&colArea, &map);
+    RectangleTileCollision(rect, velocity, tiles);
+    // free allocated RectList memory
+    MemFree(tiles->rect);
+    MemFree(tiles);
 }
 
-// Clamp value between min and max
-float ttc_clamp(float value, float min, float max)
-{
-    const float res = value < min ? min : value;
-    return res > max ? max : res;
+Rectangle RectangleResize(Rectangle *rect, Vector2 *size){
+    return (Rectangle){
+        size->x > 0 ? rect->x : rect->x + size->x,
+        size->y > 0 ? rect->y : rect->y + size->y,
+        size->x > 0 ? rect->width + size->x : rect->width - size->x,
+        size->y > 0 ? rect->height + size->y : rect->height - size->y
+        };
 }
 
-// Update and Draw (one frame)
-void UpdateDrawFrame(void)
-{
-    UpdateGame();
-    DrawGame();
+RectList* RectangleListFromTiles(Rectangle *rect, Grid *grid){
+    float offX = rect->x - grid->x;
+    float offY = rect->y - grid->y;
+    // compensate flooring
+    if (offX < 0.0f){offX -= grid->s;}
+    if (offY < 0.0f){offY -= grid->s;}
+    
+    // grid coordinates
+    int X = (int)(offX / grid->s);
+    int sizeX = (int)((offX + rect->width) / grid->s) + 1;
+    int Y = (int)(offY / grid->s);
+    int sizeY = (int)((offY + rect->height) / grid->s) + 1;
+    
+    RectList *list = MemAlloc(sizeof(RectList));
+    list->rect = MemAlloc(sizeof(Rectangle) * sizeX * sizeY);
+    list->size = 0;
+    
+    for (int y = Y; y < sizeY; y++){
+        if (y >= 0 && y < grid->h){
+            for (int x = X; x < sizeX; x++){
+                if (x >= 0 && x < grid->w){
+                    int tile = grid->cell[x + y * grid->w];
+                    if (tile){
+                        list->rect[list->size] = (Rectangle){
+                            grid->x + x * grid->s,
+                            grid->y + y * grid->s,
+                            grid->s,
+                            grid->s
+                            };
+                        list->size += 1;
+                    }
+                }
+            }
+        }
+    }
+    return list;
 }
+
+void RectangleTileCollision(Rectangle *rect, Vector2 *velocity, RectList *list){
+    Rectangle *a = rect;
+    float *spdX = &velocity->x;
+    float *spdY = &velocity->y;
+    //Because of this logic it's necessary to check in vertical order of velocity.y direction
+    bool down = velocity->y > 0; // Reverse list reading order
+    
+    for (int i = 0; i < list->size; i++){
+        Rectangle *b = &list->rect[down ? i : list->size -1 -i];
+        Rectangle c = (Rectangle){a->x + *spdX, a->y, a->width, a->height};
+
+        if (CheckCollisionRecs(c, *b)) {
+            if (*spdX > 0.0f) {
+                *spdX = (b->x - a->width) - a->x;
+            }
+            else if (*spdX < 0.0f) {
+                *spdX = (b->x + b->width) - a->x;
+            }
+        }
+        c.x = a->x + *spdX;
+        c.y += *spdY;
+
+        if (CheckCollisionRecs(c, *b)) {
+            if (*spdY > 0.0f) {
+                *spdY = (b->y - a->height) - a->y;
+            }
+            else if (*spdY < 0.0f) {
+                *spdY = (b->y + b->height) - a->y;
+            }
+        }
+    }
+}
+
 
