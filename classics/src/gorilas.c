@@ -536,7 +536,7 @@ static bool UpdateBall(int playerTurn)
 
         // Building collision
         // NOTE: We only check building collision if we are not inside an explosion
-        for (int i = 0; i < MAX_BUILDINGS; i++)
+        for (int i = 0; i < MAX_EXPLOSIONS; i++)
         {
             if (CheckCollisionCircles(ball.position, ball.radius, explosion[i].position, explosion[i].radius - ball.radius))
             {
