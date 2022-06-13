@@ -82,7 +82,7 @@ static bool exitGame = false;
 
 static int timeLevelSeconds = 300;
 
-static float creditsScrollingPosY = (float)screenHeight + 20.0f;
+static float creditsScrollingPosY = 240.0f + 20.0f;
 
 static bool playerMoving = false;
 static int stepFrameCount = 0;
@@ -216,7 +216,7 @@ int main()
     // Load render texture to draw game on it, it could be useful for scaling
     // NOTE: If screen is scaled, mouse input should be scaled proportionally
     screenTarget = LoadRenderTexture(640, 480);
-    SetTextureFilter(screenTarget.texture, FILTER_BILINEAR);
+    SetTextureFilter(screenTarget.texture, TEXTURE_FILTER_BILINEAR);
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
