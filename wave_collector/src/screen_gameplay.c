@@ -153,11 +153,11 @@ void InitGameplayScreen(void)
     // We calculate the required parameters to adjust audio time to gameplay time
     // that way samples collected correspond to audio playing
     // Synchonization is not perfect due to possible rounding issues (float to int)
-    waveTime = wave.sampleCount/wave.sampleRate;     // Total sample time in seconds
+    waveTime = wave.frameCount*wave.channels/wave.sampleRate;     // Total sample time in seconds
     float requiredSamples = (MAX_SAMPLES_SPEED*waveTime*60 - 1000)/SAMPLES_SPACING;
-    int samplesDivision = (int)(wave.sampleCount/requiredSamples);
+    int samplesDivision = (int)(wave.frameCount*wave.channels/requiredSamples);
 
-    totalSamples = wave.sampleCount/samplesDivision;
+    totalSamples = wave.frameCount*wave.channels/samplesDivision;
 
     // We don't need wave any more (already got waveData)
     UnloadWave(wave);

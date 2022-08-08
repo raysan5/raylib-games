@@ -53,7 +53,7 @@ void InitGameplayScreen(void)
     finishScreen = 0;
 
     target = LoadRenderTexture(720, 720);
-    SetTextureFilter(target.texture, FILTER_BILINEAR);
+    SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
     // Generate player character!
     //player = GenerateCharacter();

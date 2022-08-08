@@ -83,7 +83,7 @@ int main(void)
     InitAudioDevice();
 
     font = LoadFont("resources/font.png");
-    SetTextureFilter(font.texture, FILTER_BILINEAR);
+    SetTextureFilter(font.texture, TEXTURE_FILTER_BILINEAR);
 
     music = LoadMusicStream("resources/elevator_romance.ogg");
     fxCoin = LoadSound("resources/coin.wav");
