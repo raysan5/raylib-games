@@ -100,7 +100,7 @@ static bool ResolveLateralMovement();
 static bool ResolveTurnMovement();
 static void CheckDetection(bool *detection);
 static void CheckCompletion(bool *lineToDelete);
-static void DeleteCompleteLines();
+static int DeleteCompleteLines();
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -279,11 +279,12 @@ void UpdateGame(void)
 
                 if (fadeLineCounter >= FADING_TIME)
                 {
-                    DeleteCompleteLines();
+                    int deletedLines = 0;
+                    deletedLines = DeleteCompleteLines();
                     fadeLineCounter = 0;
                     lineToDelete = false;
 
-                    lines++;
+                    lines += deletedLines;
                 }
             }
         }
@@ -758,8 +759,10 @@ static void CheckCompletion(bool *lineToDelete)
     }
 }
 
-static void DeleteCompleteLines()
+static int DeleteCompleteLines()
 {
+    int deletedLines = 0;
+
     // Erase the completed line
     for (int j = GRID_VERTICAL_SIZE - 2; j >= 0; j--)
     {
@@ -786,6 +789,10 @@ static void DeleteCompleteLines()
                     }
                 }
             }
+
+             deletedLines++;
         }
     }
+
+    return deletedLines;
 }
