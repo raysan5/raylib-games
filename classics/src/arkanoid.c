@@ -32,8 +32,6 @@
 //----------------------------------------------------------------------------------
 // Types and Structures Definition
 //----------------------------------------------------------------------------------
-typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, ENDING } GameScreen;
-
 typedef struct Player {
     Vector2 position;
     Vector2 size;
