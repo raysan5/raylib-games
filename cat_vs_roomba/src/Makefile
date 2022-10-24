@@ -223,7 +223,7 @@ LDFLAGS = -L. -L$(RAYLIB_LIB_PATH)
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),WINDOWS)
         # NOTE: The resource .rc file contains windows executable icon and properties
-        LDFLAGS += koala_seasons.rc.data
+        LDFLAGS += cat_vs_roomba.rc.data
         # -Wl,--subsystem,windows hides the console window
         ifeq ($(PROJECT_BUILD_MODE), RELEASE)
             LDFLAGS += -Wl,--subsystem,windows
@@ -323,7 +323,7 @@ endif
 
 # Define all source files required
 PROJECT_SOURCE_FILES ?= \
-    koala_seasons.c \
+    cat_vs_roomba.c \
     screen_logo.c \
     screen_title.c \
     screen_gameplay.c \

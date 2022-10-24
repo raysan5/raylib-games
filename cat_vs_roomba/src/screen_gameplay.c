@@ -26,7 +26,7 @@
 #include "raylib.h"
 #include "screens.h"
 
-#include "external/raymath.h"
+#include "raymath.h"
 
 #include <stdio.h>
 
