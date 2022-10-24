@@ -223,7 +223,7 @@ LDFLAGS = -L. -L$(RAYLIB_LIB_PATH)
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),WINDOWS)
         # NOTE: The resource .rc file contains windows executable icon and properties
-        LDFLAGS += koala_seasons.rc.data
+        LDFLAGS += retro_maze_3d.rc.data
         # -Wl,--subsystem,windows hides the console window
         ifeq ($(PROJECT_BUILD_MODE), RELEASE)
             LDFLAGS += -Wl,--subsystem,windows
@@ -323,11 +323,7 @@ endif
 
 # Define all source files required
 PROJECT_SOURCE_FILES ?= \
-    koala_seasons.c \
-    screen_logo.c \
-    screen_title.c \
-    screen_gameplay.c \
-    screen_ending.c
+    retro_maze_3d.c
 
 # Define all object files from source files
 OBJS = $(patsubst %.c, %.o, $(PROJECT_SOURCE_FILES))
