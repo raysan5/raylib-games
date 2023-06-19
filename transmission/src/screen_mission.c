@@ -55,7 +55,7 @@ static Color numberColor = { 0 };
 static Vector2 missionPosition = { 0 };
 static int missionSize = 0;
 static Color missionColor = { 0 };
-static int missionLenght = 0;
+static int missionLength = 0;
 static int missionMaxLength = 0;
 static int missionSpeed = 0;
 
@@ -134,7 +134,7 @@ void InitMissionScreen(void)
     }
 
     missionSize = 30;
-    missionLenght = 0;
+    missionLength = 0;
     missionSpeed = 1;
 
     numberColor = RAYWHITE;
@@ -189,7 +189,7 @@ void UpdateMissionScreen(void)
                 writeEnd = true;
                 writeKeyword = true;
                 writeNumber = true;
-                missionLenght = missionMaxLength;
+                missionLength = missionMaxLength;
             }
             else
             {
@@ -208,7 +208,7 @@ void DrawMissionScreen(void)
     DrawTexturePro(texBackline, sourceRecBackLine, destRecBackLine, (Vector2){0,0},0, Fade(WHITE, fadeBackLine));
 
     if (writeNumber) DrawTextEx(fontMission, TextFormat("Filtración #%02i ", currentMission + 1), numberPosition, missionSize + 10, 0, numberColor);
-    DrawTextEx(fontMission, TextSubtext(missions[currentMission].brief, 0, missionLenght), missionPosition, missionSize, 0, missionColor);
+    DrawTextEx(fontMission, TextSubtext(missions[currentMission].brief, 0, missionLength), missionPosition, missionSize, 0, missionColor);
     if (writeKeyword && blinkKeyWord) DrawTextEx(fontMission, TextFormat("Keyword: %s", missions[currentMission].key), keywordPosition, missionSize + 10, 0, keywordColor);
 
     if (showButton)
@@ -273,9 +273,9 @@ static void WriteMissionText()
         if (framesCounter % missionSpeed == 0)
         {
             framesCounter = 0;
-            missionLenght++;
+            missionLength++;
 
-            if (missionLenght == missionMaxLength)
+            if (missionLength == missionMaxLength)
             {
                 writtingMission = false;
             }
