@@ -46,10 +46,10 @@ static const char textTitle[20] = "transmissionmission";
 static Color titleColor = { 0 };
 static int speedText = 0;
 
-static int transmissionLenght = 0;
-static int missionLenght = 0;
-static int transmissionMaxLenght = 0;
-static int missionMaxLenght = 0;
+static int transmissionLength = 0;
+static int missionLength = 0;
+static int transmissionMaxLength = 0;
+static int missionMaxLength = 0;
 
 static bool writeTransmission = false;
 static bool writeMission = false;
@@ -82,11 +82,11 @@ void InitTitleScreen(void)
     titleColor = BLACK;
     speedText = 15;
 
-    missionLenght = 0;
-    transmissionLenght = 0;
+    missionLength = 0;
+    transmissionLength = 0;
 
-    missionMaxLenght = 7;
-    transmissionMaxLenght = 12;
+    missionMaxLength = 7;
+    transmissionMaxLength = 12;
 
     writeTransmission = true;
     writeMission = false;
@@ -107,8 +107,8 @@ void UpdateTitleScreen(void)
             framesCounter = 0;
             if (writeTransmission)
             {
-                transmissionLenght++;
-                if (transmissionLenght == transmissionMaxLenght)
+                transmissionLength++;
+                if (transmissionLength == transmissionMaxLength)
                 {
                     writeTransmission = false;
                     writeMission = true;
@@ -116,8 +116,8 @@ void UpdateTitleScreen(void)
             }
             else if (writeMission)
             {
-                missionLenght++;
-                if (missionLenght == missionMaxLenght)
+                missionLength++;
+                if (missionLength == missionMaxLength)
                 {
                     writeMission = false;
                     writeEnd = true;
@@ -139,8 +139,8 @@ void UpdateTitleScreen(void)
 void DrawTitleScreen(void)
 {
     DrawTexture(texBackground, 0,0, WHITE);
-    DrawTextEx(fontTitle, TextSubtext(textTitle, 0, transmissionLenght), transmissionPosition, titleSize, 0, titleColor);
-    DrawTextEx(fontTitle, TextSubtext(textTitle, 12, missionLenght), missionPositon, titleSize, 0, titleColor);
+    DrawTextEx(fontTitle, TextSubtext(textTitle, 0, transmissionLength), transmissionPosition, titleSize, 0, titleColor);
+    DrawTextEx(fontTitle, TextSubtext(textTitle, 12, missionLength), missionPositon, titleSize, 0, titleColor);
 
     DrawButton("start");
 }
@@ -164,8 +164,8 @@ int FinishTitleScreen(void)
 //----------------------------------------------------------------------------------
 static void MissionScreen(void)
 {
-    transmissionLenght = transmissionMaxLenght;
-    missionLenght = missionMaxLenght;
+    transmissionLength = transmissionMaxLength;
+    missionLength = missionMaxLength;
     writeEnd = true;
 
     //finishScreen = 1;   // OPTIONS
