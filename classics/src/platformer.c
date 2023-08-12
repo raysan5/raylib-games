@@ -80,7 +80,6 @@ typedef struct {
 // Global Variables Declaration
 //------------------------------------------------------------------------------------
 const int TILE_SIZE = 16;
-const int TILE_SHIFT = 4;   // Used in bitshift  | bit of TILE_SIZE
 const int TILE_ROUND = 15;  // Used in bitwise operation | TILE_SIZE - 1
 
 float screenScale;
@@ -134,7 +133,6 @@ static void CollisionVerticalBlocks(Entity *instance);
 //------------------------------------------------------------------------------------
 // Tile Functions Declaration (local)
 //------------------------------------------------------------------------------------
-static int MapGetTile(int x, int y);
 static int MapGetTileWorld(int x, int y);
 static int TileHeight(int x, int y, int tile);
 
@@ -317,20 +315,13 @@ void MapDraw(void)
 // Function to get tile index using world coordinates
 int MapGetTileWorld(int x, int y)
 {
+    if (x < 0 || y < 0) return EMPTY;
+
     // Returns tile ID using world position
     x /= TILE_SIZE;
     y /= TILE_SIZE;
     
-    if (x < 0 || x > TILE_MAP_WIDTH || y < 0 || y > TILE_MAP_HEIGHT) return EMPTY;
-
-    return tiles[x+y*TILE_MAP_WIDTH];
-}
-
-// Function to get tile index using tile map coordinates
-int MapGetTile(int x, int y)
-{
-    // Returns tile ID using tile position withing tile map
-    if (x < 0 || x > TILE_MAP_WIDTH || y < 0 || y > TILE_MAP_HEIGHT) return EMPTY;
+    if (x > TILE_MAP_WIDTH || y > TILE_MAP_HEIGHT) return EMPTY;
 
     return tiles[x+y*TILE_MAP_WIDTH];
 }
@@ -488,7 +479,7 @@ void GroundCheck(Entity *instance)
     instance->isGrounded = false;
 
     // Center point check
-    int c = MapGetTile(x >> TILE_SHIFT, y >> TILE_SHIFT);
+    int c = MapGetTileWorld(x , y);
     
     if (c != EMPTY)
     {
@@ -500,7 +491,7 @@ void GroundCheck(Entity *instance)
     {
         // Left bottom corner check
         int xl = (x - instance->width / 2);
-        int l = MapGetTile(xl >> TILE_SHIFT, y >> TILE_SHIFT);
+        int l = MapGetTileWorld(xl , y);
         
         if (l != EMPTY)
         {
@@ -512,7 +503,7 @@ void GroundCheck(Entity *instance)
         {
             // Right bottom corner check
             int xr = (x + instance->width / 2 - 1);
-            int r = MapGetTile(xr >> TILE_SHIFT, y >> TILE_SHIFT);
+            int r = MapGetTileWorld(xr , y);
             if (r != EMPTY)
             {
                 int h = TileHeight(xr, y, r);
@@ -619,9 +610,9 @@ void CollisionHorizontalBlocks(Entity *instance)
     int top = -instance->height + 1;
 
     // 3 point check
-    int b = MapGetTile((x + side + xsp) >> TILE_SHIFT, y >> TILE_SHIFT) > EMPTY;
-    int m = MapGetTile((x + side + xsp) >> TILE_SHIFT, (y + mid) >> TILE_SHIFT) > EMPTY;
-    int t = MapGetTile((x + side + xsp) >> TILE_SHIFT, (y + top) >> TILE_SHIFT) > EMPTY;
+    int b = MapGetTileWorld(x + side + xsp , y) > EMPTY;
+    int m = MapGetTileWorld(x + side + xsp , y + mid) > EMPTY;
+    int t = MapGetTileWorld(x + side + xsp , y + top) > EMPTY;
     
     // If implementing slopes it's better to disable b and m, if (x,y) is in the slope tile
     if (b || m || t)
@@ -657,9 +648,9 @@ void CollisionVerticalBlocks(Entity *instance)
     int xl = -instance->width/2;
     int xr = instance->width/2 - 1;
 
-    int c = MapGetTile(x >> TILE_SHIFT, (y + side + ysp) >> TILE_SHIFT) > EMPTY;
-    int l = MapGetTile((x + xl) >> TILE_SHIFT, (y + side + ysp) >> TILE_SHIFT) > EMPTY;
-    int r = MapGetTile((x + xr) >> TILE_SHIFT, (y + side + ysp) >> TILE_SHIFT) > EMPTY;
+    int c = MapGetTileWorld(x , y + side + ysp) > EMPTY;
+    int l = MapGetTileWorld(x + xl , y + side + ysp) > EMPTY;
+    int r = MapGetTileWorld(x + xr , y + side + ysp) > EMPTY;
     
     if (c || l || r)
     {
