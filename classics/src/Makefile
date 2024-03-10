@@ -383,9 +383,10 @@ SAMPLES = \
     gorilas \
     missile_commander \
     pang \
+    platformer \
     snake \
     space_invaders \
-    tetris \
+    tetris
 
 # typing 'make' will invoke the default target entry
 all: $(SAMPLES)
@@ -426,4 +427,3 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
 	del *.o *.html *.js
 endif
 	@echo Cleaning done
-
