@@ -383,6 +383,7 @@ SAMPLES = \
     gorilas \
     missile_commander \
     pang \
+    platformer \
     snake \
     space_invaders \
     tetris \
