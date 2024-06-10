@@ -147,7 +147,11 @@ void UpdateEndingScreen(void)
     {
         currentMission++;
 
-        if (currentMission >= totalMissions) finishScreen = 2;
+        if (currentMission >= totalMissions)
+        {
+            finishScreen = 2;
+            currentMission = 0;
+        }
         else finishScreen = 1;
     }
 }
