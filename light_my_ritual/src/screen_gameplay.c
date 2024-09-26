@@ -277,7 +277,7 @@ void InitGameplayScreen(void)
 
     // Initialize ritual variables
     ritualTime = 0.0f;
-    startRitual = false;;
+    startRitual = false;
     alphaRitual = 0.0f;
 
     timeOver = false;
