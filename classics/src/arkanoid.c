@@ -124,7 +124,7 @@ void InitGame(void)
     player.life = PLAYER_MAX_LIFE;
 
     // Initialize ball
-    ball.position = (Vector2){ screenWidth/2, screenHeight*7/8 - 30 };
+    ball.position = (Vector2){ player.position.x, player.position.y - player.size.y/2 - ball.radius };
     ball.speed = (Vector2){ 0, 0 };
     ball.radius = 7;
     ball.active = false;
@@ -175,7 +175,7 @@ void UpdateGame(void)
             }
             else
             {
-                ball.position = (Vector2){ player.position.x, screenHeight*7/8 - 30 };
+                ball.position = (Vector2){ player.position.x, player.position.y - player.size.y/2 - ball.radius };
             }
 
             // Collision logic: ball vs walls
