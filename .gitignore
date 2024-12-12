@@ -58,6 +58,7 @@ dkms.conf
 [Rr]elease.DLL/
 *.user
 .vs
+.vscode
 
 # Build folder
 [Bb]uild
