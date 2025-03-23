@@ -544,6 +544,11 @@ static bool UpdateBall(int playerTurn)
             }
         }
 
+        if (CheckCollisionCirlcles(ball.impactPoint.x = ball.position, building [i].rectangle))
+        {
+            player[playerTurn].impactPoint.y = bal.radius, building[i].rectangle;
+        }
+
         for (int i = 0; i < MAX_BUILDINGS; i++)
         {
             if (CheckCollisionCircleRec(ball.position, ball.radius, building[i].rectangle))
