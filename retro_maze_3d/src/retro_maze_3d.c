@@ -59,15 +59,10 @@ static const int screenHeight = 240;
 static int currentScreen = LOGO;
 static int elementPositionY = -128;
 static int framesCounter = 0;
-static int scrollingY = 0;
-static int score = 0;
-static int hiscore = 0;
 static int titleState = 0;
 static int optionSelect = 0;       // Main menu option selection
 
 static Camera camera = { 0 };
-static float playerEyesPosition = 0.3f;                 // Player eyes position from ground (in meters)
-static Vector2 cameraAngle = { 0.0f, -8.0f*DEG2RAD };   // Camera rotation angle over its axis
 
 static Vector3 mapPosition = { 0.0f, 0.0f, 0.0f };      // Set map position
 static Vector3 playerPosition = { 0 };
@@ -193,8 +188,6 @@ int main()
     camera.fovy = 45.0f;                                // Camera field-of-view Y
     camera.projection = CAMERA_PERSPECTIVE;                   // Camera mode type
 
-    cameraAngle.x = 0.0f;               // Camera rotation angle in Y axis
-    cameraAngle.y = -8.0f*DEG2RAD;      // Camera rotation angle in plane XY
     playerPosition = camera.position;   // Initial player position
 
     // Load map data (model anf texture)
@@ -221,6 +214,7 @@ int main()
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
 #else
+    DisableCursor();
     SetTargetFPS(60);   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
@@ -712,38 +706,17 @@ void UpdateCameraCustom(Camera *camera)
     if (direction[0] || direction[1] || direction[2] || direction[3]) playerMoving = true;
     else playerMoving = false;
 
-    camera->position.x += (sinf(cameraAngle.x)*direction[1] -
-                           sinf(cameraAngle.x)*direction[0] -
-                           cosf(cameraAngle.x)*direction[3] +
-                           cosf(cameraAngle.x)*direction[2])/PLAYER_MOVEMENT_SENSITIVITY;
+    Vector3 movement = {0};
+    if (direction[0]) movement.x += 0.05f;
+    if (direction[1]) movement.x -= 0.05f;
+    if (direction[2]) movement.y += 0.05f;
+    if (direction[3]) movement.y -= 0.05f;
 
-    camera->position.y += (sinf(cameraAngle.y)*direction[0] -
-                           sinf(cameraAngle.y)*direction[1])/PLAYER_MOVEMENT_SENSITIVITY;
+    Vector3 rotation = {0};
+    rotation.x += GetMouseDelta().x*0.05f;
+    rotation.y += GetMouseDelta().y*0.05f;
 
-    camera->position.z += (cosf(cameraAngle.x)*direction[1] -
-                           cosf(cameraAngle.x)*direction[0] +
-                           sinf(cameraAngle.x)*direction[3] -
-                           sinf(cameraAngle.x)*direction[2])/PLAYER_MOVEMENT_SENSITIVITY;
-
-    // Camera rotation over its own Y axis
-    if (IsKeyDown(KEY_LEFT) || IsGamepadButtonDown(0, GPICASE_TRIGGER_LEFT)) cameraAngle.x += (1.0f*DEG2RAD);      // GAMEPAD_BUTTON_LEFT_TRIGGER_1    // GAMEPAD_BUTTON_LEFT_FACE_LEFT    // DPAD LEFT
-    if (IsKeyDown(KEY_RIGHT) || IsGamepadButtonDown(0, GPICASE_TRIGGER_RIGHT)) cameraAngle.x -= (1.0f*DEG2RAD);     // GAMEPAD_BUTTON_RIGHT_TRIGGER_1   // GAMEPAD_BUTTON_LEFT_FACE_RIGHT   // DPAD RIGHT
-
-    // Camera angle clamp to limits
-    if (cameraAngle.y > CAMERA_FIRST_PERSON_MIN_CLAMP*DEG2RAD) cameraAngle.y = CAMERA_FIRST_PERSON_MIN_CLAMP*DEG2RAD;
-    else if (cameraAngle.y < CAMERA_FIRST_PERSON_MAX_CLAMP*DEG2RAD) cameraAngle.y = CAMERA_FIRST_PERSON_MAX_CLAMP*DEG2RAD;
-
-    // Recalculate camera target considering translation and rotation
-    Matrix translation = MatrixTranslate(0.0f, 0.0f, 1.0f);
-    Matrix rotation = MatrixRotateXYZ((Vector3){ PI*2 - cameraAngle.y, PI*2 - cameraAngle.x, 0 });
-    Matrix transform = MatrixMultiply(translation, rotation);
-
-    camera->target.x = camera->position.x - transform.m12;
-    camera->target.y = camera->position.y - transform.m13;
-    camera->target.z = camera->position.z - transform.m14;
-
-    // Camera position update
-    camera->position.y = playerEyesPosition;
+    UpdateCameraPro(camera, movement, rotation, 0.0f);
 }
 
 // Check if gamepad axis has been pressed
