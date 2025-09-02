@@ -142,7 +142,7 @@ static void UpdateCameraCustom(Camera *camera); // Update camera custom (first p
 static bool IsGamepadAxisAsButtonPressed(int gamepad, int axis, bool positiveAxis);
 
 //----------------------------------------------------------------------------------
-// Main entry point
+// Program main entry point
 //----------------------------------------------------------------------------------
 int main()
 {

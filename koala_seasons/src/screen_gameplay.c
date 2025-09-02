@@ -405,7 +405,7 @@ static PopUpScore popupBee = { 0 };
 static PopUpScore popupEagle = { 0 };
 
 //----------------------------------------------------------------------------------
-// Module specific Functions Declaration
+// Module Internal Functions Declaration
 //----------------------------------------------------------------------------------
 static void BambooSpawn(void);
 static void SnakeSpawn(int chance);

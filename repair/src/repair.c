@@ -71,7 +71,7 @@ static void DrawTransition(void);           // Draw transition effect (full-scre
 static void UpdateDrawFrame(void);          // Update and draw one frame
 
 //----------------------------------------------------------------------------------
-// Main entry point
+// Program main entry point
 //----------------------------------------------------------------------------------
 int main(void)
 {
