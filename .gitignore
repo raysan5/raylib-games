@@ -67,3 +67,5 @@ dkms.conf
 *.js
 *.html
 *.wasm
+!src/minshell.html
+!src/shell.html
