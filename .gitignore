@@ -59,6 +59,9 @@ dkms.conf
 *.user
 .vs
 
+# Visual Studio Code files
+.vscode
+
 # Build folder
 [Bb]uild
 
