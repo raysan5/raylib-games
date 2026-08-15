@@ -209,7 +209,7 @@ void UpdateGame(void)
                     {
                         // Hit below
                         if (((ball.position.y - ball.radius) <= (brick[i][j].position.y + brickSize.y/2)) &&
-                            ((ball.position.y - ball.radius) > (brick[i][j].position.y + brickSize.y/2 + ball.speed.y)) &&
+                            ((ball.position.y - ball.radius) > (brick[i][j].position.y + brickSize.y/2 + ball.speed.y*2)) &&
                             ((fabs(ball.position.x - brick[i][j].position.x)) < (brickSize.x/2 + ball.radius*2/3)) && (ball.speed.y < 0))
                         {
                             brick[i][j].active = false;
@@ -217,7 +217,7 @@ void UpdateGame(void)
                         }
                         // Hit above
                         else if (((ball.position.y + ball.radius) >= (brick[i][j].position.y - brickSize.y/2)) &&
-                                ((ball.position.y + ball.radius) < (brick[i][j].position.y - brickSize.y/2 + ball.speed.y)) &&
+                                ((ball.position.y + ball.radius) < (brick[i][j].position.y - brickSize.y/2 + ball.speed.y*2)) &&
                                 ((fabs(ball.position.x - brick[i][j].position.x)) < (brickSize.x/2 + ball.radius*2/3)) && (ball.speed.y > 0))
                         {
                             brick[i][j].active = false;
@@ -225,7 +225,7 @@ void UpdateGame(void)
                         }
                         // Hit left
                         else if (((ball.position.x + ball.radius) >= (brick[i][j].position.x - brickSize.x/2)) &&
-                                ((ball.position.x + ball.radius) < (brick[i][j].position.x - brickSize.x/2 + ball.speed.x)) &&
+                                ((ball.position.x + ball.radius) < (brick[i][j].position.x - brickSize.x/2 + ball.speed.x*2)) &&
                                 ((fabs(ball.position.y - brick[i][j].position.y)) < (brickSize.y/2 + ball.radius*2/3)) && (ball.speed.x > 0))
                         {
                             brick[i][j].active = false;
@@ -233,7 +233,7 @@ void UpdateGame(void)
                         }
                         // Hit right
                         else if (((ball.position.x - ball.radius) <= (brick[i][j].position.x + brickSize.x/2)) &&
-                                ((ball.position.x - ball.radius) > (brick[i][j].position.x + brickSize.x/2 + ball.speed.x)) &&
+                                ((ball.position.x - ball.radius) > (brick[i][j].position.x + brickSize.x/2 + ball.speed.x*2)) &&
                                 ((fabs(ball.position.y - brick[i][j].position.y)) < (brickSize.y/2 + ball.radius*2/3)) && (ball.speed.x < 0))
                         {
                             brick[i][j].active = false;
