@@ -731,7 +731,7 @@ static void CheckCompletion(bool *lineToDelete)
     int calculator = 0;
     bool isEmptyRowFound = false;
 
-    for (int j = GRID_VERTICAL_SIZE - 2 && !isEmptyRowFound; j >= 0; j--)
+    for (int j = GRID_VERTICAL_SIZE - 2; j >= 0 && !isEmptyRowFound; j--)
     {
         calculator = 0;
         for (int i = 1; i < GRID_HORIZONTAL_SIZE - 1; i++)
@@ -743,25 +743,23 @@ static void CheckCompletion(bool *lineToDelete)
             }
         }
 
-            // Check if we completed the whole line
-            if (calculator == GRID_HORIZONTAL_SIZE - 2)
-            {
-                *lineToDelete = true;
-                calculator = 0;
-                // points++;
+        // Check if we completed the whole line
+        if (calculator == GRID_HORIZONTAL_SIZE - 2)
+        {
+            *lineToDelete = true;
+            calculator = 0;
+            // points++;
 
-                // Mark the completed line
-                for (int z = 1; z < GRID_HORIZONTAL_SIZE - 1; z++)
-                {
-                    grid[z][j] = FADING;
-                }
+            // Mark the completed line
+            for (int z = 1; z < GRID_HORIZONTAL_SIZE - 1; z++)
+            {
+                grid[z][j] = FADING;
             }
-            else {
-                if (calculator == 0)
-                {
-                    isEmptyRowFound = true;
-                }
-            }
+        }
+        else if (calculator == 0)
+        {
+            isEmptyRowFound = true;
+        }
     }
 }
 
